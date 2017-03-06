@@ -1,0 +1,10 @@
+﻿input.cropit-image-zoom-input {
+    width: 50%;
+}
+.group_ul_item {
+    overflow: hidden;
+    padding: 12px 18px 11px;
+    border-bottom: 1px solid #292C33;
+    cursor: pointer;
+    position: relative;
+}

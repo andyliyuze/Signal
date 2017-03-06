@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Microsoft.AspNet.SignalR;
 using Autofac;
 using MeassageCache;
 using Model;
 using DAL;
-using System.Web.SessionState;
- 
 using System.Threading.Tasks;
-using System.Diagnostics;
 using DAL.Interface;
-using Microsoft.AspNet.SignalR.Hubs;
 using Model.ViewModel;
-using SignalRChat.Extend;
-using Model.ViewModel;
-using Model.Extend;
-using System.Web.Security;
 namespace SignalRChat
 {
 
