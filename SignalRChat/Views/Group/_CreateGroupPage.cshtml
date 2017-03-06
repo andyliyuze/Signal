@@ -1,0 +1,51 @@
+﻿<!-- 按钮触发模态框 -->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="CreateGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建群</h4>
+            </div>
+            <div style=" margin-left: 50px; margin-bottom: 100px; margin-top: 20px;margin-right:50px ">
+              <h4>群名称</h4>
+              <h4>设置头像</h4>
+          
+
+                    <div class="control-group">
+                   
+                          
+          
+                    
+
+                        <div style="display: inline;margin-left:47px;">
+                            <img name="pre" id="preview" style="    border-radius: 54px;width: 110px;" src="~/Images/webwxgeticon.jpg" />
+                            <input id="img-data" name="img-data" style="display:none" />
+                        </div>
+
+
+                        <div class="image-editor">
+                            <input type="file" class="cropit-image-input">
+                            <div class="cropit-preview"></div>
+                            <div class="image-size-label">
+                                Resize image
+                            </div>
+                            <input type="range" class="cropit-image-zoom-input">
+                            <button class="rotate-ccw">Rotate counterclockwise</button>
+                            <button class="rotate-cw">Rotate clockwise</button>
+                            <button class="export">Export</button>
+                        </div>
+                        
+                        <div style="clear:both"></div>
+                    </div>
+
+         
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div>    
+<!-- /.modal -->
+</div>
+
+ 
+ 

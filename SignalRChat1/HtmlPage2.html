@@ -1,0 +1,709 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"> </script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"> </script>
+    <style type="text/css">
+  
+        body {
+        padding:0;
+        margin:0;
+       
+        
+        }
+        #caretPosHelper {
+       height:auto;
+        }
+        body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, fieldset, textarea {
+            margin: 0;
+        }
+        .main {
+            height: 600px;
+            min-width: 800px;
+            margin: auto;
+            width: 80%;
+            background-color: #17232d;
+            position: relative;
+        }
+        .pannel {
+            width: 280px;
+            height: 600px;
+            background-color: #2e3238;
+            position: relative;
+            float: left;
+        }
+        .right {
+            width: 73%;
+            background-color: bisque;
+            height: 600px;
+            margin-left: 280px;
+        }
+        .header .avatar {
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            left: 7%;
+            top: 22%;
+        }
+
+        .info {
+            width: 73%;
+            height: 40px;
+            position: absolute;
+            top: 22%;
+            left: 21%;
+            padding: 8px;
+        }
+
+        .web_wechat_add {
+            background: url(Images/sprite308b49.png) 0 -406px;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        /*搜索框*/
+        .search_bar {
+            position: relative;
+            width: 244px;
+            margin: 0 auto 6px;
+        }
+        .web_wechat_search {
+            background: url(Images/sprite308b49.png) 0 -1946px;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .search_bar .web_wechat_search {
+            position: absolute;
+            z-index: 101;
+            top: 1px;
+        }
+        .search_bar .frm_search {
+            width: 214px;
+            height: 32px;
+            line-height: 32px;
+            border: 0;
+            border-radius: 2px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            background-color: #26292E;
+            color: #fff;
+            padding-left: 30px;
+            font-size: 12px;
+        }
+        /*导航栏*/
+        .tab {
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .tab .tab_item {
+            float: left;
+            width: 33.33333333%;
+            position: relative;
+        }
+            .tab .tab_item a {
+                display: block;
+                text-align: center;
+            }
+        .web_wechat_tab_chat_hl {
+            background: url(Images/sprite308b49.png) 0 -2083px;
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .tab .tab_item:after {
+            content: '';
+            position: absolute;
+            top: 7px;
+            right: 0;
+            width: 0;
+            height: 20px;
+            border-right: 1px solid #24272C;
+        }
+        .tab:after {
+            content: '';
+            position: absolute;
+            border-bottom: 1px solid #24272C;
+            height: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .web_wechat_tab_public {
+            background: url(Images/sprite308b49.png) 0 -2232px;
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .web_wechat_tab_friends {
+            background: url(Images/sprite308b49.png) 0 -2140px;
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        /*好友列表*/
+        .chat_ul{
+            position: absolute;
+            top: 154px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+            .chat_ul::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+                 background-color: #F5F5F5;
+                border-radius: 10px;
+            }
+            /*定义滚动条的轨道，内阴影及圆角*/
+            .chat_ul::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                border-radius: 10px;
+                background-color: transparent;
+            }
+            /*定义滑块，内阴影及圆角*/
+            .chat_ul::-webkit-scrollbar-thumb {
+                border-radius: 3px;
+                -moz-border-radius: 3px;
+                -webkit-border-radius: 3px;
+                background-color: #c3c3c3 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                background-color: #555;
+            }
+        /*::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            background-color: #c3c3c3;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+        }*/
+        .chat_ul_item {
+            overflow: hidden;
+            padding: 12px 18px 11px;
+            border-bottom: 1px solid #292C33;
+            cursor: pointer;
+            position: relative;
+        }
+        .chat_ul_item .avatar {
+            float: left;
+            margin-right: 10px;
+            position: relative;
+        }
+            .chat_ul_item .avatar .img {
+                display: block;
+                width: 40px;
+                height: 40px;
+                border-radius: 2px;
+                -moz-border-radius: 2px;
+                -webkit-border-radius: 2px;
+            }
+            .chat_ul_item .avatar .icon {
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                color: #FFF;
+                font-style: normal;
+                font-size: 12px;
+                text-align: center;
+            }
+        .web_wechat_reddot {
+            background: url(Images/sprite308b49.png) 0 -1736px;
+            width: 12px;
+            height: 12px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+            .chat_ul_item .chat_item_info {
+            overflow: hidden;
+        }
+            .chat_ul_item .chat_item_info .nickname {
+                font-weight: 400;
+                font-size: 13px;
+                color: #FFF;
+                line-height: 20px;
+            }
+            .chat_ul_item .chat_item_info .msg {
+                color: #989898;
+                font-size: 13px;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                word-wrap: normal;
+                height: 1.5em;
+            }
+            .chat_ul_item .chat_item_info .nickname_text {
+                display: inline-block;
+                vertical-align: top;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                word-wrap: normal;
+            }
+
+        .chat_ul_item .ext {
+            float: right;
+            color: #6b6f7c;
+            font-size: 13px;
+            text-align: right;
+        }
+        .chat_ul_item .ext .attr {
+            height: 19px;
+            line-height: 1.5;
+        }
+        .web_wechat_no-remind {
+            background: url(Images/sprite308b49.png) 0 -1292px;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /*//聊天面板*/
+        .web_wechat_down_icon {
+            background: url(Images/sprite308b49.png) 0 -795px;
+            width: 10px;
+            height: 10px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .message {
+            margin-bottom: 16px;
+            float: left;
+            width: 100%;
+        }
+        .message_system {
+            text-align: center;
+            margin: 10px auto;
+            max-width: 50%;
+        }
+            .message_system .content {
+                display: inline-block;
+                background-color: #dcdcdc;
+                font-size: 12px;
+                padding: 1px 18px;
+                color: #fff;
+                border-radius: 2px;
+                -moz-border-radius: 2px;
+                -webkit-border-radius: 2px;
+            }
+        .message .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            float: left;
+            cursor: pointer;
+        }
+        .message .content {
+            overflow: hidden;
+        }
+        .message .nickname {
+            font-weight: 400;
+            padding-left: 10px;
+            font-size: 12px;
+            height: 22px;
+            line-height: 24px;
+            color: #4f4f4f;
+            width: 350px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-wrap: normal;
+        }
+        .bubble {
+            max-width: 500px;
+            min-height: 1em;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            text-align: left;
+            font-size: 14px;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            margin: 0 10px;
+        }
+        .bubble.left:before, .bubble.left:after {
+            right: 100%;
+        }
+        .bubble:before, .bubble:after {
+            position: absolute;
+            top: 14px;
+            border: 6px solid transparent;
+            content: " ";
+        }
+        .bubble.bubble_default {
+            background-color: #fff;
+        }
+        
+        .bubble_cont {
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height: 25px;
+        }
+            .bubble_cont .plain {
+                padding: 9px 13px;
+            }
+        pre {
+            margin: 0;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            word-break: initial;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+        }
+        .message.me {
+            float: right;
+            text-align: right;
+            clear: right;
+        }
+            .message.me .avatar {
+                float: right;
+            }
+        .bubble.bubble_primary {
+            background-color: #b2e281;
+        }
+        /*输入框*/
+        .chat .box_ft {
+            height: 180px;
+            margin-right: 19px;
+            border-top: 1px solid #d6d6d6;
+
+        }
+        /*.box_ft {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }*/
+        .chat .box_ft .toolbar {
+            height: 30px;
+            padding: 5px 17px;
+        }
+        .web_wechat_face {
+            background: url(Images/sprite308b49.png) 0 -805px;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .web_wechat_screencut {
+            background: url(Images/sprite308b49.png) 0 -1916px;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .chat .box_ft .content .flex {
+            height: 6em;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-left: 20px;
+            outline: 0;
+            border: 0;
+            font-size: 14px;
+        }
+        .chat .box_ft .caret_pos_helper {
+            position: absolute;
+            filter: alpha(opacity=0);
+            -moz-opacity: 0;
+            -khtml-opacity: 0;
+            opacity: 0;
+            white-space: pre;
+        }
+        .chat .box_ft .action {
+            text-align: right;
+            margin-top: 5px;
+        }
+        .chat .box_ft .action {
+            text-align: right;
+            margin-top: 5px;
+        }
+        a.btn {
+            text-decoration: none;
+        }
+
+        .btn_send {
+            background-color: #fff;
+            color: #222;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .btn {
+            display: inline-block;
+            border: 1px solid #c1c1c1;
+            border-radius: 4px;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            padding: 3px 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="pannel">
+            <div class="header" style="position: relative; height: 76px; width: 100%;">
+                <div class="avatar">
+
+                    <img style="width: 100%;" src="Images/webwxgeticon.jpg" />
+                </div>
+
+                <div class="info">
+                    <span style="color: #fff;">Andy</span>
+                    <a style="margin-left: 100px;">
+                        <i class="web_wechat_add"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="search_bar">
+                <i class="web_wechat_search"></i>
+                <input  class="frm_search ng-isolate-scope ng-pristine ng-valid" type="text" placeholder="搜索">
+            </div>
+            <div class="tab">
+                <div class="tab_item">
+                    <a class="chat"  title="聊天" href="#">
+                    <i class="web_wechat_tab_chat web_wechat_tab_chat_hl" ></i>
+                    </a>
+                </div>
+                <div class="tab_item ng-scope" ng-if="isShowReader">
+                    <a class="chat"   title="阅读" href="#">
+                    <i class="web_wechat_tab_public"></i></a>
+                </div>
+                <div class="tab_item no_extra">
+                    <a class="chat"  title="通讯录" href="#">
+                    <i class="web_wechat_tab_friends"></i></a>
+                </div>
+            </div>
+          <div style=" margin-bottom: 0px; margin-right: 0px; height: 446px; overflow-y: auto;" class="chat_ul">
+              <div class="ng-scope chat_ul_div">
+ 
+                  <div class="chat_ul_item">
+                      <div class="ext">
+                          <p class="attr ng-binding">22:29</p>
+                          <p class="attr ng-scope">
+                              <i class="web_wechat_no-remind"></i>
+                          </p>
+                      </div>
+                      <div class="avatar">
+
+                          <img class="img" src="Images/webwxgetheadimg.jpg" />
+                          <i class="icon web_wechat_reddot ng-scope"></i>
+
+
+
+                      </div>
+                      <div class="chat_item_info">
+                          <h3 class="nickname">
+                              <span class="nickname_text ng-binding">吴川730爱心公益志愿者</span>
+
+                          </h3>
+
+                          <p class="msg ng-scope">
+                              <span class="ng-binding ng-scope">[6条]</span>
+
+                              <span class="ng-binding">
+                                  自然自在:客气了
+                              </span>
+                          </p>
+                      </div>
+
+                  </div>
+                  <div class="chat_ul_item">
+                      <div class="ext">
+                          <p class="attr ng-binding">22:29</p>
+                          <p class="attr ng-scope">
+                              <i class="web_wechat_no-remind"></i>
+                          </p>
+                      </div>
+                      <div class="avatar">
+
+                          <img class="img" src="Images/webwxgetheadimg.jpg" />
+                          <i class="icon web_wechat_reddot ng-scope"></i>
+
+
+
+                      </div>
+                      <div class="chat_item_info">
+                          <h3 class="nickname">
+                              <span class="nickname_text ng-binding">吴川730爱心公益志愿者</span>
+
+                          </h3>
+
+                          <p class="msg ng-scope">
+                              <span class="ng-binding ng-scope">[6条]</span>
+
+                              <span class="ng-binding">
+                                  自然自在:客气了
+                              </span>
+                          </p>
+                      </div>
+
+                  </div>
+                  <div class="chat_ul_item">
+                      <div class="ext">
+                          <p class="attr ng-binding">22:29</p>
+                          <p class="attr ng-scope">
+                              <i class="web_wechat_no-remind"></i>
+                          </p>
+                      </div>
+                      <div class="avatar">
+
+                          <img class="img" src="Images/webwxgetheadimg.jpg" />
+                          <i class="icon web_wechat_reddot ng-scope"></i>
+
+
+
+                      </div>
+                      <div class="chat_item_info">
+                          <h3 class="nickname">
+                              <span class="nickname_text ng-binding">吴川730爱心公益志愿者</span>
+
+                          </h3>
+
+                          <p class="msg ng-scope">
+                              <span class="ng-binding ng-scope">[6条]</span>
+
+                              <span class="ng-binding">
+                                  自然自在:客气了
+                              </span>
+                          </p>
+                      </div>
+
+                  </div>
+                  <div class="chat_ul_item">
+                      <div class="ext">
+                          <p class="attr ng-binding">22:29</p>
+                          <p class="attr ng-scope">
+                              <i class="web_wechat_no-remind"></i>
+                          </p>
+                      </div>
+                      <div class="avatar">
+
+                          <img class="img" src="Images/webwxgetheadimg.jpg" />
+                          <i class="icon web_wechat_reddot ng-scope"></i>
+
+
+
+                      </div>
+                      <div class="chat_item_info">
+                          <h3 class="nickname">
+                              <span class="nickname_text ng-binding">吴川730爱心公益志愿者</span>
+
+                          </h3>
+
+                          <p class="msg ng-scope">
+                              <span class="ng-binding ng-scope">[6条]</span>
+
+                              <span class="ng-binding">
+                                  自然自在:客气了
+                              </span>
+                          </p>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="right chat">
+            <div class="panel panel-default" style="background-color: #eee;margin-bottom:20px">
+                <div class="panel-heading" style="text-align: center;">
+                    Panel heading without title
+                    <i class="web_wechat_down_icon"></i>
+                </div>
+                <div class="panel-body"style="padding-bottom: 0;height: 380px;">
+                    <div   class="ng-scope">
+                    <div class="message_ul">
+                        <div class="message_item message" style=" margin-bottom: 16px; float: left; width: 100%;">
+                            <p class="message_system ng-scope">
+                                <span class="content ng-binding">9:52</span>
+                            </p>
+
+                            <img class="avatar" src="Images/webwxgeticon%20(1).jpg" title="李思晓" />
+                            <div class="content">
+                             
+                                <div class="bubble js_message_bubble ng-scope bubble_default left">
+                                    <div class="bubble_cont ng-scope"  >
+                                        <div class="plain">
+                                            <pre class="js_message_plain ng-binding" >。。</pre>
+ 
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="message_item message me" style=" margin-bottom: 16px; float: left; width: 100%;">
+                            <p class="message_system ng-scope">
+                                <span class="content ng-binding">9:52</span>
+                            </p>
+
+                            <img class="avatar" src="Images/webwxgeticon%20(1).jpg" title="李思晓" />
+                            <div class="content">
+
+                                <div class="bubble js_message_bubble ng-scope bubble_primary left">
+                                    <div class="bubble_cont ng-scope">
+                                        <div class="plain">
+                                            <pre class="js_message_plain ng-binding">。。</pre>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="box_ft ng-scope">
+                    <div class="toolbar" id="tool_bar">
+                        <a class="web_wechat_face" href="javascript:;" title="表情"></a>
+                        <a class="web_wechat_screencut ng-isolate-scope" href="javascript:;" title="截屏"></a>
+
+                    </div>
+                    <div class="content ng-isolate-scope">
+                        <pre id="editArea" class="flex edit_area ng-isolate-scope ng-pristine ng-valid" contenteditable="true"></pre>
+                        <span class="caret_pos_helper" id="caretPosHelper"></span>
+                    </div>
+                    <div class="action">
+                        <!-- ngIf: !isMacOS --><span ng-if="!isMacOS" class="desc ng-scope">按下Ctrl+Enter换行</span><!-- end ngIf: !isMacOS -->
+                        <!-- ngIf: isMacOS -->
+                        <a class="btn btn_send" href="javascript:;" ng-click="sendTextMessage()">发送</a>
+                    </div>
+                </div>
+            </div>
+
+          
+            </div> 
+        </div>
+</body>
+</html>
+ 
