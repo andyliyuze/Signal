@@ -7,36 +7,35 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">创建群</h4>
             </div>
-            <div style=" margin-left: 50px; margin-bottom: 100px; margin-top: 20px;margin-right:50px ">
-              <h4>群名称</h4>
-              <h4>设置头像</h4>
-          
-
-                    <div class="control-group">
-                   
-                          
-          
-                    
-
-                     
-
-                        <div class="image-editor">
+            <div style="margin-left: 50px; margin-bottom: 20px; margin-top: 20px;margin-right:50px ">
+           
+                  
+             
+               
+                <div class="control-group" >
+                    <label class="col-sm-2 control-label" style="font-size:15px; padding-top:5px; ">群名称</label>
+                    <input id="setgroupName" class="form-control" name="setgroupName" style="width: 80%;" placeholder="请输入群名称" />
+                </div>
+                    <div class="control-group" style="margin-top: 30px;">
+                        <label  class="col-sm-2 control-label" style="font-size:15px; padding-top:5px; ">群头像</label>
+                        <div class="image-editor" style="margin-left: 82px;">
                             <input type="file" class="cropit-image-input">
                             <div class="cropit-preview"></div>
                             <div class="image-size-label">
                                 Resize image
                             </div>
                             <input type="range" class="cropit-image-zoom-input">
-                             
-                            <button class="export">Export</button>
                         </div>
-                        
+                         
                         <div style="clear:both"></div>
                     </div>
 
-         
-            </div>
+              </div>
+            <div class="modal-footer">
 
+                <button id="createGroup" type="button" class="btn btn-primary" >确定创建</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
         </div><!-- /.modal-content -->
     </div>    
 <!-- /.modal -->
