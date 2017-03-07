@@ -232,7 +232,7 @@
 
             });
             //点击用户时绑定用户名和id
-            $(document).on('click', '.chat_ul_item', function () {
+            $(document).on('click', '.friends_item', function () {
                 if (IsCurrentUserOrNotUser(this)) { return; }
                 //获取当前用户用户名
                 var username = $(this).find(".nickname_text").text();
@@ -375,15 +375,34 @@
                     $('.image-editor').cropit();
                     $('.export').click(function () {
                         var imageData = $('.image-editor').cropit('export');
-                        $("#pre").attr("src", imageData);
-                        $("#preview").attr("src", imageData);
-                        var data = imageData.replace("data:image/png;base64,", "");
                         $("#img-data").val(data);
                     });
                 });
 
 
             });
+
+            $(document).on('click', "#createGroup", function () {
+                var groupname=$("#setgroupName").val();
+                var imageData = $('.image-editor').cropit('export');
+                imageData = imageData.replace("data:image/png;base64,", "");
+                $.ajax({
+                    type: 'post',
+                    url: '/Group/CreateGruop',
+                    data: { GroupName: groupname,Avatar:imageData },
+                    beforeSend: function () {
+                      
+                    },
+                    success: function (data) {
+                      
+                    },
+                    complete: function () { layer.closeAll('loading'); },
+                    error: function () { alert("系统出错"); }
+                })
+            });
+
+
+            
         }
 
     </script>
@@ -406,7 +425,7 @@
 </head>
 <body>
     <div class="main" id="divChat">
-        <button id="test">测试</button>
+    
         <div class="pannel">
             <div class="header" style="position: relative; height: 76px; width: 100%;">
                 <div class="avatar">
@@ -445,7 +464,7 @@
             </div>
             <div class="item chat_ul">
                 <div class="chat_ul_div">
-
+                    
 
 
                 </div>
@@ -456,7 +475,7 @@
             <div class="item groups_ul hide">
                 <div class="chat_ul_div">
 
-                    <div data-uid="a401ff37-857f-4816-b981-b91419f37726" class="group_ul_item OnLine" id="ul_item_createGroup">
+                    <div data-uid="a401ff37-857f-4816-b981-b91419f37726" class="chat_ul_item" id="ul_item_createGroup">
                    
                     <div class="avatar">
                         <img class="img" id="img_a401ff37-857f-4816-b981-b91419f37726" src="/Content/upload/image/HeadImage/20170210172536.Jpeg">
@@ -551,7 +570,7 @@
     </div>
     <div id="modal"></div>
 
-    <script src="Scripts/chat/groupHelper.js"></script>
+     
 
 </body>
 </html>
