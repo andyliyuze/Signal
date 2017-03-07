@@ -56,6 +56,7 @@
     <Compile Include="Interface\IDAL.cs" />
     <Compile Include="Interface\IFriendsApply_DAL.cs" />
     <Compile Include="Interface\IFriends_DAL.cs" />
+    <Compile Include="Interface\IGroup_DAL.cs" />
     <Compile Include="Interface\IPrivateMessages_DAL.cs" />
     <Compile Include="Interface\IUserDeatail_DAL.cs" />
     <Compile Include="Interface\IUserInfo_DAL.cs" />

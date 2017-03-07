@@ -327,7 +327,6 @@
                 userHub.server.beFriend(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
             });
 
-
             $(document).on('click', '.reply-refuse', function () {
 
                 //根据鼠标点击结果获取reply数据
@@ -363,10 +362,7 @@
                     return;
                 }
             });
-
-         
-     
-
+        
             $(document).on('click', "#ul_item_createGroup", function () {
 
                 $("#modal").load("/Group/_CreateGroupPage", function (response, status, xhr) {
@@ -400,8 +396,6 @@
                     error: function () { alert("系统出错"); }
                 })
             });
-
-
             
         }
 

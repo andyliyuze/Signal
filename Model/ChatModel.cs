@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
- 
+
 namespace Model
 {
- [Serializable]
+    [Serializable]
         public class BroadcastMessage
         {
 
@@ -112,4 +108,61 @@ namespace Model
 
          public DateTime BefriendTime { get; set; }
  }
+
+
+    [Serializable]
+    public class Group
+    {
+        public Guid GroupId { get; set; }
+
+        public Guid OwnerId { get; set; }
+
+        public string GroupName { get; set; }
+
+        public string GroupAvatar { get; set; }
+
+     
+    }
+    [Serializable]
+    public class GroupMember
+    {
+
+        public Guid Id { get; set; }
+         
+        public string GroupId { get; set; }
+
+        public string MemberId { get; set; }
+
+        public Guid ApproverId { get; set; }
+
+    }
+    [Serializable]
+    public class JoinGroupApply
+    {
+
+        [Key, Column(TypeName = "uniqueidentifier")]
+        public Guid Id { get; set; }
+
+        [Column(TypeName = "uniqueidentifier")]
+        public Guid ApplyUserId { get; set; }
+
+        [Column(TypeName = "uniqueidentifier")]
+        public Guid GroupIdId { get; set; }
+       
+        //申请时间
+        public DateTime ApplyTime { get; set; }
+
+        //回复时间
+        [DefaultValue(typeof(DateTime), "1970-01-01"), Required(AllowEmptyStrings = true)]
+        public DateTime ReplyTime { get; set; }
+        
+        //申请结果
+        [Column(TypeName = "nvarchar"), MaxLength(10)]
+        public string Result { get; set; }
+
+        [Column(TypeName = "nvarchar"), MaxLength(20), DefaultValue("待回复")]
+        public string HasReadResult { get; set; }
+
+    }
 }
+
