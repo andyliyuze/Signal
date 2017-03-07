@@ -52,6 +52,7 @@
     <Compile Include="BroadcastMessages_DAL.cs" />
     <Compile Include="FriendsApply_DAL.cs" />
     <Compile Include="Friends_DAL.cs" />
+    <Compile Include="Group_DAL.cs" />
     <Compile Include="Interface\IBroadcastMessages_DAL.cs" />
     <Compile Include="Interface\IDAL.cs" />
     <Compile Include="Interface\IFriendsApply_DAL.cs" />

@@ -47,6 +47,9 @@ namespace SignalRChat
             builder.RegisterType<UserDetail_DAL>().As<IUserDetail_DAL>();
             builder.RegisterType<BroadcastMessages_DAL>().As<IBroadcastMessages_DAL>();
             builder.RegisterType<PrivateMessages_DAL>().As<IPrivateMessages_DAL>();
+
+
+            builder.RegisterType<Group_DAL>().As<IGroup_DAL>();
             //builder.RegisterType<PopCache>();
             var container = builder.Build();
             GlobalHost.DependencyResolver = new AutofacDependencyResolver(container);

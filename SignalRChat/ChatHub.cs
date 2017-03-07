@@ -23,7 +23,7 @@ namespace SignalRChat
         private readonly IUserDetail_DAL _DALservice;
         private readonly IFriendsApply_DAL _DALFriendsApplyservice;
         private string UserId="";
-        private UserDetail CurrentUser=new UserDetail();
+        UserDetail CurrentUser = new UserDetail();
          #endregion
         public ChatHub(ILifetimeScope lifetimeScope)
         {

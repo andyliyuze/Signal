@@ -1,6 +1,6 @@
 ﻿function AddUser(id, name, avatarPic, IsOnline) {
     var str =
-           " <div data-uid=" + id + " class='chat_ul_item OffLine'id='ul_item_" + id + "'>" +
+           " <div data-uid=" + id + " class='chat_ul_item OffLine friends_item'id='ul_item_" + id + "'>" +
                 "<div class='ext'>" +
                     "<p class='attr ng-binding'>22:29</p>" +
                    " <p class='attr ng-scope'>" +

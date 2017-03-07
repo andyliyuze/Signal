@@ -35,8 +35,9 @@ namespace SignalRChat.Controllers
         {
             string pic = Request.Form["img-data"];
             string name = DateTime.Now.ToString("yyyMMddHHmmss") + ".Jpeg";
+            //存入本地的绝对路径
             var localPath = HttpContext.Server.MapPath(UploadConfig.AvatarPath) + name;
-
+            //存入数据库的相对路径
             model.AvatarPic = UploadConfig.AvatarPath + name;
             UploadHelper.SaveImage(pic, localPath);
             if (ModelState.IsValid)

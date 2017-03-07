@@ -18,7 +18,7 @@
     <script src="Scripts/chat/chatclient.js"></script>
     <script src="Scripts/chat/userclient.js"></script>
 
-
+    <script src="Scripts/chat/groupHelper.js"></script>
     <!--Script references. -->
     <!--Reference the jQuery library. -->
     <!--Reference the SignalR library. -->
@@ -381,22 +381,32 @@
             $(document).on('click', "#createGroup", function () {
                 var groupname=$("#setgroupName").val();
                 var imageData = $('.image-editor').cropit('export');
+                var uid = $("#hdUserName").attr("data-uid");
                 imageData = imageData.replace("data:image/png;base64,", "");
                 $.ajax({
                     type: 'post',
                     url: '/Group/CreateGruop',
-                    data: { GroupName: groupname,Avatar:imageData },
-                    beforeSend: function () {
-                      
-                    },
+                    data: { GroupName: groupname, Avatar: imageData, UserId: uid },
+                  
                     success: function (data) {
-                      
+                        if (data.result == true) {
+                            alert("创建成功");
+                            AddGroup(data.groupId, data.groupName, data.groupAvatar);
+                            $("#CreateGroupModal").modal('hide');
+                        }
+                        else {
+                            alert("创建失败");
+                        }
                     },
-                    complete: function () { layer.closeAll('loading'); },
+                   
                     error: function () { alert("系统出错"); }
                 })
             });
             
+            $(document).on('click', ".dropdown-menu.search_type_ul li a", function ()
+            {
+                $(".search_type").val($(this).text());
+            });
         }
 
     </script>
