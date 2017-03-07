@@ -18,5 +18,10 @@ namespace Model
         public DbSet<FriendsApply> FriendsApply { get; set; }
         public DbSet<Friends> Friends { get; set; }
 
+
+        public DbSet<Group> Group { get; set; }
+        public DbSet<GroupMember> GroupMember { get; set; }
+        public DbSet<JoinGroupApply> JoinGroupApply{ get; set; }
+
     }
 }
