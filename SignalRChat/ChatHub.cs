@@ -61,6 +61,7 @@ namespace SignalRChat
              List<HistoryMsgViewModel> hisMsglist=  _Msgservice.GetHistoryMsg(UserId);
              //获得好友列表
              List<UserDetail> list = _service.GetMyFriendsDetail(_service.GetFriendsIds(UserId));
+
              list.OrderBy(a=>a.IsOnline).ToList();
              string Onlinegruop = CurrentUser.UserName + "的在线好友";
              foreach (var model in list.Where(a=>a.IsOnline==true).ToList()) {
@@ -69,7 +70,8 @@ namespace SignalRChat
              }
               //查询出收到的好友申请列表
              List<FriendsApplyViewModel> FriendsApplys = _DALFriendsApplyservice.GetFriendsApplyByUId(Guid.Parse(UserId));
-            
+            //获取群列表
+            //
            
             //并行执行两个相互不影响的方法；
             //两个并行执行的方法才能用Parallel类
