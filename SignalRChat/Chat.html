@@ -406,7 +406,11 @@
             
             $(document).on('click', ".dropdown-menu.search_type_ul li a", function ()
             {
-                $(".search_type").val($(this).text());
+                var arr = $(".search_type").html().split('<span class="caret"></span>');
+                var text = arr[0];
+                text = $(this).text();
+
+                $(".search_type").html(text+"<span class=caret></span>");
             });
         }
 

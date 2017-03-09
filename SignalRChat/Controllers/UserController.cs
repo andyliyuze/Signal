@@ -55,8 +55,11 @@ namespace SignalRChat.Controllers
             Response.Redirect("/Chat.html");
         }
 
+        public ActionResult _SearchUserPage()
+        {
+            return View();
+        }
 
-        public ActionResult _SearchUserPage() { return View(); }
         public ActionResult _FriensApplysPage()
         {
             return View();
