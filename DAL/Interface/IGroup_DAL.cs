@@ -10,5 +10,6 @@ namespace DAL.Interface
  public   interface IGroup_DAL
     {
       bool  Create(Group model);
+        List<Group> GetGroup(string UserId);
     }
 }
