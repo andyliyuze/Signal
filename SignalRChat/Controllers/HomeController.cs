@@ -29,4 +29,9 @@ namespace SignalRChat.Controllers
             return View();
         }
     }
+
+
+
+
+
 }

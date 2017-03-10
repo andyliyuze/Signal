@@ -187,6 +187,7 @@
     <Compile Include="Extend\MyPrincipal.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MyBaseHub.cs" />
+    <Compile Include="test.cs" />
     <Compile Include="UserHub.cs" />
     <Compile Include="ChatHub.cs" />
     <Compile Include="Controllers\AccountController.cs" />

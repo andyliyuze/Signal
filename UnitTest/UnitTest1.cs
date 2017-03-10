@@ -9,6 +9,8 @@ using ServiceStack.Redis.Support.Queue.Implementation;
 using ServiceStack.Redis.Tests;
 using DAL;
 using Model.ViewModel;
+using Common;
+
 namespace UnitTest
 {
     [TestClass]
@@ -183,5 +185,14 @@ namespace UnitTest
                FriendsApply model = new FriendsApply { ReceiverUserId = Guid.Parse("66847BA8-3B53-43EA-A693-05E78827520F"), Result = "通过", ApplyTime = DateTime.Now, FriendsApplyId = Guid.Parse("5EBA7A3D-35BB-447E-B48D-09DD2F29CE08") };
            _applydal.UpdateResult(model);
            }
+
+
+        [TestMethod]
+
+        public void test_Refelct()
+        {
+
+            ScaleConfig.GetAttribute(1);
+        }
     }
 }
