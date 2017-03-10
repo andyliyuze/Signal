@@ -303,7 +303,8 @@
             //searchBtn
             $(document).on('click', "#searchBtn", function () {
                 var name = $("#searchVal").val();
-                userHub.server.searchUser(name);
+                var type = $(".search_type").attr("data-type");
+                userHub.server.searchUser(name,type);
             });
 
             $(document).on('click', "#sendreply", function () {
@@ -329,7 +330,6 @@
             });
 
             $(document).on('click', '.reply-refuse', function () {
-
                 //根据鼠标点击结果获取reply数据
                 var ReplyModel = createReplyModel(this);
                 //更新一下Storage，该条申请消息的状态为已通过
@@ -365,9 +365,7 @@
             });
         
             $(document).on('click', "#ul_item_createGroup", function () {
-
                 $("#modal").load("/Group/_CreateGroupPage", function (response, status, xhr) {
-
                     $("#CreateGroupModal").modal('show');
                     $('.image-editor').cropit();
                     $('.export').click(function () {
@@ -375,8 +373,6 @@
                         $("#img-data").val(data);
                     });
                 });
-
-
             });
 
             $(document).on('click', "#createGroup", function () {
@@ -387,8 +383,7 @@
                 $.ajax({
                     type: 'post',
                     url: '/Group/CreateGruop',
-                    data: { GroupName: groupname, Avatar: imageData, UserId: uid },
-                  
+                    data: { GroupName: groupname, Avatar: imageData, UserId: uid },                 
                     success: function (data) {
                         if (data.result == true) {
                             alert("创建成功");
@@ -398,8 +393,7 @@
                         else {
                             alert("创建失败");
                         }
-                    },
-                   
+                    },                  
                     error: function () { alert("系统出错"); }
                 })
             });
@@ -409,7 +403,7 @@
                 var arr = $(".search_type").html().split('<span class="caret"></span>');
                 var text = arr[0];
                 text = $(this).text();
-
+                $(".search_type").attr("data-type", text);
                 $(".search_type").html(text+"<span class=caret></span>");
             });
         }

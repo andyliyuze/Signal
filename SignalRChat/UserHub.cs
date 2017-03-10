@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Microsoft.AspNet.SignalR;
 using Autofac;
 using MeassageCache;
 using Model;
-using DAL;
-using System.Web.SessionState;
- 
-using System.Threading.Tasks;
-using System.Diagnostics;
 using DAL.Interface;
-using Microsoft.AspNet.SignalR.Hubs;
 using Model.ViewModel;
 namespace SignalRChat
 {
@@ -30,6 +22,7 @@ namespace SignalRChat
         private readonly IFriendsApply_DAL _friendsApplyDal;
         private readonly IFriends_DAL _friendsDal;
         private readonly ICacheService _service;
+        private readonly IGroup_DAL _IGroupDal;
         #endregion
         public UserHub(ILifetimeScope lifetimeScope)
         {
@@ -43,7 +36,7 @@ namespace SignalRChat
 
             _service = _hubLifetimeScope.Resolve<ICacheService>();
 
-
+            _IGroupDal = _hubLifetimeScope.Resolve<IGroup_DAL>();
         }
         #region Methods
 
@@ -84,12 +77,18 @@ namespace SignalRChat
         }
 
         //好友搜索
-        public void SearchUser(string name)
+        public void SearchUser(string name,string type)
         {
-            string id = _service.GetUserIdByName(name);
-            UserDetail model = _service.GetUserDetail(id);
-            Clients.Caller.searchResultReceived(model);
-        
+            if (type == "好友")
+            {
+                string id = _service.GetUserIdByName(name);
+                UserDetail model = _service.GetUserDetail(id);
+                Clients.Caller.searchResultReceived(model);
+            }
+            else if(type=="群"){
+
+                _IGroupDal
+            }
         }
 
         //好友申请

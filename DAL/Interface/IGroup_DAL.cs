@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace DAL.Interface
     {
       bool  Create(Group model);
         List<Group> GetGroup(string UserId);
+        GroupViewModel GetGroupDeatailByGroupName(string Name);
     }
 }

@@ -35,5 +35,23 @@ namespace DAL
             }
 
         }
+
+        public GroupViewModel GetGroupDeatailByGroupName(string Name)
+        {
+            using (var context = new ChatContext())
+            {
+                try
+                {
+                    GroupViewModel model = context.Group.Join(context.UserDetail, a => a.OwnerId, b => b.UserDetailId,
+                        (a, b) => new GroupViewModel() { Group = a, OwnerName = b.UserName }).FirstOrDefault();
+                    return model;
+                }
+                catch
+                {
+
+                    return null;
+                }
+            }
+        }
     }
 }
