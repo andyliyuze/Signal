@@ -167,17 +167,20 @@
             //点击查看好友申请的item
             $(document).on('click', '.apply_ul_item', function (e) {
                 var Applys = GetSeesionStorageList("FriendsApplys");
-
+                var GroupApplys = GetSeesionStorageList("GroupApplys");
                 $(".list-group.friendsApply li").remove();
+                $(".list-group.groupApply li").remove();
                 if ($("#friendsapplyModal").length <= 0) {
 
                     $("#modal").load("/User/_FriensApplysPage", function (response, status, xhr) {
                         bindingApplys(Applys);
+                        bindingGroupApplys(GroupApplys);
                         $("#friendsapplyModal").modal('show');
                     });
                 }
                 else {
                     bindingApplys(Applys);
+                    bindingGroupApplys(GroupApplys);
                     $("#friendsapplyModal").modal('show');
 
                 }
@@ -195,43 +198,21 @@
                 if ($("#friendsreplyModal").length <= 0) {
 
                     $("#modal").load("/User/_ReplyResultPage", function (response, status, xhr) {
-                        bindingReplys(Replys);
+                    bindingReplys(Replys);
                         $("#friendsreplyModal").modal('show');
                     });
                 }
                 else {
-                   ////
                     bindingReplys(Replys);
                     $("#friendsreplyModal").modal('show');
 
                 }
-                //获取所有未读回复的item
-                var ApplyIdlist = [];
-                for (var i = 0; i < Replys.length; i++) {
-                    var item = Replys[i];
-                    if (item.HasReadResult == false) {
-                        //移除一个元素
-                        Replys.pop(item);
-                        //更改Item属性
-                        item.HasReadResult = true;
-                        //向数组开头添加元素
-                        Replys.unshift(item);
-                        //该数组是数据库需要更新的数组
-                        ApplyIdlist.push(item.AppyId);
-                        //设置sessionstrorage的item
-                        //UpdateItemById(item.AppyId, true, "FriendReplys","添加回复");
-                    }
-                }
-                if (ApplyIdlist.length > 0) {
-
-                    //更新一下Stroage
-                    PushArrInSessionStroage("FriendReplys", Replys);
-
-                    userHub.server.replyHaveRead(ApplyIdlist);
-
-                }
-
+                //更新Stroage以及数据库中未读消息
+                UpdateUnreadFriendsApply(Replys);
             });
+
+         
+
             //点击用户时绑定用户名和id
             $(document).on('click', '.friends_item', function () {
                 if (IsCurrentUserOrNotUser(this)) { return; }
@@ -308,14 +289,24 @@
             });
 
             $(document).on('click', "#sendreply", function () {
+                //确定申请的类型，好友还是群
+                var type = $("#searchresult_uid").attr("data-type");
                 var applyUid = $("#hdUserName").attr("data-uid");
+                //被申请的主键Id，可能是群Id或者好友Id
                 var recevieUid = $("#searchresult_uid").val();
-                if (applyUid == recevieUid) { alert("不能添加自己为好友!"); return; }
-                userHub.server.sendAddFriendsReply(applyUid, recevieUid);
+               if (type == "User") {
+                   if (applyUid == recevieUid) { alert("不能添加自己为好友!"); return; }
+                   userHub.server.sendAddFriendsReply(applyUid, recevieUid);
+               }
+               else
+               {
+
+                   userHub.server.sendAdGroupReply(applyUid, recevieUid);
+               }
             });
 
             //通过申请按钮
-            $(document).on('click', '.reply-pass', function () {
+            $(document).on('click', '.reply-pass.friend', function () {
                 //根据鼠标点击结果获取reply数据
                 var ReplyModel = createReplyModel(this);
                 //更新一下自己的好友列表
@@ -329,7 +320,7 @@
                 userHub.server.beFriend(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
             });
 
-            $(document).on('click', '.reply-refuse', function () {
+            $(document).on('click', '.reply-refuse.friend', function () {
                 //根据鼠标点击结果获取reply数据
                 var ReplyModel = createReplyModel(this);
                 //更新一下Storage，该条申请消息的状态为已通过
@@ -406,6 +397,30 @@
                 $(".search_type").attr("data-type", text);
                 $(".search_type").html(text+"<span class=caret></span>");
             });
+
+
+
+
+
+
+
+
+            //通过入群申请按钮
+            $(document).on('click', '.reply-pass.group', function () {
+                //根据鼠标点击结果获取reply数据
+                var ReplyModel = createReplyModel(this);
+              
+                //更新一下Storage，该条申请消息的状态为已通过
+                UpdateItemById(ReplyModel.ApplyId, "已同意", "GroupApplys");
+                //跟新一下消息界面，将选择按钮改为“同意”
+                $(this).parent().text("已同意");
+                $(this).parent().find("button").remove();
+                //更新一下数据库
+                userHub.server.beGroupMember(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
+            });
+
+
+
         }
 
     </script>

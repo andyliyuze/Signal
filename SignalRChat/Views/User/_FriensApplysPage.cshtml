@@ -3,31 +3,37 @@
 <div class="modal fade" id="friendsapplyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="padding-left: 0px;border-bottom: none;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">好友申请</h4>
-            </div>
-            <div style=" margin-left: 50px; margin-bottom: 100px; margin-top: 20px;margin-right:50px ">
-                <ul class="list-group friendsApply">
-                    @*<li style="" class="list-group-item">
-                <div style="    display: inline-block;width: 40%;">
-                    <img class="reply-avatar" style=" width: 50px; display: block; float: left;   margin-right: 10px;" src="~/Images/mushui.jpg" />
-                    <span class="reply-name" style="font-family:'微软雅黑','黑体','宋体'" ;padding-top 5px;display block;>罗晓婷</span>
-                    <span class="reply-datetime" style="display: block;font-family: '微软雅黑','黑体','宋体';padding-top: 5px;6font-size: 10px;">2010-10-11</span>
-                </div>
-
-
-                <div class="btn-group  btn-group-sm" style="float: right;display:inline;padding-top: 11px;">
-                    <button type="button" class="reply-pass btn btn-primary">通过</button>
-                    <button type="button" class="reply-refuse btn btn-danger">拒绝</button>
-                    <button type="button" class="reply-ignore btn btn-warning">忽略</button>
-                </div>
-                <div style=" clear: both;"></div>
-            </li>*@
-
+              
+                <ul id="myTab" class="nav nav-tabs" style="padding-left: 49px;">
+                    <li class="active">
+                        <a href="#friend_tab" data-toggle="tab">
+                            好友申请
+                        </a>
+                    </li>
+                    <li><a href="#group_tab" data-toggle="tab">入群申请</a></li>
+                  
                 </ul>
-
             </div>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="friend_tab">
+                    <div style="margin-left: 50px; margin-bottom: 100px; margin-top: 20px;margin-right:50px">
+                        <ul class="list-group friendsApply"></ul>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="group_tab">
+               
+                        <div style="margin-left: 50px; margin-bottom: 100px; margin-top: 20px;margin-right:50px">
+                            <ul class="list-group groupApply"></ul>
+
+                        </div>
+                    
+                </div>
+            
+            </div>
+
       
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

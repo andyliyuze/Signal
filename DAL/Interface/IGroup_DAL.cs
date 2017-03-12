@@ -2,16 +2,14 @@
 using Model.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Interface
 {
- public   interface IGroup_DAL
+    public   interface IGroup_DAL
     {
-      bool  Create(Group model);
-        List<Group> GetGroup(string UserId);
+        bool  Create(Group model);
+        List<Group> GetGroup(Guid UserId);
         GroupViewModel GetGroupDeatailByGroupName(string Name);
+        Group GetItemByGroupId(Guid Id); 
     }
 }

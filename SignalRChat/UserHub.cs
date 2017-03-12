@@ -6,6 +6,8 @@ using MeassageCache;
 using Model;
 using DAL.Interface;
 using Model.ViewModel;
+using Newtonsoft.Json.Linq;
+
 namespace SignalRChat
 {
 
@@ -23,6 +25,8 @@ namespace SignalRChat
         private readonly IFriends_DAL _friendsDal;
         private readonly ICacheService _service;
         private readonly IGroup_DAL _IGroupDal;
+        private readonly IGroupMember_DAL _IGroupMemberDal;
+        private readonly IJoinGroupApply_DAL _IJoinGroupApplyDal;
         #endregion
         public UserHub(ILifetimeScope lifetimeScope)
         {
@@ -37,6 +41,8 @@ namespace SignalRChat
             _service = _hubLifetimeScope.Resolve<ICacheService>();
 
             _IGroupDal = _hubLifetimeScope.Resolve<IGroup_DAL>();
+            _IGroupMemberDal = _hubLifetimeScope.Resolve<IGroupMember_DAL>();
+            _IJoinGroupApplyDal = _hubLifetimeScope.Resolve<IJoinGroupApply_DAL>();
         }
         #region Methods
 
@@ -76,18 +82,22 @@ namespace SignalRChat
             UpdateApplyResult("通过", applyId);
         }
 
-        //好友搜索
+        //好友或群搜索
         public void SearchUser(string name,string type)
         {
             if (type == "好友")
             {
                 string id = _service.GetUserIdByName(name);
                 UserDetail model = _service.GetUserDetail(id);
-                Clients.Caller.searchResultReceived(model);
+              
+                var json = new { result = model, type = "User" };
+                Clients.Caller.searchResultReceived(json);
             }
-            else if(type=="群"){
-
-                _IGroupDal
+            else if (type == "群")
+            {
+                GroupViewModel model = _IGroupDal.GetGroupDeatailByGroupName(name);
+                var json = new { result = model, type = "Group" };
+                Clients.Caller.searchResultReceived(json);
             }
         }
 
@@ -104,8 +114,8 @@ namespace SignalRChat
            
                 _friendsApplyDal.SendAddFriendsApply(model);
                 Clients.Caller.applyResult(ApplyStatus.Success);
-               //尝试通知接受者
-                TryTellReceiver(uidA, uidB, ApplyId);
+                //尝试通知接受者
+                TryTellReceiverForFriendsApply(uidA, uidB, ApplyId);
             }
             catch 
             {
@@ -115,7 +125,7 @@ namespace SignalRChat
 
 
 
-        private void TryTellReceiver(string uidA, string uidB,Guid ApplyId)
+        private void TryTellReceiverForFriendsApply(string uidA, string uidB,Guid ApplyId)
         {
             //接受者uid
             string toUserCId = _service.GetUserCId(uidB);
@@ -123,8 +133,9 @@ namespace SignalRChat
             {
                 //发送人信息
                 var user = _service.GetUserDetail(uidA);
-                FriendsApplyViewModel viewmodel = FriendsApplyViewModel.Create(user, ApplyId); 
-                Clients.Client(toUserCId).recevieApply(viewmodel);
+                FriendsApplyViewModel viewmodel = FriendsApplyViewModel.Create(user, ApplyId);
+              
+                Clients.Client(toUserCId).recevieFriendApply(viewmodel);
             }
 
         }
@@ -155,13 +166,21 @@ namespace SignalRChat
             else { return false; }
         }
         //确定查看到回复
-        public void ReplyHaveRead(List<string> appIds)
+        public void FriendReplyHaveRead(List<string> appIds)
         {
 
             var app = new List<string>();
             _friendsApplyDal.SetReadByIds(appIds);
         
         
+        }
+        public void GroupReplyHaveRead(List<string> appIds)
+        {
+
+            var app = new List<string>();
+             _IJoinGroupApplyDal.SetReadByIds(appIds);
+
+
         }
         //申请好友结果的状态枚举
         private enum ApplyStatus
@@ -203,6 +222,118 @@ namespace SignalRChat
             //更新一下好友申请
             FriendsApply apply = new FriendsApply { FriendsApplyId = Guid.Parse(applyId), ReceiverUserId = Guid.Parse(Clients.CallerState.Uid), ReplyTime = DateTime.Now, Result = result, HasReadResult = "未读" };
              _friendsApplyDal.UpdateResult(apply);
+        }
+
+        //发送添加群操作
+        public void SendAdGroupReply(string uidA,string uidB)
+        {
+            if (!CheckIsvalid(uidA) || CheckIsInGruop(uidA, uidB)) { return; };
+            try
+            {
+                //将添加请求持久化到sqlserver
+                var ApplyId = Guid.NewGuid();
+                JoinGroupApply model = new JoinGroupApply
+                {
+                    ApplyTime = DateTime.Now,
+                    ApplyUserId = Guid.Parse(uidA),
+                    GroupIdId = Guid.Parse(uidB),
+                    HasReadResult = "待回复",
+                    Id= ApplyId,
+                    ReplyTime=DateTime.Now,
+                    Result="待审"
+                };
+                _IJoinGroupApplyDal.Add(model);
+            
+                Clients.Caller.applyResult(ApplyStatus.Success);
+                //尝试通知接受者
+                TryTellReceiverForGroupApply(uidA, uidB, ApplyId);
+            }
+            catch
+            {
+                Clients.Caller.applyResult(ApplyStatus.Failed);
+            }
+        }
+
+        //检查是否添加人已经在群里
+
+        private bool CheckIsInGruop(string uidA,string  uidB)
+        {
+            if (_IGroupMemberDal.GetItemByMemberId(Guid.Parse(uidA)) != null)
+            {
+                return true;
+
+            }
+            else { return false; }
+        }
+
+        private void TryTellReceiverForGroupApply(string uidA, string uidB, Guid ApplyId)
+        {
+            //找出组别信息
+            var group = _IGroupDal.GetItemByGroupId(Guid.Parse(uidB));
+            //uidB为群Id，需要先找出群住Id
+            string ownerId= group.OwnerId.ToString();
+
+            //接受者uid
+            string toUserCId = _service.GetUserCId(ownerId);
+            if (!string.IsNullOrEmpty(toUserCId))
+            {
+                //发送人信息
+                var user = _service.GetUserDetail(uidA);
+               
+                GruopApplyViewModel viewmodel = GruopApplyViewModel.Create(user, ApplyId, group);
+            //    var json = new { type = "GroupApply", model = viewmodel };
+                Clients.Client(toUserCId).recevieGroupApply(viewmodel);
+            }
+
+
+        }
+
+        //同意入群操作,uidA代表是通过者，uidB表示是申请者
+        public void BeGroupMember(string uidA, string uidB, string applyId)
+        {
+
+
+
+            //通过者model
+            UserDetail respondserModel = _service.GetUserDetail(uidA);
+            //申请者model
+            UserDetail applicantModel = _service.GetUserDetail(uidB);
+            //通知通过者
+            Clients.Caller.beFriends(applicantModel);
+            //接受者uid
+            string toUserCId = _service.GetUserCId(uidB);
+            //回复模型
+            FriendsReplyViewModel ReplyViewModel = FriendsReplyViewModel.Create(respondserModel, ReplyStatus.Pass, applyId, false);
+            //接受者在线说明存在cid
+            if (!string.IsNullOrEmpty(toUserCId))
+            {
+                //通知申请人
+                Clients.Client(toUserCId).receiveReplyResult(ReplyViewModel);
+            }
+            //自己的客户端也要更新一下用户好友表
+            Clients.Caller.onNewUserConnected(applicantModel);
+
+            //拿到组别Id
+             Guid GroupId =  _IJoinGroupApplyDal.GetItemById(Guid.Parse(applyId)).GroupId;
+
+            //持久化操作
+            GroupMember model = new GroupMember { ApproverId=Guid.Parse(uidA),GroupId=GroupId,Id=Guid.NewGuid(),MemberId=Guid.Parse(uidB) };
+
+            _IGroupMemberDal.Add(model);
+            //更新一下好友申请
+            UpdateGroupApplyResult("通过", applyId);
+
+
+        }
+
+        //更新入群申请操作
+        private void UpdateGroupApplyResult(string result, string applyId)
+        {
+            Guid GroupApplyId = Guid.Parse(applyId);
+
+            //更新一下好友申请
+            JoinGroupApply apply = new JoinGroupApply {Id= GroupApplyId, ReplyTime = DateTime.Now, Result = result, HasReadResult = "未读" };
+           
         }
     }
 

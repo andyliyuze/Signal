@@ -17,7 +17,7 @@ namespace DAL
             return Add(model);
         }
 
-        public List<Group> GetGroup(string UserId)
+        public List<Group> GetGroup(Guid UserId)
         {
             using (var context = new ChatContext())
             {
@@ -42,7 +42,8 @@ namespace DAL
             {
                 try
                 {
-                    GroupViewModel model = context.Group.Join(context.UserDetail, a => a.OwnerId, b => b.UserDetailId,
+                    var model = context.Group.Where(a => a.GroupName.Contains(Name))
+                        .Join(context.UserDetail, a => a.OwnerId, b => b.UserDetailId,
                         (a, b) => new GroupViewModel() { Group = a, OwnerName = b.UserName }).FirstOrDefault();
                     return model;
                 }
@@ -51,6 +52,15 @@ namespace DAL
 
                     return null;
                 }
+            }
+        }
+
+        public Group GetItemByGroupId(Guid Id)
+        {
+            using (ChatContext context = new ChatContext())
+            {
+                var model=    context.Group.Where(a => a.GroupId == Id).FirstOrDefault();
+                return model;
             }
         }
     }

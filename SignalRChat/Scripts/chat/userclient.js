@@ -1,15 +1,31 @@
 ﻿function registerClientMethodsForUser(userHub) {
 
-    userHub.client.searchResultReceived = function (model) {
+    userHub.client.searchResultReceived = function (json) {
+        $(".searchresult_status_span ,.searchresult_owner_span").hide();
         $(".searchresult_info").show();
-        $("#searchresult_avatar").attr("src", model.AvatarPic);
-        $("#searchresult_uid").val(model.UserDetailId);
-        $("#searchresult_name").text(model.UserName);
-
-        if (model.IsOnline == true) { $("#searchresult_status").text("在线"); }
-        else { $("#searchresult_status").text("离线"); }
         //‘添加好友’按钮激活
         $("#sendreply").removeAttr("disabled");
+        if (json.type == "User") {
+           
+            $("#searchresult_avatar").attr("src", json.result.AvatarPic);
+            $("#searchresult_uid").val(json.result.UserDetailId);
+            $("#searchresult_uid").attr("data-type", "User");
+            $("#searchresult_name").text(json.result.UserName);
+            $(".searchresult_status_span").show();
+            if (json.result.IsOnline == true) { $("#searchresult_status").text("在线"); }
+            else { $("#searchresult_status").text("离线"); }
+           
+          
+        }
+        else {
+            $("#searchresult_avatar").attr("src", json.result.Group.GroupAvatar);
+            $("#searchresult_uid").val(json.result.Group.GroupId);
+            //设置一下该Id的类型，是群还是好友，用于发送添加申请时，定位到不同方法中
+            $("#searchresult_uid").attr("data-type", "Group");
+            $("#searchresult_name").text(json.result.Group.GroupName);
+            $(".searchresult_owner_span").show();
+            $("#searchresult_owner").text(json.result.OwnerName)
+        }
 
     }
 
@@ -70,12 +86,10 @@
         $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
     }
     //收到后台发来的好友添加申请
-    userHub.client.recevieApply = function (applyModel) {
+    userHub.client.recevieFriendApply = function (applyModel) {
         //将数据缓存到SeesionStorage
-
+        
         PushSeesionStorage("FriendsApplys", applyModel);
-
-
         if ($(".apply_ul_item").length <= 0) {
             var id = "Applys";
             var name = "添加申请";
@@ -86,6 +100,23 @@
 
 
     }
+
+    //收到后台发来的群添加申请
+    userHub.client.recevieGroupApply = function (applyModel) {
+        //将数据缓存到SeesionStorage
+
+        PushSeesionStorage("GroupApplys", applyModel);
+        if ($(".apply_ul_item").length <= 0) {
+            var id = "Applys";
+            var name = "添加申请";
+            var avatarPic = "Images/usericon.jpg";
+            var IsOnline = true;
+            AddUser(id, name, avatarPic, IsOnline);
+        }
+
+
+    }
+
     //审过别人的好友申请时，后台回传一个改好友当前信息，将此添加到当前
     userHub.client.appendFriends = function (usermodel) {
 

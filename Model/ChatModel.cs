@@ -136,7 +136,7 @@ namespace Model
 
         public Guid GroupId { get; set; }
 
-        public string MemberId { get; set; }
+        public Guid MemberId { get; set; }
 
         public Guid ApproverId { get; set; }
 
@@ -152,7 +152,7 @@ namespace Model
         public Guid ApplyUserId { get; set; }
 
         [Column(TypeName = "uniqueidentifier")]
-        public Guid GroupIdId { get; set; }
+        public Guid GroupId { get; set; }
 
         //申请时间
         public DateTime ApplyTime { get; set; }

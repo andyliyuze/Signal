@@ -77,13 +77,20 @@ function bindingApplys(FriendsApplys) {
         var item = FriendsApplys[i];
         var RightParttext = "";
         if (item.replyResult != "" && item.replyResult != undefined) {
-            RightParttext = item.replyResult;
+            RightParttext =
+                   " <div class='btn-group  btn-group-sm' style='float: right;display:inline;padding-top: 11px;'>" +
+                item.replyResult+
+            "  </div>";
         }
         else {
 
-            RightParttext = "<button type='button' class='reply-pass btn btn-primary'>通过</button>" +
-                    "  <button type='button' class='reply-refuse btn btn-danger'>拒绝</button>" +
-                  "    <button type='button' class='reply-ignore btn btn-warning'>忽略</button>";
+            RightParttext =
+                " <div class='btn-group  btn-group-sm' style='float: right;display:inline;'>" +
+           
+                "<button type='button' class='reply-pass friend btn btn-primary'>通过</button>" +
+                    "  <button type='button' class='reply-refuse friend btn btn-danger'>拒绝</button>" +
+                  "    <button type='button' class='reply-ignore friend btn btn-warning'>忽略</button>" +
+            "  </div>"  ;
 
         }
         var str =
@@ -93,10 +100,9 @@ function bindingApplys(FriendsApplys) {
               "        <img class='reply-avatar' style=' width: 50px; display: block; float: left;   margin-right: 10px;' src='" + item.ApplyUserAvatar + "' />" +
                   "    <span class='reply-name' data-uid='" + item.ApplyUserId + "'data-applyid='" + item.FriendsApplyId + "' style='font-family:'微软雅黑','黑体','宋体'' ;padding-top 5px;display block;>" + item.ApplyUserName + "</span>" +
                    "   <span class='reply-datetime' style='display: block;font-family: '微软雅黑','黑体','宋体';padding-top: 5px;6font-size: 10px;'>" + getTimeFromBackGroung(item.ApplyTime, "") + "</span></div>" +
-
-              " <div class='btn-group  btn-group-sm' style='float: right;display:inline;padding-top: 11px;'>" +
-                  RightParttext
-        "  </div>" +
+ 
+                  RightParttext+
+     
         "  <div style=' clear: both;'></div>" +
      " </li>"
         ;
@@ -110,6 +116,63 @@ function bindingApplys(FriendsApplys) {
 
 
 }
+
+
+
+
+function bindingGroupApplys(GroupApplys) {
+
+
+    for (var i = 0; i < GroupApplys.length; i++) {
+        var item = GroupApplys[i];
+        var RightParttext = "";
+        if (item.replyResult != "" && item.replyResult != undefined) {
+            RightParttext =
+                   " <div class='btn-group  btn-group-sm' style='float: right;display:inline;padding-top: 11px;'>" +
+                item.replyResult +
+            "  </div>";
+        }
+        else {
+
+            RightParttext =
+                " <div class='btn-group  btn-group-sm' style='float: right;display:inline;'>" +
+
+                "<button type='button' class='reply-pass group btn btn-primary'>通过</button>" +
+                    "  <button type='button' class='reply-refuse group btn btn-danger'>拒绝</button>" +
+                  "    <button type='button' class='reply-ignore group btn btn-warning'>忽略</button>" +
+            "  </div>";
+
+        }
+        var middletext = "<div style=' bottom: 5px;position: relative;  display: inline;font-weight: 600; color: #337ab7;'>申请进入" + item.GroupName+ "</div>"
+
+        var str =
+           "    <li style='' class='list-group-item'>" +
+           "       <div style='    display: inline-block;width: 39%;'>" +
+               "<input class='replyUserIsOnline' value='" + item.IsOnline + "' style='display:none' >" +
+              "        <img class='reply-avatar' style=' width: 50px; display: block; float: left;   margin-right: 10px;' src='" + item.ApplyUserAvatar + "' />" +
+                  "    <span class='reply-name' data-uid='" + item.ApplyUserId + "'data-applyid='" + item.GroupApplyId + "' style='font-family:'微软雅黑','黑体','宋体'' ;padding-top 5px;display block;>" + item.ApplyUserName + "</span>" +
+                   "   <span class='reply-datetime' style='display: block;font-family: '微软雅黑','黑体','宋体';padding-top: 5px;6font-size: 10px;'>" + getTimeFromBackGroung(item.ApplyTime, "") + "</span></div>" +
+                   middletext+
+           
+                  RightParttext+
+        
+        "  <div style=' clear: both;'></div>" +
+     " </li>"
+        ;
+
+        //在选中元素之前插入元素
+        $(".groupApply").prepend(str);
+    }
+
+
+
+
+
+}
+//
+
+
+
 //绑定添加回复的消息到弹框页面
 function bindingReplys(Replys) {
 
@@ -209,3 +272,58 @@ function createReplyModel(e) {
     }
     return ReplyModel;
 }
+
+//更新stroage和数据库的未读消息
+function UpdateUnreadFriendsApply(Replys) {
+    //获取所有未读回复的item
+    var ApplyIdlist = [];
+    for (var i = 0; i < Replys.length; i++) {
+        var item = Replys[i];
+        if (item.HasReadResult == false) {
+            //移除一个元素
+            Replys.pop(item);
+            //更改Item属性
+            item.HasReadResult = true;
+            //向数组开头添加元素
+            Replys.unshift(item);
+            //该数组是数据库需要更新的数组
+            ApplyIdlist.push(item.AppyId);
+        }
+    }
+    if (ApplyIdlist.length > 0) {
+        //更新一下Stroage
+        PushArrInSessionStroage("FriendReplys", Replys);
+        //跟新一下数据库
+        userHub.server.friendReplyHaveRead(ApplyIdlist);
+
+    }
+
+}
+function UpdateUnreadGroupApply(Replys) {
+    //获取所有未读回复的item
+    var ApplyIdlist = [];
+    for (var i = 0; i < Replys.length; i++) {
+        var item = Replys[i];
+        if (item.HasReadResult == false) {
+            //移除一个元素
+            Replys.pop(item);
+            //更改Item属性
+            item.HasReadResult = true;
+            //向数组开头添加元素
+            Replys.unshift(item);
+            //该数组是数据库需要更新的数组
+            ApplyIdlist.push(item.AppyId);
+        }
+    }
+    if (ApplyIdlist.length > 0) {
+        //更新一下Stroage
+        PushArrInSessionStroage("GroupReplys", Replys);
+        //跟新一下数据库
+        userHub.server.groupReplyHaveRead(ApplyIdlist);
+
+    }
+
+}
+
+
+ 
