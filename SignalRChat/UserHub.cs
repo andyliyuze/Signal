@@ -236,7 +236,7 @@ namespace SignalRChat
                 {
                     ApplyTime = DateTime.Now,
                     ApplyUserId = Guid.Parse(uidA),
-                    GroupIdId = Guid.Parse(uidB),
+                    GroupId = Guid.Parse(uidB),
                     HasReadResult = "待回复",
                     Id= ApplyId,
                     ReplyTime=DateTime.Now,
