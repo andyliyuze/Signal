@@ -122,4 +122,9 @@
 
         AddUser(usermodel.UserDetailId, usermodel.UserName, usermodel.AvatarPic, usermodel.IsOnline);
     }
+
+    userHub.client.beGroupMember = function ()
+    {
+
+    }
 }

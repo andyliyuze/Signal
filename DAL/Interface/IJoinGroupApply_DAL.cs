@@ -13,6 +13,7 @@ namespace DAL.Interface
         bool    Add(JoinGroupApply model);
         bool SetReadByIds(List<string> ids);
         JoinGroupApply GetItemById(Guid Id);
+        bool  UpdateResult(JoinGroupApply apply);
     }
 
 }
