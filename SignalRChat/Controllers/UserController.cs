@@ -39,7 +39,7 @@ namespace SignalRChat.Controllers
             var localPath = HttpContext.Server.MapPath(UploadConfig.AvatarPath) + name;
             //存入数据库的相对路径
             model.AvatarPic = UploadConfig.AvatarPath + name;
-            UploadHelper.SaveImage(pic, localPath);
+            UploadHelper.SaveImageFromBase64(pic, localPath);
             if (ModelState.IsValid)
             {
                 Guid Id = Guid.NewGuid();

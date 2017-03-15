@@ -41,7 +41,7 @@ namespace SignalRChat.Controllers
             var localPath = HttpContext.Server.MapPath(UploadConfig.AvatarPath) + name;
             //存入数据库的相对路径
             string path = UploadConfig.AvatarPath + name;
-            UploadHelper.SaveImage(data, localPath);
+            UploadHelper.SaveImageFromBase64(data, localPath);
             Guid GroupId = Guid.NewGuid();
             var flag = _Groupservice.Create(new Group { OwnerId = Guid.Parse(uid), GroupAvatar = path, GroupId = GroupId, GroupName = GroupName });
 

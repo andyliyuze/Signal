@@ -10,12 +10,11 @@ namespace Common
     public class UploadHelper
     {
 
-        public static void SaveImage(string data, string path)
+        public static void SaveImageFromBase64(string data, string path)
         {
 
             byte[] bytes1 = Convert.FromBase64String(data);  //将2进制编码转换为8位无符号整数数组.
-            //byte[] bytes2 = Convert.FromBase64String(pic2);  //将2进制编码转换为8位无符号整数数组.
-            //byte[] bytes3 = Convert.FromBase64String(pic3);  //将2进制编码转换为8位无符号整数数组.
+           
 
 
 

@@ -47,7 +47,27 @@ namespace DAL
             {
                 using (var context = new ChatContext())
                 {
-                    return TryUpdate(apply, context);
+                   
+                     Func<JoinGroupApply, bool> f = x =>
+                      {
+
+                          JoinGroupApply model = context.JoinGroupApply.Where(a => a.Id == x.Id).FirstOrDefault();
+                          if (model != null)
+                          {
+                              model.HasReadResult = x.HasReadResult;
+                              model.Result = x.Result;
+                              model.ReplyTime = DateTime.Now;
+                              context.Set<JoinGroupApply>().Attach(model);
+                              context.Entry<JoinGroupApply>(model).State = EntityState.Modified;
+                              return context.SaveChanges() > 0;
+                          }
+                          else
+                          {
+                              return false;
+                          }
+                      };
+
+                    return f(apply);
                 }
             }
             catch
@@ -73,5 +93,9 @@ namespace DAL
                 return false;
             }
         }
+
+
+
+
     }
 }
