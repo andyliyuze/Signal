@@ -85,6 +85,32 @@
         AddUser(replyModel.ReplyUserId, replyModel.ReplyUserName, replyModel.ReplyUserAvatar, IsOnline);
         $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
     }
+
+
+    //收到添加群的申请的回复
+    userHub.client.receiveGroupReplyResult = function (replyModel) {
+        //将数据缓存到SeesionStorage       
+        PushSeesionStorage("GroupReplys", replyModel);
+        var IsOnline = true;
+        var Id = "Replys";
+        var Name = "申请回复";
+        var avatarPic = "Images/usericon.jpg";
+        //防添加止重复
+        if ($(".reply_ul_item").length <= 0) {
+            //append一条好友申请的回复
+            AddUser(Id, Name, avatarPic, IsOnline);
+        }
+        //append一条好友头像信息
+    
+        AddGroup(replyModel.ReplyGroupId, replyModel.ReplyGroupName, replyModel.ReplyGroupAvatar);
+        $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
+    }
+
+
+
+
+
+
     //收到后台发来的好友添加申请
     userHub.client.recevieFriendApply = function (applyModel) {
         //将数据缓存到SeesionStorage

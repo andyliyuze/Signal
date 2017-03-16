@@ -289,11 +289,15 @@ namespace SignalRChat
             }
         }
 
-        //同意入群操作,uidA代表是通过者，uidB表示是申请者
+        //同意入群操作,uidA代表是组别Id，uidB表示是申请者
         public void BeGroupMember(string uidA, string uidB, string applyId)
         {
-            //通过者model
-            UserDetail respondserModel = _service.GetUserDetail(uidA);
+            //拿到组别Id
+            Guid GroupId = _IJoinGroupApplyDal.GetItemById(Guid.Parse(applyId)).GroupId;
+
+            //拿到组别实体
+            Group group = _IGroupDal.GetItemByGroupId(GroupId);
+
             //申请者model
             UserDetail applicantModel = _service.GetUserDetail(uidB);
             //通知通过者
@@ -301,21 +305,20 @@ namespace SignalRChat
             //接受者uid
             string toUserCId = _service.GetUserCId(uidB);
             //回复模型
-            FriendsReplyViewModel ReplyViewModel = FriendsReplyViewModel.Create(respondserModel, ReplyStatus.Pass, applyId, false);
+           GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Pass, applyId, false);
             //接受者在线说明存在cid
             if (!string.IsNullOrEmpty(toUserCId))
             {
                 //通知申请人
-                Clients.Client(toUserCId).receiveReplyResult(ReplyViewModel);
+                Clients.Client(toUserCId).receiveGroupReplyResult(ReplyViewModel);
             }
-            //拿到组别Id
-             Guid GroupId =  _IJoinGroupApplyDal.GetItemById(Guid.Parse(applyId)).GroupId;
+        
 
             //持久化操作
             GroupMember model = new GroupMember { ApproverId=Guid.Parse(uidA),GroupId=GroupId,Id=Guid.NewGuid(),MemberId=Guid.Parse(uidB) };
-
+            //成员表添加数据
             _IGroupMemberDal.Add(model);
-            //更新一下好友申请
+            //更新一下好友申请表
             UpdateGroupApplyResult("通过", applyId);
         }
 

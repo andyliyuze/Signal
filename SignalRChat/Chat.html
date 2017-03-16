@@ -408,7 +408,7 @@
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已同意");
                 $(this).parent().find("button").remove();
-                //更新一下数据库
+                //更新一下数据库,此时ReceiverUserId代表组Id
                 userHub.server.beGroupMember(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
             });
 
