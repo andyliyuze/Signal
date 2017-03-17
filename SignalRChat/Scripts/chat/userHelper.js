@@ -173,7 +173,7 @@ function bindingGroupApplys(GroupApplys) {
 
 
 
-//绑定添加回复的消息到弹框页面
+//绑定添加好友回复的消息到弹框页面
 function bindingReplys(Replys) {
 
     for (var i = 0; i < Replys.length; i++) {
@@ -195,6 +195,32 @@ function bindingReplys(Replys) {
 
         //在选中元素之前插入元素
         $(".friendsReply").prepend(str);
+    }
+
+}
+
+//绑定添加群添加回复的消息到弹框页面
+function bindingGroupReplys(Replys) {
+
+    for (var i = 0; i < Replys.length; i++) {
+        var item = Replys[i];
+        var result = GetReplysResultStr(Replys[i].ReplyStatus);
+
+        var str =
+           "<li style='' class='list-group-item'>" +
+           "<div style='    display: inline-block;width: 50%;'>" +
+              " <img class='reply-avatar' style=' width: 50px; display: block; float: left;   margin-right: 10px;' src='" + item.ReplyGroupAvatar + "' />" +
+                  "<span class='reply-name' data-groupid='" + item.ReplyGroupId + "'data-applyid='" + item.AppyId + "' style='font-family:'微软雅黑','黑体','宋体'' ;padding-top 5px;display block;>" + item.ReplyGroupName + "</span>" +
+                   "<span class='reply-datetime' style='display: block;font-family: '微软雅黑','黑体','宋体';padding-top: 5px;6font-size: 10px;'>" + getTimeFromBackGroung(item.ReplyTime, "") + "</span></div>" +
+                   "<div class='btn-group  btn-group-sm' style='float: right;display:inline;padding-top: 11px;'>" +
+                  result
+        "</div>" +
+        "<div style=' clear: both;'></div>" +
+     " </li>"
+        ;
+
+        //在选中元素之前插入元素
+        $(".groupReply").prepend(str);
     }
 
 }

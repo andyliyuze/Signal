@@ -191,27 +191,33 @@
             //点击查看添加好友回复
             $(document).on('click', '.reply_ul_item', function (e) {
 
-                var Replys = GetSeesionStorageList("FriendReplys");
+                var FriendReplys = GetSeesionStorageList("FriendReplys");
+                var GroupReplys = GetSeesionStorageList("GroupReplys");
                 //去除好点标识
                 $(this).find("i.icon").removeClass("web_wechat_reddot");
                 $(".list-group.friendsReply li").remove();
+                $(".list-group.groupReply li").remove();
                 if ($("#friendsreplyModal").length <= 0) {
 
                     $("#modal").load("/User/_ReplyResultPage", function (response, status, xhr) {
-                    bindingReplys(Replys);
+                        
+                        bindingReplys(FriendReplys);
+                        
+                        bindingGroupReplys(GroupReplys)
                         $("#friendsreplyModal").modal('show');
                     });
                 }
                 else {
-                    bindingReplys(Replys);
+                     
+                    bindingReplys(FriendReplys);
+                    bindingGroupReplys(GroupReplys)
                     $("#friendsreplyModal").modal('show');
 
                 }
                 //更新Stroage以及数据库中未读消息
-                UpdateUnreadFriendsApply(Replys);
-            });
-
-         
+                UpdateUnreadFriendsApply(FriendReplys);
+                UpdateUnreadGroupApply(GroupReplys);
+            });       
 
             //点击用户时绑定用户名和id
             $(document).on('click', '.friends_item', function () {

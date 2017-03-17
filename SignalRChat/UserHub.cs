@@ -305,15 +305,13 @@ namespace SignalRChat
             //接受者uid
             string toUserCId = _service.GetUserCId(uidB);
             //回复模型
-           GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Pass, applyId, false);
+            GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Pass, applyId, false);
             //接受者在线说明存在cid
             if (!string.IsNullOrEmpty(toUserCId))
             {
                 //通知申请人
                 Clients.Client(toUserCId).receiveGroupReplyResult(ReplyViewModel);
-            }
-        
-
+            }      
             //持久化操作
             GroupMember model = new GroupMember { ApproverId=Guid.Parse(uidA),GroupId=GroupId,Id=Guid.NewGuid(),MemberId=Guid.Parse(uidB) };
             //成员表添加数据
