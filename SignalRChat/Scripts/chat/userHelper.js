@@ -227,14 +227,11 @@ function bindingGroupReplys(Replys) {
 
  
 //根据申请消息Id从SeesionStorage获取改item
-function UpdateItemById(id, result, key) {
+function UpdateItemById(id, result, key,IdName) {
     var list = GetSeesionStorageList(key);
     var temp;
-    list.filter(function (index) {
-      
-            index = filterForApplys(index, id, result);
-      
-         
+    list.filter(function (index) {      
+        index = filterForApplys(index, id, result,IdName);
         return true;
     });
     sessionStorage.removeItem(key);
@@ -245,11 +242,13 @@ function UpdateItemById(id, result, key) {
 
 }
 //更改申请消息的item sessionstorage
-function filterForApplys(index, id, result) {
+function filterForApplys(index, id, result, IdName) {
 
-    if (index.FriendsApplyId == id) {
+    if (index[IdName] != undefined && index[IdName] == id)
+    {
         index.replyResult = result;
     }
+   
     return index;
 }
 //更改回复消息的item sessionstorage
@@ -349,6 +348,30 @@ function UpdateUnreadGroupApply(Replys) {
 
     }
 
+}
+
+
+function ShowReplyModalBeforeCheck(FriendsReplysLength, GroupReplysLength)
+{
+    if (FriendsReplysLength == 0) {
+        $(".myTab_li_friendsReoly").hide();
+        $(".myTab_li_friendsReoly").removeClass("active");
+        $(".myTab_li_groupReoly").addClass("active");
+
+        $("#friend_tab").removeClass("in active");
+        $("#group_tab").addClass("in active");
+
+    }
+    if (GroupReplysLength == 0) {
+        $(".myTab_li_groupReoly").hide();
+        $(".myTab_li_groupReoly").removeClass("active");
+        $(".myTab_li_friendsReoly").addClass("active");
+
+        
+        $("#group_tab").removeClass("in active");
+        $("#friend_tab").addClass("in active");
+
+    }
 }
 
 

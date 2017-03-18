@@ -4,7 +4,8 @@
     UnAuthorize:1,
     Failed:2,
     Friended: 3,
-    YourSelf:4
+    YourSelf: 4,
+    BeenMember:5
    
 }
 var LoginStatus = {

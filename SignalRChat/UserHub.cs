@@ -194,7 +194,8 @@ namespace SignalRChat
             UnAuthorize=1,
             Failed=2,
             Friended=3,
-            YourSelf=4
+            YourSelf=4,
+            BeenMember=5
        }
 
         //拒绝操作
@@ -266,10 +267,12 @@ namespace SignalRChat
         {
             if (_IGroupMemberDal.GetItemByMemberId(Guid.Parse(uidA)) != null)
             {
+                Clients.Caller.applyResult(ApplyStatus.BeenMember);
                 return true;
 
             }
-            else { return false; }
+            else {
+                return false; }
         }
 
         private void TryTellReceiverForGroupApply(string uidA, string uidB, Guid ApplyId)

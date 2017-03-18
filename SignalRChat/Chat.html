@@ -204,13 +204,15 @@
                         bindingReplys(FriendReplys);
                         
                         bindingGroupReplys(GroupReplys)
+                        ShowReplyModalBeforeCheck(FriendReplys.length, GroupReplys.length);
                         $("#friendsreplyModal").modal('show');
                     });
                 }
                 else {
                      
                     bindingReplys(FriendReplys);
-                    bindingGroupReplys(GroupReplys)
+                    bindingGroupReplys(GroupReplys);
+                    ShowReplyModalBeforeCheck(FriendReplys.length, GroupReplys.length);
                     $("#friendsreplyModal").modal('show');
 
                 }
@@ -311,9 +313,10 @@
                 //更新一下自己的好友列表
                 AddUser(ReplyModel.ApplyUid, ReplyModel.ReplyName, ReplyModel.Avatar, ReplyModel.IsOnline);
                 //更新一下Storage，该条申请消息的状态为已通过
-                UpdateItemById(ReplyModel.ApplyId, "已同意", "FriendsApplys");
+                UpdateItemById(ReplyModel.ApplyId, "已同意", "FriendsApplys", "FriendsApplyId");
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已同意");
+                $(this).parent().css("padding-top","10px");
                 $(this).parent().find("button").remove();
                 //更新一下数据库
                 userHub.server.beFriend(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
@@ -326,6 +329,7 @@
                 UpdateItemById(ReplyModel.ApplyId, "已拒绝", "FriendsApplys");
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已拒绝");
+                $(this).parent().css("padding-top", "10px");
                 $(this).parent().find("button").remove();
                 //更新一下数据库
                 userHub.server.refuseApply(ReplyModel.ReceiverUserId, ReplyModel.ApplyId, ReplyModel.ApplyId);
@@ -410,15 +414,21 @@
                 var ReplyModel = createReplyModel(this);
               
                 //更新一下Storage，该条申请消息的状态为已通过
-                UpdateItemById(ReplyModel.ApplyId, "已同意", "GroupApplys");
+                UpdateItemById(ReplyModel.ApplyId, "已同意", "GroupApplys", "GroupApplyId");
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已同意");
+                $(this).parent().css("padding-top", "10px");
                 $(this).parent().find("button").remove();
                 //更新一下数据库,此时ReceiverUserId代表组Id
                 userHub.server.beGroupMember(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
             });
 
-
+            //监听模态框关闭事件
+            $(document).on('.modal', 'hide.bs.modal', function () {
+                // 执行一些动作...
+                $("#modal").children().remove();
+            })
+            //清除
 
         }
 
@@ -426,12 +436,7 @@
 
 
     <script>
-        //监听模态框关闭事件
-        $(document).on('.modal', 'hide.bs.modal', function () {
-            // 执行一些动作...
-            $("#modal").children().remove();
-        })
-        //清除
+        
         $(function () {
             sessionStorage.clear();
 

@@ -60,8 +60,12 @@
             alert("对方已经是你好友");
             return;
         }
-        if (result = ApplyStatus.YourSelf) {
+        if (result == ApplyStatus.YourSelf) {
             alert("不能添加自己为好友");
+            return;
+        }
+        if (result == ApplyStatus.BeenMember) {
+            alert("您已经是该群成员");
             return;
         }
 
