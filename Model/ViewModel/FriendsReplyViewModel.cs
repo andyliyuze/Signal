@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Common;
+using System;
 
 namespace Model.ViewModel
 {
     public  class FriendsReplyViewModel
     {
-        private FriendsReplyViewModel() { }
+        public FriendsReplyViewModel() { }
 
         public Guid AppyId { get; set; }
         public Guid ReplyUserId { get; set; }
@@ -29,13 +30,5 @@ namespace Model.ViewModel
    
     }
 
-  public enum ReplyStatus
-  {
 
-
-      Pass = 0,
-      Decline = 1,
-      Ignore = 2,
-
-  }
 }

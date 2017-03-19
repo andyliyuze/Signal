@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Common;
+using System;
 
 namespace Model.ViewModel
 {
     public class GroupReplyViewModel
     {
-        private GroupReplyViewModel() { }
+        public GroupReplyViewModel() { }
 
         public Guid AppyId { get; set; }
         public Guid ReplyGroupId { get; set; }

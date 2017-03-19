@@ -7,6 +7,7 @@ using Model;
 using DAL.Interface;
 using Model.ViewModel;
 using Newtonsoft.Json.Linq;
+using Common;
 
 namespace SignalRChat
 {
@@ -220,7 +221,7 @@ namespace SignalRChat
            
         }
 
-
+        //好友申请结果更新
         private void UpdateApplyResult(string result, string applyId) 
         {
 
@@ -287,7 +288,7 @@ namespace SignalRChat
             {
                 //发送人信息
                 var user = _service.GetUserDetail(uidA);             
-                GruopApplyViewModel viewmodel = GruopApplyViewModel.Create(user, ApplyId, group);       
+                GroupApplyViewModel viewmodel = GroupApplyViewModel.Create(user, ApplyId, group);       
                 Clients.Client(toUserCId).recevieGroupApply(viewmodel);
             }
         }
@@ -331,7 +332,67 @@ namespace SignalRChat
             JoinGroupApply apply = new JoinGroupApply {Id = GroupApplyId, ReplyTime = DateTime.Now, Result = result, HasReadResult = "未读" };
             _IJoinGroupApplyDal.UpdateResult(apply);
         }
+
+
+        //拒绝操作
+        public void RefuseGroupApply(string uidA, string applyUserId, string applyId)
+        {
+            //拿到组别Id
+            Guid GroupId = _IJoinGroupApplyDal.GetItemById(Guid.Parse(applyId)).GroupId;
+
+            //拿到组别实体
+            Group group = _IGroupDal.GetItemByGroupId(GroupId);
+             
+            //回复模型
+            GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Decline, applyId, false);
+            //检查申请人是否在线
+            string Cid = _service.GetUserCId(applyUserId);
+            if (!string.IsNullOrEmpty(Cid))
+            {
+
+                //尝试通知申请人
+                Clients.Client(Cid).receiveGroupReplyResult(ReplyViewModel);
+            }
+            // 更新一下数据库，申请表
+            string result = "拒绝";
+            UpdateGroupApplyResult(result, applyId);
+
+        }
+
+
+
+
+
+        //获取未读群添加回复
+        public void GetUnreadGroupReply() {
+            string uid = Clients.CallerState.Uid;
+            var list = _IJoinGroupApplyDal.GetGroupReplyByUId(Guid.Parse(uid));
+
+            Clients.Caller.receiveGroupReplyList(list);
+        }
+        //获取未审核群添加申请
+        public void GettUnapproveGroupApply() {
+            string uid = Clients.CallerState.Uid;
+            var list = _IJoinGroupApplyDal.GetGroupApplyByUId(Guid.Parse(uid));
+            Clients.Caller.receiveGroupApplyList(list);
+        }
+        //获取未读添好友加回复
+        public void GetUnreadFriendsReply()
+        {
+            string uid = Clients.CallerState.Uid;
+            var list = _friendsApplyDal.GetFriendsReplyByUId(Guid.Parse(uid));
+            Clients.Caller.receiveFriendReplyList(list);
+
+        }
+        //获取未审核好友添加申请
+        public void GetUnapproveFriendsApply()
+        {
+
+            string uid = Clients.CallerState.Uid;
+            var list = _friendsApplyDal.GetFriendsApplyByUId(Guid.Parse(uid));
+            Clients.Caller.receiveFriendApplyList(list);
+        }
     }
 
- 
+
 }

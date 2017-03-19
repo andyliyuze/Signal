@@ -21,6 +21,7 @@ namespace UnitTest
         MessageService _Msgservice = new MessageService();
         PrivateMessages_DAL _DAL = new PrivateMessages_DAL();
         FriendsApply_DAL _applydal = new FriendsApply_DAL();
+        JoinGroupApply_DAL _groupapplydal = new JoinGroupApply_DAL();
         Friends_DAL _frienddal = new Friends_DAL();
         [TestMethod]
         public void Test_CacheService_Register()
@@ -193,6 +194,35 @@ namespace UnitTest
         {
 
             ScaleConfig.GetAttribute(1);
+        }
+
+
+        [TestMethod]
+
+        public void test_GetGroupApplyByUId()
+        {
+          var list=       _groupapplydal.GetGroupApplyByUId(Guid.Parse("DDA0E29C-A821-478E-B925-080EA9E1EE54"));
+
+
+        }
+
+
+        [TestMethod]
+
+        public void test_GetGroupReplyByUId()
+        {
+            var list = _groupapplydal.GetGroupReplyByUId(Guid.Parse("bc01539f-0985-4db8-9dce-ef1073ba8f6c"));
+
+
+        }
+
+        [TestMethod]
+
+        public void test_GetFriendsReplyByUId()
+        {
+            var list = _applydal.GetFriendsReplyByUId(Guid.Parse("66847ba8-3b53-43ea-a693-05e78827520f"));
+
+
         }
     }
 }

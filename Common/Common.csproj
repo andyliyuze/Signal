@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReplyStatusHelper.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="UploadHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

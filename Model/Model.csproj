@@ -59,13 +59,19 @@
     <Compile Include="ViewModel\FriendsApplyViewModel.cs" />
     <Compile Include="ViewModel\FriendsReplyViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
-    <Compile Include="ViewModel\GruopApplyViewModel.cs" />
+    <Compile Include="ViewModel\GroupApplyViewModel.cs" />
     <Compile Include="ViewModel\PrivateMessageViewModel.cs" />
     <Compile Include="ViewModel\GroupReplyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{B69174AC-6F4E-424B-8C0C-DCFDCAD5FA95}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

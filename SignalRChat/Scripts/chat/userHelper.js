@@ -178,13 +178,15 @@ function bindingReplys(Replys) {
 
     for (var i = 0; i < Replys.length; i++) {
         var item = Replys[i];
-        var result = GetReplysResultStr(Replys[i].ReplyStatus);
+        var result = GetReplysResultStr(item.ReplyStatus);
 
         var str =
            "<li style='' class='list-group-item'>" +
            "<div style='    display: inline-block;width: 50%;'>" +
               " <img class='reply-avatar' style=' width: 50px; display: block; float: left;   margin-right: 10px;' src='" + item.ReplyUserAvatar + "' />" +
-                  "<span class='reply-name' data-uid='" + item.ReplyUserId + "'data-applyid='" + item.FriendsApplyId + "' style='font-family:'微软雅黑','黑体','宋体'' ;padding-top 5px;display block;>" + item.ReplyUserName + "</span>" +
+                  "<span class='reply-name' data-uid='" + item.ReplyUserId + "'data-applyid='"
+                  + item.FriendsApplyId + "' style='font-family:'微软雅黑','黑体','宋体'' ;padding-top 5px;display block;>"
+                  + item.ReplyUserName + "</span>" +
                    "<span class='reply-datetime' style='display: block;font-family: '微软雅黑','黑体','宋体';padding-top: 5px;6font-size: 10px;'>" + getTimeFromBackGroung(item.ReplyTime, "") + "</span></div>" +
                    "<div class='btn-group  btn-group-sm' style='float: right;display:inline;padding-top: 11px;'>" +
                   result
@@ -299,25 +301,25 @@ function createReplyModel(e) {
 }
 
 //更新stroage和数据库的未读消息
-function UpdateUnreadFriendsApply(Replys) {
+function UpdateUnreadFriendsApply(Applys) {
     //获取所有未读回复的item
     var ApplyIdlist = [];
-    for (var i = 0; i < Replys.length; i++) {
-        var item = Replys[i];
+    for (var i = 0; i < Applys.length; i++) {
+        var item = Applys[i];
         if (item.HasReadResult == false) {
             //移除一个元素
-            Replys.pop(item);
+         //   Applys.pop(item);
             //更改Item属性
             item.HasReadResult = true;
             //向数组开头添加元素
-            Replys.unshift(item);
+           // Applys.unshift(item);
             //该数组是数据库需要更新的数组
             ApplyIdlist.push(item.AppyId);
         }
     }
     if (ApplyIdlist.length > 0) {
         //更新一下Stroage
-        PushArrInSessionStroage("FriendReplys", Replys);
+        PushArrInSessionStroage("FriendReplys", Applys);
         //跟新一下数据库
         userHub.server.friendReplyHaveRead(ApplyIdlist);
 
@@ -371,6 +373,32 @@ function ShowReplyModalBeforeCheck(FriendsReplysLength, GroupReplysLength)
         $("#group_tab").removeClass("in active");
         $("#friend_tab").addClass("in active");
 
+    }
+}
+
+//好友，群通用
+function AppendApplyMsgIntoUl()
+{
+    if ($(".apply_ul_item").length <= 0) {
+        var id = "Applys";
+        var name = "添加申请";
+        var avatarPic = "Images/usericon.jpg";
+        var IsOnline = true;
+        AddUser(id, name, avatarPic, IsOnline);
+    }
+}
+//好友，群通用
+function AppendReplyMsgIntoUl()
+{
+   
+    //防添加止重复
+    if ($(".reply_ul_item").length <= 0) {
+        var IsOnline = true;
+        var Id = "Replys";
+        var Name = "申请回复";
+        var avatarPic = "Images/usericon.jpg";
+        //append一条好友申请的回复
+        AddUser(Id, Name, avatarPic, IsOnline);
     }
 }
 

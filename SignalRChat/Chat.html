@@ -197,8 +197,9 @@
                 $(this).find("i.icon").removeClass("web_wechat_reddot");
                 $(".list-group.friendsReply li").remove();
                 $(".list-group.groupReply li").remove();
-                if ($("#friendsreplyModal").length <= 0) {
-
+                if ($("#friendsreplyModal").length <= 0)
+                {
+                    //此步骤是异步操作，因此必须等待异步完成后才能更改Stroage以及数据库
                     $("#modal").load("/User/_ReplyResultPage", function (response, status, xhr) {
                         
                         bindingReplys(FriendReplys);
@@ -206,6 +207,9 @@
                         bindingGroupReplys(GroupReplys)
                         ShowReplyModalBeforeCheck(FriendReplys.length, GroupReplys.length);
                         $("#friendsreplyModal").modal('show');
+                        //更新Stroage以及数据库中未读消息
+                        UpdateUnreadFriendsApply(FriendReplys);
+                        UpdateUnreadGroupApply(GroupReplys);
                     });
                 }
                 else {
@@ -214,11 +218,11 @@
                     bindingGroupReplys(GroupReplys);
                     ShowReplyModalBeforeCheck(FriendReplys.length, GroupReplys.length);
                     $("#friendsreplyModal").modal('show');
-
+                    //更新Stroage以及数据库中未读消息
+                    UpdateUnreadFriendsApply(FriendReplys);
+                    UpdateUnreadGroupApply(GroupReplys);
                 }
-                //更新Stroage以及数据库中未读消息
-                UpdateUnreadFriendsApply(FriendReplys);
-                UpdateUnreadGroupApply(GroupReplys);
+            
             });       
 
             //点击用户时绑定用户名和id
@@ -288,7 +292,7 @@
                 var type = $(".search_type").attr("data-type");
                 userHub.server.searchUser(name,type);
             });
-
+            //发送申请，群或者好友
             $(document).on('click', "#sendreply", function () {
                 //确定申请的类型，好友还是群
                 var type = $("#searchresult_uid").attr("data-type");
@@ -314,26 +318,70 @@
                 AddUser(ReplyModel.ApplyUid, ReplyModel.ReplyName, ReplyModel.Avatar, ReplyModel.IsOnline);
                 //更新一下Storage，该条申请消息的状态为已通过
                 UpdateItemById(ReplyModel.ApplyId, "已同意", "FriendsApplys", "FriendsApplyId");
+
+                //先修改一下样式
+                $(this).parent().css("padding-top", "10px");
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已同意");
-                $(this).parent().css("padding-top","10px");
-                $(this).parent().find("button").remove();
+               $(this).parent().find("button").remove();
                 //更新一下数据库
                 userHub.server.beFriend(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
             });
-
+            //拒绝好友申请
             $(document).on('click', '.reply-refuse.friend', function () {
                 //根据鼠标点击结果获取reply数据
                 var ReplyModel = createReplyModel(this);
                 //更新一下Storage，该条申请消息的状态为已通过
                 UpdateItemById(ReplyModel.ApplyId, "已拒绝", "FriendsApplys");
+                //先修改一下样式
+                $(this).parent().css("padding-top", "10px");
+
                 //跟新一下消息界面，将选择按钮改为“同意”
                 $(this).parent().text("已拒绝");
-                $(this).parent().css("padding-top", "10px");
+               
                 $(this).parent().find("button").remove();
                 //更新一下数据库
                 userHub.server.refuseApply(ReplyModel.ReceiverUserId, ReplyModel.ApplyId, ReplyModel.ApplyId);
             });
+
+            //通过入群申请按钮
+            $(document).on('click', '.reply-pass.group', function () {
+                //根据鼠标点击结果获取reply数据
+                var ReplyModel = createReplyModel(this);
+
+                //更新一下Storage，该条申请消息的状态为已通过
+                UpdateItemById(ReplyModel.ApplyId, "已同意", "GroupApplys", "GroupApplyId");
+
+                //先修改一下样式
+               $(this).parent().css("padding-top", "10px");
+
+                //跟新一下消息界面，将选择按钮改为“同意”
+                $(this).parent().text("已同意");
+            
+                $(this).parent().find("button").remove();
+                //更新一下数据库,此时ReceiverUserId代表组Id
+                userHub.server.beGroupMember(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
+            });
+
+            //拒绝入群申请
+            $(document).on('click', '.reply-refuse.group', function () {
+                //根据鼠标点击结果获取reply数据
+                var ReplyModel = createReplyModel(this);
+                //更新一下Storage，该条申请消息的状态为已通过
+                UpdateItemById(ReplyModel.ApplyId, "已拒绝", "GroupApplys", "GroupApplyId");
+
+                //先修改一下样式
+                $(this).parent().css("padding-top", "10px");
+                //跟新一下消息界面，将选择按钮改为“同意”
+                $(this).parent().text("已拒绝");
+               
+                $(this).parent().find("button").remove();
+                //更新一下数据库
+                userHub.server.refuseGroupApply(ReplyModel.ReceiverUserId, ReplyModel.ApplyId, ReplyModel.ApplyId);
+            });
+
+
+
             //tab切换
             $(".tab .tab_item").click(function () {
                 $(".pannel .item").addClass("hide");
@@ -408,20 +456,7 @@
 
 
 
-            //通过入群申请按钮
-            $(document).on('click', '.reply-pass.group', function () {
-                //根据鼠标点击结果获取reply数据
-                var ReplyModel = createReplyModel(this);
-              
-                //更新一下Storage，该条申请消息的状态为已通过
-                UpdateItemById(ReplyModel.ApplyId, "已同意", "GroupApplys", "GroupApplyId");
-                //跟新一下消息界面，将选择按钮改为“同意”
-                $(this).parent().text("已同意");
-                $(this).parent().css("padding-top", "10px");
-                $(this).parent().find("button").remove();
-                //更新一下数据库,此时ReceiverUserId代表组Id
-                userHub.server.beGroupMember(ReplyModel.ReceiverUserId, ReplyModel.ApplyUid, ReplyModel.ApplyId);
-            });
+          
 
             //监听模态框关闭事件
             $(document).on('.modal', 'hide.bs.modal', function () {

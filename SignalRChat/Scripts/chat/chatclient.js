@@ -6,8 +6,7 @@
         setScreen(true);
         userHub.state.Uid = chatHub.state.Uid;
         userHub.state.CurrentUserInfo = chatHub.state.CurrentUserInfo;
-        //$(".message").remove();
-        //$(".user").remove();
+
 
         $('#hdUserName').attr("data-uid", user.UserDetailId);
         $('#hdUserName').text(user.UserName);
@@ -22,19 +21,11 @@
             bindingMsg(hisMsglist[i]);
 
         }
-        if (FriendsApplys.length > 0) {
-            //将数据缓存到SeesionStorage
-            for (var i = 0; i < FriendsApplys.length; i++) {
-                PushSeesionStorage("FriendsApplys", FriendsApplys[i]);
-            }
-            var id = "Applys";
-            var name = "添加申请";
-
-            var avatarPic = "Images/usericon.jpg";
-            var IsOnline = true;
-            AddUser(id, name, avatarPic, IsOnline);
-            //   bindingApplys(FriendsApplys);
-        }
+        //延时获取申请消息，回复消息
+        setTimeout(function () { userHub.server.getUnreadGroupReply();  }, 1000);
+        setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
+        setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
+        setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
     }
 
     // On New User Connected

@@ -76,17 +76,13 @@
     userHub.client.receiveReplyResult = function (replyModel) {
         //将数据缓存到SeesionStorage       
         PushSeesionStorage("FriendReplys", replyModel);
-        var IsOnline = true;
-        var Id = "Replys";
-        var Name = "申请回复";
-        var avatarPic = "Images/usericon.jpg";
-        //防添加止重复
-        if ($(".reply_ul_item").length <= 0) {
-            //append一条好友申请的回复
-            AddUser(Id, Name, avatarPic, IsOnline);
+       
+        if (replyModel.ReplyStatus == ReplyStatus.Pass) {
+            //append一条好友头像信息
+            AddUser(replyModel.ReplyUserId, replyModel.ReplyUserName, replyModel.ReplyUserAvatar, IsOnline);
         }
-        //append一条好友头像信息
-        AddUser(replyModel.ReplyUserId, replyModel.ReplyUserName, replyModel.ReplyUserAvatar, IsOnline);
+        //在消息列表处添加回复消息，并添加红点
+        AppendReplyMsgIntoUl();
         $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
     }
 
@@ -95,19 +91,16 @@
     userHub.client.receiveGroupReplyResult = function (replyModel) {
         //将数据缓存到SeesionStorage       
         PushSeesionStorage("GroupReplys", replyModel);
-        var IsOnline = true;
-        var Id = "Replys";
-        var Name = "申请回复";
-        var avatarPic = "Images/usericon.jpg";
-        //防添加止重复
-        if ($(".reply_ul_item").length <= 0) {
-            //append一条好友申请的回复
-            AddUser(Id, Name, avatarPic, IsOnline);
+        
+        
+        if (replyModel.ReplyStatus == ReplyStatus.Pass)
+        {
+            //append一条好友头像信息
+            AddGroup(replyModel.ReplyGroupId, replyModel.ReplyGroupName, replyModel.ReplyGroupAvatar);
         }
-        //append一条好友头像信息
-    
-        AddGroup(replyModel.ReplyGroupId, replyModel.ReplyGroupName, replyModel.ReplyGroupAvatar);
-        $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
+        //在消息列表处添加回复消息，并添加红点
+        AppendReplyMsgIntoUl();
+        $("#ul_item_Applys").find(".avatar .icon").addClass("web_wechat_reddot");
     }
 
 
@@ -120,14 +113,9 @@
         //将数据缓存到SeesionStorage
         
         PushSeesionStorage("FriendsApplys", applyModel);
-        if ($(".apply_ul_item").length <= 0) {
-            var id = "Applys";
-            var name = "添加申请";
-            var avatarPic = "Images/usericon.jpg";
-            var IsOnline = true;
-            AddUser(id, name, avatarPic, IsOnline);
-        }
-
+        //在消息列表处添加申请消息，并添加红点
+        AppendApplyMsgIntoUl();
+        $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
 
     }
 
@@ -136,25 +124,72 @@
         //将数据缓存到SeesionStorage
 
         PushSeesionStorage("GroupApplys", applyModel);
-        if ($(".apply_ul_item").length <= 0) {
-            var id = "Applys";
-            var name = "添加申请";
-            var avatarPic = "Images/usericon.jpg";
-            var IsOnline = true;
-            AddUser(id, name, avatarPic, IsOnline);
+        //在消息列表处添加申请消息，并添加红点
+        AppendApplyMsgIntoUl();
+        $("#ul_item_Applys").find(".avatar .icon").addClass("web_wechat_reddot");
+
+    }
+
+   
+   
+
+
+    //收到添加群的申请的回复,属于历史消息
+    userHub.client.receiveGroupReplyList = function (replyList) {
+        if (replyList.length > 0) {
+            //将数据缓存到SeesionStorage       
+            for (var i = 0; i < replyList.length; i++) {
+                var replyModel = replyList[i];
+                PushSeesionStorage("GroupReplys", replyModel);
+            }
+            //在消息列表处添加回复消息，并添加红点
+            AppendReplyMsgIntoUl();
+            $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
         }
-
-
     }
 
-    //审过别人的好友申请时，后台回传一个改好友当前信息，将此添加到当前
-    userHub.client.appendFriends = function (usermodel) {
 
-        AddUser(usermodel.UserDetailId, usermodel.UserName, usermodel.AvatarPic, usermodel.IsOnline);
+    //收到添加好友的申请的回复,属于历史消息
+    userHub.client.receiveFriendReplyList = function (replyList) {
+        if (replyList.length > 0) {
+            //将数据缓存到SeesionStorage       
+            for (var i = 0; i < replyList.length; i++) {
+                var replyModel = replyList[i];
+                PushSeesionStorage("FriendReplys", replyModel);
+            }
+            //在消息列表处添加回复消息，并添加红点
+            AppendReplyMsgIntoUl();
+            $("#ul_item_Replys").find(".avatar .icon").addClass("web_wechat_reddot");
+        }
     }
 
-    userHub.client.beGroupMember = function ()
-    {
 
+
+
+    //收到添加群的申请消息,属于历史消息
+    userHub.client.receiveGroupApplyList = function (applyList) {
+        if (applyList.length > 0) {
+            //将数据缓存到SeesionStorage       
+            for (var i = 0; i < applyList.length; i++) {
+                var applyModel = applyList[i];
+                PushSeesionStorage("GroupApplys", applyModel);
+            }
+            //在消息列表处添加回复消息，并添加红点
+            AppendApplyMsgIntoUl();
+            $("#ul_item_Applys").find(".avatar .icon").addClass("web_wechat_reddot");
+        }
+    }
+    //收到添加好友的申请消息,属于历史消息
+    userHub.client.receiveFriendApplyList = function (applyList) {
+        if (applyList.length > 0) {
+            //将数据缓存到SeesionStorage       
+            for (var i = 0; i < applyList.length; i++) {
+                var applyModel = applyList[i];
+                PushSeesionStorage("FriendApplys", applyModel);
+            }
+            //在消息列表处添加回复消息，并添加红点
+            AppendApplyMsgIntoUl();
+            $("#ul_item_Applys").find(".avatar .icon").addClass("web_wechat_reddot");
+        }
     }
 }

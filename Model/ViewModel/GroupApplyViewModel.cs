@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.ViewModel
 {
-  public  class GruopApplyViewModel
+  public  class GroupApplyViewModel
     {
 
         public Guid GroupApplyId
@@ -25,10 +25,10 @@ namespace Model.ViewModel
         public DateTime ApplyTime { get; set; }
 
 
-        public static GruopApplyViewModel Create(UserDetail applymodel, Guid ApplyId,Group groupmodel)
+        public static GroupApplyViewModel Create(UserDetail applymodel, Guid ApplyId,Group groupmodel)
         {
 
-            return new GruopApplyViewModel
+            return new GroupApplyViewModel
             {
                 GroupApplyId = ApplyId,
                 GroupId = groupmodel.GroupId,
