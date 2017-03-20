@@ -10,6 +10,7 @@ namespace DAL.Interface
         bool  Create(Group model);
         List<Group> GetGroup(Guid UserId);
         GroupViewModel GetGroupDeatailByGroupName(string Name);
-        Group GetItemByGroupId(Guid Id); 
+        Group GetItemByGroupId(Guid Id);
+        List<Group> GetMyGroups(Guid UserId);
     }
 }

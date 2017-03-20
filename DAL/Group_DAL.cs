@@ -63,5 +63,21 @@ namespace DAL
                 return model;
             }
         }
+
+        public List<Group> GetMyGroups(Guid UserId)
+        {
+            try
+            {
+                using (var context = new ChatContext())
+                {
+                    var list = context.GroupMember.Where(a => a.MemberId == UserId).Join(context.Group, a => a.GroupId, b => b.GroupId, (a, b) =>b
+                   ).ToList();
+                    return list;
+                }
+            }
+            catch { return new List<Group>(); }
+
+        }
+
     }
 }

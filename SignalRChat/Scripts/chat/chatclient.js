@@ -1,7 +1,7 @@
 ﻿function registerClientMethodsForChat(chatHub) {
 
     // Calls when user successfully logged in
-    chatHub.client.onConnected = function (user, allUsers, hisMsglist, FriendsApplys) {
+    chatHub.client.onConnected = function (user, allUsers,grouplist, hisMsglist) {
 
         setScreen(true);
         userHub.state.Uid = chatHub.state.Uid;
@@ -17,6 +17,13 @@
 
             AddUser(allUsers[i].UserDetailId, allUsers[i].UserName, allUsers[i].AvatarPic, allUsers[i].IsOnline);
         }
+        // Add All Groups
+        for (i = 0; i < grouplist.length; i++) {
+
+            var group = grouplist[i];
+            AddGroup(group.GroupId, group.GroupName, group.GroupAvatar);
+        }
+
         for (i = 0; i < hisMsglist.length; i++) {
             bindingMsg(hisMsglist[i]);
 
@@ -70,7 +77,7 @@
         PushSeesionStorage(key, message);
 
         //绑定消息在聊天对话框框
-        if (message.SenderId.trim() == $("#currentUserName").attr("data-uid").trim()) {
+        if (message.SenderId.trim() === $("#currentUserName").attr("data-uid").trim()) {
 
             AddMessage(message);
             $("#ul_item_" + uid + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
@@ -100,7 +107,7 @@
             //如果未读消息大于0
             $("#ul_item_" + uid + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
             $("#ul_item_" + uid + "").find(".avatar .icon").addClass("web_wechat_reddot");
-            var unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" + unreadhtml;
+             unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" + unreadhtml;
             $("#ul_item_" + uid + "").find(".chat_item_info p.msg").append(unreadhtml);
             return;
         }
@@ -110,12 +117,12 @@
     //登陆结果
     chatHub.client.loginResult = function (result) {
 
-        if (result == LoginStatus.Success) {
+        if (result === LoginStatus.Success) {
             return;
 
         }
-        if (result == LoginStatus.Failed) { alert("密码错误"); }
-        if (result == LoginStatus.UserUnExist) { alert("用户名不存在"); }
+        if (result === LoginStatus.Failed) { alert("密码错误"); }
+        if (result === LoginStatus.UserUnExist) { alert("用户名不存在"); }
 
     }
     chatHub.client.OutLogin = function () {

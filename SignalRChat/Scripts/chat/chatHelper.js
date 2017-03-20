@@ -1,8 +1,8 @@
 ﻿$(function () {
     $('.image-editor').cropit({
         imageState: {
-            src: '1.jpg',
-        },
+            src: '1.jpg'
+        }
     });
 
     $('.rotate-cw').click(function () {
@@ -35,7 +35,7 @@ function bindingMsg(model) {
     //如果未读消息大于0
     if (model.UnReadMsgCount > 0) {
         $("#ul_item_" + uid + "").find(".avatar .icon").addClass("web_wechat_reddot");
-        var unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[" + model.UnReadMsgCount + "条]</span>" + unreadhtml;
+         unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[" + model.UnReadMsgCount + "条]</span>" + unreadhtml;
         $("#ul_item_" + uid + "").addClass("NeedGetMsgFromBack");
         $("#ul_item_" + uid + "").attr("data-unreadCount", model.UnReadMsgCount);
         $("#ul_item_" + uid + "").attr("data-unreadMsgId", model.Message.PrivateMessageId);
@@ -52,7 +52,7 @@ function bindingMsg(model) {
 function GetStrogeMessage(chatingId) {
     var key = key = "MessageListWith_" + chatingId;
     var str = sessionStorage.getItem(key);
-    if (str != null) {
+    if (str !== null) {
         var list = JSON.parse(str);
         for (var i = 0; i < list.length; i++) {
 
@@ -70,7 +70,7 @@ function AddMessage(message) {
     var me = "";
     var MyId = $("#hdUserName").attr("data-uid");
     //接收者id不等于我的Id，说明我是发送者
-    if (message.SenderId.trim() == MyId.trim()) {
+    if (message.SenderId.trim() === MyId.trim()) {
         src = $("#myheadsrc").attr("src");
         bubble_default = "bubble_primary ";
         me = "me";
@@ -91,7 +91,7 @@ function AddMessage(message) {
                               "  </div</div></div></div>";
     $(".message_ul").append(str);
     //绑定好友列表出的聊天消息，前端
-    if ($("#ul_item_" + message.RecevierId + "").find(".chat_item_info p.msg").find("span").length == 0) {
+    if ($("#ul_item_" + message.RecevierId + "").find(".chat_item_info p.msg").find("span").length === 0) {
 
         var unreadhtml = "<span class='ng-binding' data-creatime='" + message.CreateTime + "'>"
         + message.content + "</span>";

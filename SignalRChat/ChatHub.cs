@@ -22,6 +22,7 @@ namespace SignalRChat
         private readonly IMessageService _Msgservice;
         private readonly IUserDetail_DAL _DALservice;
         private readonly IFriendsApply_DAL _DALFriendsApplyservice;
+        private readonly IGroup_DAL _IGroupDal;
         private string UserId="";
         UserDetail CurrentUser = new UserDetail();
          #endregion
@@ -35,7 +36,7 @@ namespace SignalRChat
             _DALservice = _hubLifetimeScope.Resolve<IUserDetail_DAL>();
             _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
 
-
+            _IGroupDal= _hubLifetimeScope.Resolve<IGroup_DAL>();
             _DALFriendsApplyservice = _hubLifetimeScope.Resolve<IFriendsApply_DAL>();
           
  
@@ -60,24 +61,27 @@ namespace SignalRChat
                //获得与每位好友的历史消息，最新一条以及未读消息数量
              List<HistoryMsgViewModel> hisMsglist=  _Msgservice.GetHistoryMsg(UserId);
              //获得好友列表
-             List<UserDetail> list = _service.GetMyFriendsDetail(_service.GetFriendsIds(UserId));
+             List<UserDetail> friendlist = _service.GetMyFriendsDetail(_service.GetFriendsIds(UserId));
 
-             list.OrderBy(a=>a.IsOnline).ToList();
+             friendlist.OrderBy(a=>a.IsOnline).ToList();
              string Onlinegruop = CurrentUser.UserName + "的在线好友";
-             foreach (var model in list.Where(a=>a.IsOnline==true).ToList()) {
-
+             foreach (var model in friendlist.Where(a=>a.IsOnline==true).ToList())
+            {
                  Groups.Add(model.UserCId,Onlinegruop);
              }
-              //查询出收到的好友申请列表
-             List<FriendsApplyViewModel> FriendsApplys = _DALFriendsApplyservice.GetFriendsApplyByUId(Guid.Parse(UserId));
             //获取群列表
-            //
-           
+            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(UserId));
+            foreach (Group group in grouplist)
+            {
+
+                Join(group.GroupName.Trim());
+            }
+         
             //并行执行两个相互不影响的方法；
             //两个并行执行的方法才能用Parallel类
             Parallel.Invoke(
             //  send to caller当前用户
-             () => Clients.Caller.onConnected(CurrentUser, list, hisMsglist, FriendsApplys),
+             () => Clients.Caller.onConnected(CurrentUser, friendlist, grouplist, hisMsglist),
             // send to friends,通知所有在线好友
              ()=>   Clients.Group(Onlinegruop).onNewUserConnected(UserId, userName)
               );          
@@ -278,10 +282,26 @@ namespace SignalRChat
             Failed = 1,
         
         }
-        #endregion
-    
 
-}
+
+        //添加组成员
+        public Task Join(string groupName)
+        {
+            
+            return Groups.Add(Context.ConnectionId, groupName);
+
+        }
+        //移除组成员，当用户下线时候
+        public Task Leave(string groupName)
+        {
+
+            return Groups.R(Context.ConnectionId, groupName);
+
+        }
+        #endregion
+
+
+    }
 
 
 
