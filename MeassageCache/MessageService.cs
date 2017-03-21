@@ -25,11 +25,11 @@ namespace MeassageCache
                 {
                     
                     //添加消息实体到hash类型
-                    string key = "PrivateMessageHash:" + model.PrivateMessageId.ToString() + "";
+                    string key = "PrivateMessageHash:" + model.MessageId.ToString() + "";
                     var kvp = RedisClient.ConvertToHashFn(model);
                     redisClient.SetRangeInHash(key, kvp);
                     //将消息Id保存到list队列就nb
-                    redisClient.PushItemToList("PrivateMessageList", model.PrivateMessageId.ToString());
+                    redisClient.PushItemToList("PrivateMessageList", model.MessageId.ToString());
 
                    //i等于1代表第一个参数大，第二个参数小，所以把小的放前面大的放后面
                     //从而构成
@@ -47,7 +47,7 @@ namespace MeassageCache
                        long stamp=      TimeHelper.GetTimeStamp(model.CreateTime);
 
                     //讲消息id添加到消息集合
-                    redisClient.AddItemToSortedSet(setKey, model.PrivateMessageId.ToString(), stamp);
+                    redisClient.AddItemToSortedSet(setKey, model.MessageId.ToString(), stamp);
                    
                      UpdateHistoryMsgHash(model, redisClient);
                     
@@ -69,7 +69,7 @@ namespace MeassageCache
 
                 HistoryMsgHashModel hisMsgModel = new HistoryMsgHashModel();
                 hisMsgModel = redisClient.GetAllEntriesFromHash(setHisMsgKey).ToJson().FromJson<HistoryMsgHashModel>();
-                hisMsgModel.MessageId = model.PrivateMessageId.ToString();
+                hisMsgModel.MessageId = model.MessageId.ToString();
                 hisMsgModel.UnReadMsgCount = hisMsgModel.UnReadMsgCount + 1; 
            
                 var HisMsgkvp = RedisClient.ConvertToHashFn(hisMsgModel);

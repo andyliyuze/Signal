@@ -13,13 +13,15 @@ namespace Model
     public class BroadcastMessage
     {
 
-        [Key, Column(TypeName = "uniqueidentifier")]
-        public Guid BroadcastMessageId { get; set; }
+        [Key]
+        public Guid MessageId { get; set; }
+        public string SenderId { get; set; }
         [MaxLength(500, ErrorMessage = "消息长度不能超过500字")]
-        public string Message { get; set; }
+        public string content { get; set; }
         [MaxLength(10, ErrorMessage = "用户名不能超过10字符")]
-        public string UserName { get; set; }
-        //public int SenderId { get; set; }
+        public string SenderName { get; set; }
+        public string GroupId { get; set; }
+        public DateTime CreateTime { get; set; }
 
     }
     [Serializable]  //必须添加序列化特性
@@ -27,7 +29,7 @@ namespace Model
     {
 
         [Key]
-        public Guid PrivateMessageId { get; set; }
+        public Guid MessageId { get; set; }
         public string SenderId { get; set; }
         [MaxLength(500, ErrorMessage = "消息长度不能超过500字")]
         public string content { get; set; }

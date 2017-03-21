@@ -92,6 +92,10 @@
       <Project>{855346e4-f7a1-447a-a703-ad361d357113}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SignalRChat\SignalRChat.csproj">
+      <Project>{46075541-6250-4fc8-a087-7ec39f56b500}</Project>
+      <Name>SignalRChat</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

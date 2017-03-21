@@ -728,7 +728,7 @@
                 var unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[" + model.UnReadMsgCount + "条]</span>" + unreadhtml;
                 $("#ul_item_" + uid + "").addClass("NeedGetMsgFromBack");
                 $("#ul_item_" + uid + "").attr("data-unreadCount", model.UnReadMsgCount);
-                $("#ul_item_" + uid + "").attr("data-unreadMsgId", model.Message.PrivateMessageId);
+                $("#ul_item_" + uid + "").attr("data-unreadMsgId", model.Message.MessageId);
             }
 
 
@@ -895,7 +895,7 @@
                     </a>
                 </div>
             </div>
-            <div style=" margin-bottom: 0px; margin-right: 0px; height: 446px; overflow-y: auto;" class="chat_ul">
+            <div style="margin-bottom: 0px; margin-right: 0px; height: 446px; overflow-y: auto;" class="chat_ul">
                 <div class="ng-scope chat_ul_div">
 
 
@@ -912,7 +912,7 @@
                 <div class="panel-body" style="padding-bottom: 0; height: 377px; overflow: auto;">
                     <div class="ng-scope">
                         <div class="message_ul">
-                            <div class="message_item message" style=" margin-bottom: 16px; float: left; width: 100%;">
+                            <div class="message_item message" style="margin-bottom: 16px; float: left; width: 100%;">
                                 <p class="message_system ng-scope">
                                     <span class="content ng-binding">9:52</span>
                                 </p>
@@ -937,7 +937,7 @@
 
 
 
-                            <div class="message_item message me" style=" margin-bottom: 16px; float: left; width: 100%;">
+                            <div class="message_item message me" style="margin-bottom: 16px; float: left; width: 100%;">
                                 <p class="message_system ng-scope">
                                     <span class="content ng-binding">9:52</span>
                                 </p>

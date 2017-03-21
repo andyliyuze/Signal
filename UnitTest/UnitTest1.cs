@@ -10,6 +10,7 @@ using ServiceStack.Redis.Tests;
 using DAL;
 using Model.ViewModel;
 using Common;
+using SignalRChat;
 
 namespace UnitTest
 {
@@ -23,6 +24,7 @@ namespace UnitTest
         FriendsApply_DAL _applydal = new FriendsApply_DAL();
         JoinGroupApply_DAL _groupapplydal = new JoinGroupApply_DAL();
         Friends_DAL _frienddal = new Friends_DAL();
+         
         [TestMethod]
         public void Test_CacheService_Register()
         {
@@ -153,7 +155,7 @@ namespace UnitTest
            [TestMethod]
         public void test_pop(){
             List<PrivateMessage> list = new List<PrivateMessage>();
-            PrivateMessage model = new PrivateMessage { PrivateMessageId =Guid.Parse("0d10ad72-bc1b-4bd5-8c1a-7b8a1793d48e"), SenderId = "aSASAS" };
+            PrivateMessage model = new PrivateMessage { MessageId = Guid.Parse("0d10ad72-bc1b-4bd5-8c1a-7b8a1793d48e"), SenderId = "aSASAS" };
             list.Add(model);
                _DAL.AddList(list);
             
@@ -224,5 +226,8 @@ namespace UnitTest
 
 
         }
+
+
+
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="ViewModel\FriendsReplyViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
     <Compile Include="ViewModel\GroupApplyViewModel.cs" />
+    <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="ViewModel\PrivateMessageViewModel.cs" />
     <Compile Include="ViewModel\GroupReplyViewModel.cs" />
   </ItemGroup>

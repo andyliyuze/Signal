@@ -9,6 +9,8 @@ using DAL;
 using System.Threading.Tasks;
 using DAL.Interface;
 using Model.ViewModel;
+using System.Diagnostics;
+
 namespace SignalRChat
 {
 
@@ -46,9 +48,12 @@ namespace SignalRChat
 
 
      
-        public void Connect(string userName,string Pwd)
+        public  void Connect(string userName,string Pwd)
         {
-          
+            System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start(); //  开始监视代码运行时间
+            //  you code ....
+            
 
             //表示新尝试登陆的用户的连接Id
             var newcid = Context.ConnectionId;            
@@ -65,45 +70,50 @@ namespace SignalRChat
 
              friendlist.OrderBy(a=>a.IsOnline).ToList();
              string Onlinegruop = CurrentUser.UserName + "的在线好友";
-             foreach (var model in friendlist.Where(a=>a.IsOnline==true).ToList())
+
+            //获取群列表
+            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(UserId));
+         
+            foreach (var model in friendlist.Where(a=>a.IsOnline==true).ToList())
             {
                  Groups.Add(model.UserCId,Onlinegruop);
              }
-            //获取群列表
-            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(UserId));
-            foreach (Group group in grouplist)
-            {
-
-                Join(group.GroupName.Trim());
-            }
-         
+        
             //并行执行两个相互不影响的方法；
             //两个并行执行的方法才能用Parallel类
             Parallel.Invoke(
             //  send to caller当前用户
              () => Clients.Caller.onConnected(CurrentUser, friendlist, grouplist, hisMsglist),
             // send to friends,通知所有在线好友
-             ()=>   Clients.Group(Onlinegruop).onNewUserConnected(UserId, userName)
-              );          
+             ()=>   Clients.Group(Onlinegruop).onNewUserConnected(UserId, userName),
+             () =>Join(grouplist)
+              );
+
+
+
+
+            stopwatch.Stop(); //  停止监视
+            TimeSpan timespan = stopwatch.Elapsed; //  获取当前实例测量得出的总时间
+            double hours = timespan.TotalHours; // 总小时
+            double minutes = timespan.TotalMinutes;  // 总分钟
+            double seconds = timespan.TotalSeconds;  //  总秒数
+            double milliseconds = timespan.TotalMilliseconds;  //  总毫秒数       
         }
 
     
 
         public void SendMessageToAll( string userName, string message)
         {
-            int uid = Convert.ToInt32(Clients.CallerState.Uid);  //用它来代替Session
-          
-           
-
+            int uid = Convert.ToInt32(Clients.CallerState.Uid);  //用它来代替Session  
         }
 
      
-        public void SendPrivateMessage(PrivateMessage model)
+        public void SendPrivateMessage(Message model)
         {
-            
-           
-             
-            
+
+
+            model.RecevierId = model.ChattingId;
+            model.type = "friend";
             //发送者Cid
             string fromUserId = Context.ConnectionId;
             //接受者uid
@@ -111,7 +121,7 @@ namespace SignalRChat
             //定义消息实体
            
             model.CreateTime = DateTime.Now;
-            model.PrivateMessageId = Guid.NewGuid();
+            model.MessageId = Guid.NewGuid();
             model.SenderId = Clients.CallerState.Uid;
            
             
@@ -272,15 +282,13 @@ namespace SignalRChat
         {
             Success = 0,
             UserUnExist = 1,
-            Failed = 2,
+            Failed = 2
         }
 
         private enum SendMessageStatus
         {
-            Success = 0,
-          
-            Failed = 1,
-        
+            Success = 0,        
+            Failed = 1      
         }
 
 
@@ -295,9 +303,55 @@ namespace SignalRChat
         public Task Leave(string groupName)
         {
 
-            return Groups.R(Context.ConnectionId, groupName);
+            return Groups.Remove(Context.ConnectionId, groupName);
 
         }
+
+        public async void  Leave(List<string> groupNames)
+        {
+            foreach (var groupName in groupNames)
+            {
+             await   Groups.Remove(Context.ConnectionId, groupName);
+            }
+          
+        }
+        public async void Join(List<Group> grouplist)
+        {
+            foreach (var group  in grouplist)
+            {
+                await Groups.Add(Context.ConnectionId, group.GroupName);
+            }
+
+        }
+
+
+
+
+        public void sendGroupMessage(Message model)
+        {
+            //组别Id就是接受者Id
+            model.GroupId = model.ChattingId;
+            model.type = "group";
+            //发送者Cid
+            string fromUserId = Context.ConnectionId;
+            //接受者uid
+            string GroupName = _IGroupDal.GetItemByGroupId(Guid.Parse(model.GroupId)).GroupName;
+            //定义消息实体
+
+            model.CreateTime = DateTime.Now;
+            model.MessageId = Guid.NewGuid();
+            model.SenderId = Clients.CallerState.Uid;
+
+
+            Clients.OthersInGroup(GroupName).receiveGroupMessage(model);
+
+
+
+
+
+
+        }
+
         #endregion
 
 

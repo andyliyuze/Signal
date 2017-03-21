@@ -105,17 +105,7 @@
                 }
             });
 
-            //群发消息
-            $('#btnSendMsg').click(function () {
-
-                var msg = $("#txtMessage").val();
-                if (msg.length > 0) {
-
-                    var userName = $('#hdUserName').val();
-                    chatHub.server.sendMessageToAll(userName, msg);
-                    $("#txtMessage").val('');
-                }
-            });
+          
 
 
             $("#txtNickName").keypress(function (e) {
@@ -123,15 +113,18 @@
                     $("#btnStartChat").click();
                 }
             });
-
-            $("#txtMessage").keypress(function (e) {
+            //在编辑文本框时候按下enter键，表示发送消息
+            $("#txtPrivateMessage").keypress(function (e) {
                 if (e.which == 13) {
-                    $('#btnSendMsg').click();
+                    if ($('.btn_send').hasClass("single")) { $(".btn_send.single").click(); }
+                    if ($('.btn_send').hasClass("group")) { $(".btn_send.group").click(); }
+                    else { return;}
                 }
             });
             // Send Button event
             //私信消息
-            $(".btn_send").click(function () {
+            $(document).on("click", ".btn_send.single", function () { 
+           // $(".btn_send.single").click(function () {
                 var RecevierId = $("#currentUserName").attr("data-uid");
                 var msg = $("#txtPrivateMessage").text();
                 var SenderName = $("#hdUserName").text();
@@ -163,6 +156,20 @@
                 }
                 else { alert("不能发送空消息"); return; }
             });
+
+            //群发消息
+        //    $(".btn_send group").click(function () {
+                $(document).on("click", ".btn_send.group", function () { 
+                var message=  CreateMesModel();
+                if (message.content.length > 0)
+                {
+                    SendMsgHandlerForView(message);
+                    //将消息发送到后台处理
+                    chatHub.server.sendGroupMessage(message);
+                }
+                else { alert("不能发送空消息"); return; }
+            });
+
 
             //点击查看好友申请的item
             $(document).on('click', '.apply_ul_item', function (e) {
@@ -266,7 +273,8 @@
                 $(this).find("i.icon").removeClass("web_wechat_reddot");
                 //让未读条数变为0，前端
                 $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
-
+                //让发送消息按钮标记为单人消息
+                $(".btn_send").removeClass("group").addClass("single");
 
             });
             //点击+号弹出搜索弹框
@@ -449,7 +457,53 @@
                 $(".search_type").html(text+"<span class=caret></span>");
             });
 
+            //点击群列表
 
+            //点击用户时绑定用户名和id
+            $(document).on('click', '.group_item', function () {
+                if (IsCurrentUserOrNotUser(this)) { return; }
+                //获取当前用户用户名
+                var username = $(this).find(".nickname_text").text();
+                //更改聊天窗口的用户名
+                $("#currentUserName").text(username);
+                //获取当前聊天用户的Id
+                var id = $(this).attr("data-uid");
+                //更改聊天窗口的用户Id
+                $("#currentUserName").attr("data-uid", id);
+                //清空聊天对话框的消息
+                $(".message_ul .message_item ").remove();
+                //if ($(this).hasClass("NeedGetMsgFromBack")) {
+                //    //清除需要从后台获取数据的标识
+                //    $(this).removeClass("NeedGetMsgFromBack");
+                //    //
+                //    var MsgId = $(this).attr("data-unreadMsgId");
+                //    //如果存在未读消息，则从去后台获取未读消息数据
+                //    var unreadcount = $(this).attr("data-unreadcount");
+                //    //  unreadcount = getNum(unreadcount);
+                //    if (unreadcount > 0) {
+                //        chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
+                //            //将浏览器的本地缓存消息加载到聊天窗口中
+                //            GetStrogeMessage(id);
+
+                //        });
+                //    }
+                //}
+                //else {
+                //    //将浏览器的本地缓存消息加载到聊天窗口中
+                //    GetStrogeMessage(id);
+                //}
+
+
+
+
+                //让未读标志的红点消失
+                $(this).find("i.icon").removeClass("web_wechat_reddot");
+                //让未读条数变为0，前端
+                $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
+
+                //让发送消息按钮标记为群发消息
+                $(".btn_send").removeClass("single").addClass("group");
+            });
 
 
 
