@@ -24,7 +24,10 @@ namespace SignalRChat
 
         protected virtual MyFormsPrincipal<UserDetail> User
         {
-            get { return HttpContext.Current.User as MyFormsPrincipal<UserDetail>; }
+            get {
+
+                MyFormsPrincipal<UserDetail> Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
+                return Principal; }
         }
 
         protected  string UserId { get; set; }

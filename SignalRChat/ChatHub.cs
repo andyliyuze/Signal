@@ -16,8 +16,7 @@ using System.Web.Security;
 namespace SignalRChat
 {
 
-    public class ChatHub : Hub 
-    {
+    public class ChatHub : MyBaseHub    {
 
         #region Data Members
      
@@ -48,12 +47,12 @@ namespace SignalRChat
         }
         #region Methods
 
-
+        [HubAuthorize]
      
         public  void Connect(string userName,string Pwd)
         {
-          
-            
+
+            UserDetail u = User.UserData;
 
             //表示新尝试登陆的用户的连接Id
             var newcid = Context.ConnectionId;            

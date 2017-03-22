@@ -12,6 +12,7 @@ using DAL.Interface;
 
 using SignalRChat.Models;
 using Common;
+using SignalRChat.Extend;
 
 namespace SignalRChat.Controllers
 {
@@ -74,6 +75,57 @@ namespace SignalRChat.Controllers
 
             return View();
         
+        }
+
+
+        public ActionResult Login()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public void Login(string pwd,string name)
+        {
+            string uid = CheckUserInRedis(name);
+            if (!string.IsNullOrEmpty(uid)&& TryLogin(uid, pwd))
+            {
+                GetUserDetail(uid);
+                Response.Redirect("/Chat.html");
+            };
+           
+        }
+
+
+        //检查用户名是否存在，并且保存UserId字段的值
+        private string CheckUserInRedis(string userName)
+        {
+            string uid= _cache.GetUserIdByName(userName);
+            return uid;
+        }
+
+
+        private bool TryLogin(string userId, string Pwd)
+        {
+            return _cache.Login(userId, Pwd);
+            
+
+        }
+
+        //获取CurrentUser字段值
+        private void GetUserDetail(string UserId)
+        {
+            try
+            {
+                UserDetail    CurrentUser = _cache.GetUserDetail(UserId);
+                MyFormsPrincipal<UserDetail>.SignIn(CurrentUser.UserName, CurrentUser, 60);
+
+
+            }
+            catch(Exception e)
+            {
+                throw (e);
+            }
+
         }
     }
 }

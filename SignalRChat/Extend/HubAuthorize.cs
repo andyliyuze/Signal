@@ -20,8 +20,7 @@ namespace SignalRChat.Extend
             {
                 throw new ArgumentNullException("user");
             }
-            var context = HttpContext.Current;
-            context.User = user;
+         
             var principal = user as ClaimsPrincipal;
 
             if (principal != null)

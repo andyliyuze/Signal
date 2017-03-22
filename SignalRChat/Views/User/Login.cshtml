@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="../Scripts/bootstrap.min.css" rel="stylesheet" />
+   
+    <script src="../Scripts/jquery-2.0.0.min.js"></script>
+ 
+
+
+  
+
+
+</head>
+<body>
+    <form id="loginform" action="/User/Login" method="post">
+    <div id="divLogin" class="login" style="margin: auto; width: 200px; margin-top: 100px;">
+        <div>
+            用户名:<br />
+            <input id="txtNickName" name="name" type="text" class="textBox" />
+        </div>
+        <div>
+            密码:<br />
+            <input id="pwd" type="text" name="pwd" class="textBox" />
+        </div>
+        <div id="divButton">
+            <input id="btnStartChat" type="button" class="submitButton" value="登录" />
+        </div>
+    </div>
+  
+</form>
+    <script>
+        $("#btnStartChat").click(function(){
+
+            $("#loginform").submit();
+        //    var Pwd=$("#pwd").val();
+        //    var name=$("#txtNickName").val();
+        //$.ajax({
+        //    url:"/User/Login",
+        //    type: "post",
+        //    data: { pwd: Pwd, name: name },
+        //    success: function (data) {
+                 
+        //      location.href="/"
+        //        }
+            
+        //});
+        });
+    </script>
+
+</body>
+</html>
+
+

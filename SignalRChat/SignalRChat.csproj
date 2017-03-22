@@ -454,6 +454,8 @@
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\User\_ReplyResultPage.cshtml" />
     <Content Include="Views\Group\_CreateGroupPage.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
