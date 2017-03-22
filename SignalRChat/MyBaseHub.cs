@@ -8,11 +8,13 @@ using MeassageCache;
 using Model;
 using DAL;
 using System.Web.SessionState;
- 
+
 using System.Threading.Tasks;
 using System.Diagnostics;
 using DAL.Interface;
 using Microsoft.AspNet.SignalR.Hubs;
+using SignalRChat.Extend;
+
 namespace SignalRChat
 {
        
@@ -20,14 +22,24 @@ namespace SignalRChat
     {
 
 
-        protected  UserDetail CurrentUser { get; set; }
+        protected virtual MyFormsPrincipal<UserDetail> User
+        {
+            get { return HttpContext.Current.User as MyFormsPrincipal<UserDetail>; }
+        }
 
         protected  string UserId { get; set; }
+
+        public void SetUserCId(string cid)
+        {
+
+
+            User.UserData.UserCId = cid;
+        }
 
 
         public MyBaseHub()
         {
-
+        
       
         
         }

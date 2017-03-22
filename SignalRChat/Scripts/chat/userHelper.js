@@ -69,6 +69,12 @@ function IsCurrentUserOrNotUser(e) {
     if ($(e).attr("data-uid").trim() == $("#currentUserName").attr("data-uid")) { return true; }
 }
 
+function IsCurrentGroupOrNotUser(e) {
+
+    if ($(e).attr("data-uid").trim() == $("#currentUserName").attr("data-uid")) { return true; }
+
+}
+
 //绑定添加申请记录到弹框页面
 function bindingApplys(FriendsApplys) {
 

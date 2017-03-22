@@ -96,6 +96,7 @@
         if (replyModel.ReplyStatus === ReplyStatus.Pass) {
             //append一条好友头像信息
             AddGroup(replyModel.ReplyGroupId, replyModel.ReplyGroupName, replyModel.ReplyGroupAvatar);
+            $("#ul_item_" + replyModel.ReplyGroupId).addClass("group_item");
         }
         //在消息列表处添加回复消息，并添加红点
         AppendReplyMsgIntoUl();

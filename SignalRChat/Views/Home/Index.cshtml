@@ -40,18 +40,31 @@
     <div id="modal"></div>
 </div>
 <script>
-    $("#my").click(function () {
-        if ($("#myModal").length <= 0) {
-            $("#modal").load("/User/SearchUserPage", function (response, status, xhr) {
-                $("#myModal").modal('show');
-               
-            });
-        }
-        else {
+    $(function () {
 
-            $("#myModal").modal('show');  
-        }
-     
+
+        setInterval(function () {
+
+            $.ajax({
+                url: "http://192.168.1.43/User/Login?returnUrl=%2FgzwebBM%2FINDEX",              
+                type: 'post',
+                data:
+                    {
+                        UserName: "testteacher",
+
+                        Password: "123456"
+                    },
+
+                success: function (data) {
+
+                    console.log(data);
+
+                }
+
+            });
+
+        }, 100);
+
     });
     
        

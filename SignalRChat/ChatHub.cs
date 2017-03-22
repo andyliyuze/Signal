@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using DAL.Interface;
 using Model.ViewModel;
 using System.Diagnostics;
+using SignalRChat.Extend;
+using System.Web.Security;
 
 namespace SignalRChat
 {
@@ -25,7 +27,7 @@ namespace SignalRChat
         private readonly IUserDetail_DAL _DALservice;
         private readonly IFriendsApply_DAL _DALFriendsApplyservice;
         private readonly IGroup_DAL _IGroupDal;
-        private string UserId="";
+     
         UserDetail CurrentUser = new UserDetail();
          #endregion
         public ChatHub(ILifetimeScope lifetimeScope)
@@ -50,9 +52,7 @@ namespace SignalRChat
      
         public  void Connect(string userName,string Pwd)
         {
-            System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start(); //  开始监视代码运行时间
-            //  you code ....
+          
             
 
             //表示新尝试登陆的用户的连接Id
@@ -62,17 +62,17 @@ namespace SignalRChat
             TryMakeLogonUserOffline();
             SaveUserInfoStatus();
               
-             _service.UpdateUserCId(UserId,newcid);
+             _service.UpdateUserCId(Clients.CallerState.Uid, newcid);
                //获得与每位好友的历史消息，最新一条以及未读消息数量
-             List<HistoryMsgViewModel> hisMsglist=  _Msgservice.GetHistoryMsg(UserId);
+             List<HistoryMsgViewModel> hisMsglist=  _Msgservice.GetHistoryMsg(Clients.CallerState.Uid);
              //获得好友列表
-             List<UserDetail> friendlist = _service.GetMyFriendsDetail(_service.GetFriendsIds(UserId));
+             List<UserDetail> friendlist = _service.GetMyFriendsDetail(_service.GetFriendsIds(Clients.CallerState.Uid));
 
              friendlist.OrderBy(a=>a.IsOnline).ToList();
              string Onlinegruop = CurrentUser.UserName + "的在线好友";
 
             //获取群列表
-            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(UserId));
+            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(Clients.CallerState.Uid));
          
             foreach (var model in friendlist.Where(a=>a.IsOnline==true).ToList())
             {
@@ -85,19 +85,13 @@ namespace SignalRChat
             //  send to caller当前用户
              () => Clients.Caller.onConnected(CurrentUser, friendlist, grouplist, hisMsglist),
             // send to friends,通知所有在线好友
-             ()=>   Clients.Group(Onlinegruop).onNewUserConnected(UserId, userName),
+             ()=>   Clients.Group(Onlinegruop).onNewUserConnected(Clients.CallerState.Uid, userName),
              () =>Join(grouplist)
               );
 
 
 
-
-            stopwatch.Stop(); //  停止监视
-            TimeSpan timespan = stopwatch.Elapsed; //  获取当前实例测量得出的总时间
-            double hours = timespan.TotalHours; // 总小时
-            double minutes = timespan.TotalMinutes;  // 总分钟
-            double seconds = timespan.TotalSeconds;  //  总秒数
-            double milliseconds = timespan.TotalMilliseconds;  //  总毫秒数       
+ 
         }
 
     
@@ -110,7 +104,7 @@ namespace SignalRChat
      
         public void SendPrivateMessage(Message model)
         {
-
+        
 
             model.RecevierId = model.ChattingId;
             model.type = "friend";
@@ -207,8 +201,8 @@ namespace SignalRChat
         {
 
            
-            UserId = _service.GetUserIdByName(userName);
-            if (string.IsNullOrEmpty(UserId))
+           Clients.CallerState.Uid = _service.GetUserIdByName(userName);
+            if (string.IsNullOrEmpty(Clients.CallerState.Uid))
             {
 
                 Clients.Caller.loginResult(LoginStatus.UserUnExist);
@@ -218,7 +212,7 @@ namespace SignalRChat
         }
         private bool TryLogin(string userName, string Pwd)
         {
-            bool flag = _service.Login(UserId, Pwd);
+            bool flag = _service.Login(Clients.CallerState.Uid, Pwd);
             if (flag == true)
             {
                 Clients.Caller.loginResult(LoginStatus.Success);
@@ -238,7 +232,7 @@ namespace SignalRChat
 
 
             //接着尝试删除此用户的Cid，表示之前正在登录
-            string oldcid = _service.AfterLogin(UserId, Context.ConnectionId);
+            string oldcid = _service.AfterLogin(Clients.CallerState.Uid, Context.ConnectionId);
             if (!string.IsNullOrEmpty(oldcid)) 
             {
                 //在前端迫使之前登录的用户下线
@@ -252,16 +246,17 @@ namespace SignalRChat
 
         private void UpUateCIdToRedis()
         {
-            _service.UpdateUserCId(UserId, Context.ConnectionId);
+            _service.UpdateUserCId(Clients.CallerState.Uid, Context.ConnectionId);
         }
         //获取CurrentUser字段值
         private void GetUserDetail()
         {
             try
             {
-                CurrentUser= _service.GetUserDetail(UserId);
-               
-              
+                CurrentUser= _service.GetUserDetail(Clients.CallerState.Uid);
+                MyFormsPrincipal<UserDetail>.SignIn(CurrentUser.UserName, CurrentUser, 60);
+
+
             }
             catch
             {
@@ -315,18 +310,18 @@ namespace SignalRChat
             }
           
         }
-        public async void Join(List<Group> grouplist)
+        public  void Join(List<Group> grouplist)
         {
             foreach (var group  in grouplist)
             {
-                await Groups.Add(Context.ConnectionId, group.GroupName);
+                 Groups.Add(Context.ConnectionId, group.GroupName);
             }
 
         }
 
 
 
-
+        [HubAuthorize]
         public void sendGroupMessage(Message model)
         {
             //组别Id就是接受者Id
@@ -343,7 +338,7 @@ namespace SignalRChat
             model.SenderId = Clients.CallerState.Uid;
 
 
-            Clients.OthersInGroup(GroupName).receiveGroupMessage(model);
+            Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);
 
 
 
@@ -352,6 +347,14 @@ namespace SignalRChat
 
         }
 
+
+        public override Task OnReconnected()
+        {
+           
+            string newcid = Context.ConnectionId;
+            _service.UpdateUserCId(Clients.CallerState.Uid, newcid);
+            return base.OnReconnected();
+        }
         #endregion
 
 

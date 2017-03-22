@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeassageCache", "MeassageCache\MeassageCache.csproj", "{247C4ADF-E7F9-434E-847A-A1F07991EF4F}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{855346E4-F7A1-447A-A703-AD361D357113}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat", "SignalRChat\SignalRChat.csproj", "{46075541-6250-4FC8-A087-7EC39F56B500}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{A022E228-36D2-4F39-9618-E1C376929CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{46075541-6250-4FC8-A087-7EC39F56B500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46075541-6250-4FC8-A087-7EC39F56B500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46075541-6250-4FC8-A087-7EC39F56B500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A022E228-36D2-4F39-9618-E1C376929CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A022E228-36D2-4F39-9618-E1C376929CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A022E228-36D2-4F39-9618-E1C376929CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A022E228-36D2-4F39-9618-E1C376929CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

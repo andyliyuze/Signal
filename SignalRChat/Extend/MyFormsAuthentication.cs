@@ -13,7 +13,7 @@ namespace SignalRChat.Extend
         private const int CookieSaveDays = 14;
 
         //用户登录成功时设置Cookie
-        public static void SetAuthCookie(string username, UserDetail userData, bool rememberMe)
+        public static void SetAuthCookie(string username, TUserData userData, bool rememberMe)
         {
             if (userData == null)
                 throw new ArgumentNullException("userData");

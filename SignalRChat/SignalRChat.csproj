@@ -186,7 +186,7 @@
     <Compile Include="Extend\HubAuthorize.cs" />
     <Compile Include="Extend\MyAttribute.cs" />
     <Compile Include="Extend\MyFormsAuthentication.cs" />
-    <Compile Include="Extend\MyPrincipal.cs" />
+    <Compile Include="Extend\MyFormsPrincipal.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MyBaseHub.cs" />
     <Compile Include="test.cs" />

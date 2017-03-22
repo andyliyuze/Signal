@@ -125,30 +125,11 @@
             //私信消息
             $(document).on("click", ".btn_send.single", function () { 
            // $(".btn_send.single").click(function () {
-                var RecevierId = $("#currentUserName").attr("data-uid");
-                var msg = $("#txtPrivateMessage").text();
-                var SenderName = $("#hdUserName").text();
-                var SenderId = $("#hdUserName").attr("data-uid").trim();
-
-                var ChatingId = $("#currentUserName").attr("data-uid").trim();
-                var IsChating = SenderId == ChatingId;
-                var message = new Object();
-                message.SenderId = SenderId;
-                message.SenderName = SenderName;
-                message.RecevierId = RecevierId;
-                message.content = msg;
-                var time = new Date();
-                message.CreateTime = time;
-                if (msg.length > 0) {
-                    $("#txtPrivateMessage").text("");
-                    //将消息push进Storage，本地存储
-                    var key = "MessageListWith_" + message.RecevierId;
-                    PushSeesionStorage(key, message);
-                    //将消息绑定要页面显示，前端
-                    AddMessage(message);
-                    //好友列表出也要绑定最新消息以及时间
-                    $("#ul_item_" + RecevierId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-                    $("#ul_item_" + RecevierId + "").find(".chat_item_info p.msg").find("span:eq(0)").text(message.content);
+                var message = CreateMesModel();
+              
+                if (message.content.length > 0)
+                {
+                    SendMsgHandlerForView(message);
                     //将消息发送到后台处理
                     chatHub.server.sendPrivateMessage(message);
 
@@ -461,7 +442,7 @@
 
             //点击用户时绑定用户名和id
             $(document).on('click', '.group_item', function () {
-                if (IsCurrentUserOrNotUser(this)) { return; }
+                if (IsCurrentGroupOrNotUser(this)) { return; }
                 //获取当前用户用户名
                 var username = $(this).find(".nickname_text").text();
                 //更改聊天窗口的用户名
@@ -472,26 +453,26 @@
                 $("#currentUserName").attr("data-uid", id);
                 //清空聊天对话框的消息
                 $(".message_ul .message_item ").remove();
-                //if ($(this).hasClass("NeedGetMsgFromBack")) {
-                //    //清除需要从后台获取数据的标识
-                //    $(this).removeClass("NeedGetMsgFromBack");
-                //    //
-                //    var MsgId = $(this).attr("data-unreadMsgId");
-                //    //如果存在未读消息，则从去后台获取未读消息数据
-                //    var unreadcount = $(this).attr("data-unreadcount");
-                //    //  unreadcount = getNum(unreadcount);
-                //    if (unreadcount > 0) {
-                //        chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
-                //            //将浏览器的本地缓存消息加载到聊天窗口中
-                //            GetStrogeMessage(id);
+                if ($(this).hasClass("NeedGetMsgFromBack")) {
+                    //清除需要从后台获取数据的标识
+                    $(this).removeClass("NeedGetMsgFromBack");
+                    //
+                    var MsgId = $(this).attr("data-unreadMsgId");
+                    //如果存在未读消息，则从去后台获取未读消息数据
+                    var unreadcount = $(this).attr("data-unreadcount");
+                    //  unreadcount = getNum(unreadcount);
+                    if (unreadcount > 0) {
+                        chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
+                            //将浏览器的本地缓存消息加载到聊天窗口中
+                            GetStrogeMessage(id);
 
-                //        });
-                //    }
-                //}
-                //else {
-                //    //将浏览器的本地缓存消息加载到聊天窗口中
-                //    GetStrogeMessage(id);
-                //}
+                        });
+                    }
+                }
+                else {
+                    //将浏览器的本地缓存消息加载到聊天窗口中
+                    GetStrogeMessage(id);
+                }
 
 
 
