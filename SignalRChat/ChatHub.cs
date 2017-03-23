@@ -50,11 +50,7 @@ namespace SignalRChat
       
 
     
-
-        public void SendMessageToAll( string userName, string message)
-        {
-            int uid = Convert.ToInt32(CurrentUser.UserDetailId.ToString());  //用它来代替Session  
-        }
+ 
 
         public void SendPrivateMessage(Message model)
         {
