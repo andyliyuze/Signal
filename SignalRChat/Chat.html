@@ -54,27 +54,32 @@
     </style>
 
     <script type="text/javascript">
-        var userHub = $.connection.userHub;
-        var chatHub = $.connection.chatHub;
+       
+        var chatHub;
+        var userHub ;
         $(function () {
+            $.connection.hub.logging = true;
+            chatHub  = $.connection.chatHub;
+            userHub = $.connection.userHub;
             setScreen(false);
+        
             //      Declare a proxy to reference the hub.
 
             registerClientMethodsForChat(chatHub);
             registerClientMethodsForUser(userHub);
             // Start Hub
             $.connection.hub.start().done(function () {
-                //  registerStartChatEvents(chatHub);
+          
                 console.log("连接完成");
                 registerEvents(chatHub, userHub);
-
+              
             });
             $.connection.hub.disconnected(function () {
                 console.log("正在尝试重新连接");
                 setTimeout(function () {
                     $.connection.hub.start().done(function () {
                         console.log("连接完成");
-                        registerEvents(chatHub, userHub);
+                     //   registerEvents(chatHub, userHub);
                     });
                 }, 5000); // Restart connection after 5 seconds.
             });
@@ -94,17 +99,7 @@
 
         function registerEvents(chatHub, userHub) {
 
-            $("#btnStartChat").click(function () {
-                var name = $("#txtNickName").val();
-                var pwd = $("#pwd").val().trim();
-                if (name.length > 0 && pwd.length > 0) {
-                    chatHub.server.connect(name, pwd);
-                }
-                else {
-                    alert("用户名或密码不能为空");
-                }
-            });
-
+  
           
 
 
@@ -647,19 +642,7 @@
             </div>
         </div>
     </div>
-    <div id="divLogin" class="login" style="margin: auto; width: 200px; margin-top: 100px;">
-        <div>
-            用户名:<br />
-            <input id="txtNickName" type="text" class="textBox" />
-        </div>
-        <div>
-            密码:<br />
-            <input id="pwd" type="text" class="textBox" />
-        </div>
-        <div id="divButton">
-            <input id="btnStartChat" type="button" class="submitButton" value="登录" />
-        </div>
-    </div>
+ 
     <div id="modal"></div>
 
      

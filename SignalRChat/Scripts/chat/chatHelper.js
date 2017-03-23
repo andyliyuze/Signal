@@ -105,9 +105,9 @@ function AddMessage(message) {
 }
 
 
-function MessageHandler(message)
+function MessageHandler(message, ChattingId)
 {
-    var ChattingId = message.ChattingId;
+  
     //将消息push进Storage，本地存储
     var key = "MessageListWith_" + ChattingId;
     PushSeesionStorage(key, message);

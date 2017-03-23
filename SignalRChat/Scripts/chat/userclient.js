@@ -1,5 +1,79 @@
 ﻿function registerClientMethodsForUser(userHub) {
 
+
+    // Calls when user successfully logged in
+    userHub.client.onConnected = function (user, allUsers, grouplist, hisMsglist) {
+
+        setScreen(true);
+     
+
+        $('#hdUserName').attr("data-uid", user.UserDetailId);
+        $('#hdUserName').text(user.UserName);
+        $("#myheadsrc").attr("data-uid", user.Id);
+        $("#myheadsrc").attr("src", user.AvatarPic);
+        // Add All Users
+        for (i = 0; i < allUsers.length; i++) {
+
+            AddUser(allUsers[i].UserDetailId, allUsers[i].UserName, allUsers[i].AvatarPic, allUsers[i].IsOnline);
+        }
+        // Add All Groups
+        for (i = 0; i < grouplist.length; i++) {
+
+            var group = grouplist[i];
+            AddGroup(group.GroupId, group.GroupName, group.GroupAvatar);
+            $("#ul_item_" + group.GroupId).addClass("group_item");
+        }
+
+        for (i = 0; i < hisMsglist.length; i++) {
+            bindingMsg(hisMsglist[i]);
+
+        }
+        //延时获取申请消息，回复消息
+        setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
+        setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
+        setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
+        setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
+    };
+
+    // On New User Connected
+    userHub.client.onNewUserConnected = function (uid, name) {
+        alert("有人来啦");
+        UserIsOnlined(uid);
+        //AddUser(chatHub, id, name);
+    };
+
+
+    // On User Disconnected
+    userHub.client.onUserDisconnected = function (id, userName) {
+        alert(userName + "下线啦！");
+        $("#img_" + id + "").addClass("gray");
+
+    };
+
+
+
+
+
+    userHub.client.OutLogin = function () {
+
+
+        $.connection.hub.stop();
+        alert("你的账号在别处登录，被迫下线！");
+        location.href = '/User/Login';
+
+
+    };
+
+
+
+
+
+
+
+
+
+
+
     userHub.client.searchResultReceived = function (json) {
         $(".searchresult_status_span ,.searchresult_owner_span").hide();
         $(".searchresult_info").show();

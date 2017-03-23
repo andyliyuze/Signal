@@ -8,11 +8,15 @@ using DAL.Interface;
 using Model.ViewModel;
 using Newtonsoft.Json.Linq;
 using Common;
+using SignalRChat.Extend;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace SignalRChat
 {
 
-    public class UserHub : Hub
+    public class UserHub :MyBaseHub
     {
 
         #region Data Members
@@ -24,6 +28,7 @@ namespace SignalRChat
         private readonly IUserCacheService _Userservice;
         private readonly IFriendsApply_DAL _friendsApplyDal;
         private readonly IFriends_DAL _friendsDal;
+        private readonly IMessageService _Msgservice;
         private readonly ICacheService _service;
         private readonly IGroup_DAL _IGroupDal;
         private readonly IGroupMember_DAL _IGroupMemberDal;
@@ -33,18 +38,19 @@ namespace SignalRChat
         {
             // Create a lifetime scope for the hub.
             _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
-
             // Resolve dependencies from the hub lifetime scope.
             _Userservice = _hubLifetimeScope.Resolve<IUserCacheService>();
             _friendsApplyDal = _hubLifetimeScope.Resolve<IFriendsApply_DAL>();
             _friendsDal = _hubLifetimeScope.Resolve<IFriends_DAL>();
-
+            _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
             _service = _hubLifetimeScope.Resolve<ICacheService>();
-
             _IGroupDal = _hubLifetimeScope.Resolve<IGroup_DAL>();
             _IGroupMemberDal = _hubLifetimeScope.Resolve<IGroupMember_DAL>();
             _IJoinGroupApplyDal = _hubLifetimeScope.Resolve<IJoinGroupApply_DAL>();
         }
+   
+        
+        
         #region Methods
 
 
@@ -144,14 +150,92 @@ namespace SignalRChat
         //检查是否合法用户
         private bool CheckIsvalid(string uid)
         {
-            if (uid != Clients.CallerState.Uid) { Clients.Caller.applyResult(ApplyStatus.UnAuthorize); return false; }
+            if (uid != User.UserData.UserDetailId.ToString()) { Clients.Caller.applyResult(ApplyStatus.UnAuthorize); return false; }
             else
             {
                 return true;
             }
             #endregion
         }
-     
+
+
+    
+
+        //建立连接，业务上是用户正式上线操作
+        public override Task OnConnected()
+        {
+            UserDetail CurrentUser = User.UserData;
+
+            //当有新的用户上线
+            OnNewUserContented();
+
+         
+            //获得与每位好友的历史消息，最新一条以及未读消息数量
+            List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsg(CurrentUser.UserDetailId.ToString());
+            //获得好友列表
+            List<UserDetail> friendlist = _service.GetMyFriendsDetail(_service.GetFriendsIds(CurrentUser.UserDetailId.ToString()));
+
+            friendlist.OrderBy(a => a.IsOnline).ToList();
+            string Onlinegruop = CurrentUser.UserName + "的在线好友";
+
+            //获取群列表
+            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(CurrentUser.UserDetailId.ToString()));
+
+            foreach (var model in friendlist.Where(a => a.IsOnline == true).ToList())
+            {
+                Groups.Add(model.UserCId, Onlinegruop);
+            }
+
+            //并行执行两个相互不影响的方法；
+            //两个并行执行的方法才能用Parallel类
+            Parallel.Invoke(
+            //  send to caller当前用户
+             () => Clients.Caller.onConnected(CurrentUser, friendlist, grouplist, hisMsglist),
+            // send to friends,通知所有在线好友
+             () => Clients.Group(Onlinegruop).onNewUserConnected(CurrentUser.UserDetailId.ToString(), CurrentUser.UserName),
+             () => Join(grouplist)
+              );
+            return base.OnConnected();
+        }
+        //重新连接，业务上表示重新上线，更新用户Cid到redis
+        public override Task OnReconnected()
+        {
+            string uid = User.UserData.UserDetailId.ToString();
+            string newcid = Context.ConnectionId;
+            _service.UpdateUserCId(uid, newcid);
+            _service.UpdateUserField("IsOnline", "true", uid);
+            return base.OnReconnected();
+        }
+
+
+        //用户下线
+        public override Task OnDisconnected(bool flag)
+        {
+            if (User == null) return base.OnDisconnected(false);
+            string uid = User.UserData.UserDetailId.ToString();
+            //用户下线方法
+            string name = _service.LogOut(uid);
+            //获得在线好友列表
+            List<UserDetail> list = _service.GetMyFriendsDetail(_service.GetFriendsIds(uid)).Where(a => a.IsOnline == true).ToList();
+
+            string Onlinegruop = name + "的在线好友";
+            foreach (var model in list)
+            {
+                Groups.Add(model.UserCId, Onlinegruop);
+            }
+            //通知在线好友用户已下线
+            Clients.Group(Onlinegruop).onUserDisconnected(uid, name);
+            return base.OnDisconnected(false);
+        }
+        public void Join(List<Group> grouplist)
+        {
+            foreach (var group in grouplist)
+            {
+                Groups.Add(Context.ConnectionId, group.GroupName);
+            }
+
+        }
+
         //检查是否已经是好友
 
         private bool CheckIsFriend(string uidA, string uidB)
@@ -221,13 +305,38 @@ namespace SignalRChat
            
         }
 
+
+
+
+ 
+
+
+        private void OnNewUserContented()
+        {
+
+            string uid = User.UserData.UserDetailId.ToString();
+            string newcid = Context.ConnectionId;
+            //获取此前的cid
+            string oldcid = _service.GetUserDetail(uid).UserCId;
+           
+            if (!string.IsNullOrEmpty(oldcid)&& newcid!=oldcid)
+            {
+                //在前端迫使之前登录的用户下线
+                Clients.Client(oldcid).OutLogin();
+            }
+            //将新的cid更新到redis
+            _service.UpdateUserCId(uid, newcid);
+            _service.UpdateUserField("IsOnline", "true", uid);
+        }
+
+
         //好友申请结果更新
         private void UpdateApplyResult(string result, string applyId) 
         {
 
 
             //更新一下好友申请
-            FriendsApply apply = new FriendsApply { FriendsApplyId = Guid.Parse(applyId), ReceiverUserId = Guid.Parse(Clients.CallerState.Uid), ReplyTime = DateTime.Now, Result = result, HasReadResult = "未读" };
+            FriendsApply apply = new FriendsApply { FriendsApplyId = Guid.Parse(applyId), ReceiverUserId = Guid.Parse(User.UserData.UserDetailId.ToString()), ReplyTime = DateTime.Now, Result = result, HasReadResult = "未读" };
              _friendsApplyDal.UpdateResult(apply);
         }
 
@@ -365,21 +474,21 @@ namespace SignalRChat
 
         //获取未读群添加回复
         public void GetUnreadGroupReply() {
-            string uid = Clients.CallerState.Uid;
+            string uid = User.UserData.UserDetailId.ToString();
             var list = _IJoinGroupApplyDal.GetGroupReplyByUId(Guid.Parse(uid));
 
             Clients.Caller.receiveGroupReplyList(list);
         }
         //获取未审核群添加申请
         public void GettUnapproveGroupApply() {
-            string uid = Clients.CallerState.Uid;
+            string uid = User.UserData.UserDetailId.ToString();
             var list = _IJoinGroupApplyDal.GetGroupApplyByUId(Guid.Parse(uid));
             Clients.Caller.receiveGroupApplyList(list);
         }
         //获取未读添好友加回复
         public void GetUnreadFriendsReply()
         {
-            string uid = Clients.CallerState.Uid;
+            string uid = User.UserData.UserDetailId.ToString();
             var list = _friendsApplyDal.GetFriendsReplyByUId(Guid.Parse(uid));
             Clients.Caller.receiveFriendReplyList(list);
 
@@ -388,10 +497,12 @@ namespace SignalRChat
         public void GetUnapproveFriendsApply()
         {
 
-            string uid = Clients.CallerState.Uid;
+            string uid = User.UserData.UserDetailId.ToString();
             var list = _friendsApplyDal.GetFriendsApplyByUId(Guid.Parse(uid));
             Clients.Caller.receiveFriendApplyList(list);
         }
+
+ 
     }
 
 

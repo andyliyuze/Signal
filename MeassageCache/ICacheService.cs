@@ -16,7 +16,7 @@ namespace MeassageCache
         string GetUserIdByCId(string cid);
         string GetUserCId(string uid);
         bool UpdateUserCId(string Uid, string Cid);
-        
+       
 
         string LogOut(string uid);
 

@@ -227,7 +227,12 @@ namespace UnitTest
 
         }
 
+        [TestMethod]
+        public void test_GetKey()
+        {
 
+        string key=    redisClient.GetKeysByPattern("UserIdByCId:bcbc100e-3efc-411f-a2f8-e8aa6e03eb6e:uid").FirstNonDefault();
+        }
 
     }
 }

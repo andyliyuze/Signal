@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -11,6 +12,9 @@ namespace SignalRChat.Extend
     {
         protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
         {
+
+
+            MyFormsPrincipal<UserDetail> Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
             return true;
 
         }

@@ -46,7 +46,6 @@ namespace SignalRChat.Extend
             HttpContext.Current.Response.Cookies.Add(cookie);
         }
 
-        
         //从Request中解析出Ticket,UserData
         public static MyFormsPrincipal<TUserData> TryParsePrincipal(HttpRequest request)
         {

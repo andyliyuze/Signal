@@ -1,56 +1,7 @@
 ﻿function registerClientMethodsForChat(chatHub) {
 
-    // Calls when user successfully logged in
-    chatHub.client.onConnected = function (user, allUsers, grouplist, hisMsglist) {
-
-        setScreen(true);
-        userHub.state.Uid = chatHub.state.Uid;
-        userHub.state.CurrentUserInfo = chatHub.state.CurrentUserInfo;
-
-
-        $('#hdUserName').attr("data-uid", user.UserDetailId);
-        $('#hdUserName').text(user.UserName);
-        $("#myheadsrc").attr("data-uid", user.Id);
-        $("#myheadsrc").attr("src", user.AvatarPic);
-        // Add All Users
-        for (i = 0; i < allUsers.length; i++) {
-
-            AddUser(allUsers[i].UserDetailId, allUsers[i].UserName, allUsers[i].AvatarPic, allUsers[i].IsOnline);
-        }
-        // Add All Groups
-        for (i = 0; i < grouplist.length; i++) {
-
-            var group = grouplist[i];
-            AddGroup(group.GroupId, group.GroupName, group.GroupAvatar);
-            $("#ul_item_" + group.GroupId).addClass("group_item");
-        }
-
-        for (i = 0; i < hisMsglist.length; i++) {
-            bindingMsg(hisMsglist[i]);
-
-        }
-        //延时获取申请消息，回复消息
-        setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
-        setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
-        setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
-        setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
-    };
-
-    // On New User Connected
-    chatHub.client.onNewUserConnected = function (uid, name) {
-        alert("有人来啦");
-        UserIsOnlined(uid);
-        //AddUser(chatHub, id, name);
-    };
-
-
-    // On User Disconnected
-    chatHub.client.onUserDisconnected = function (id, userName) {
-        alert(userName + "下线啦！");
-        $("#img_" + id + "").addClass("gray");
-
-    };
-    //接收后台传来的单条消息
+   
+    
    
     //接收后台传来的消息集合
     chatHub.client.messageListReceived = function (MessageList) {
@@ -67,7 +18,7 @@
     //接收后台传来的单条消息
     chatHub.client.receivePrivateMessage = function (message) {
 
-        var chattingUid = message.ChattingId;
+        var chattingUid = message.SenderId;
         //将消息push进Storage，本地存储
         var key = "MessageListWith_" + message.ChattingId;
         PushSeesionStorage(key, message);
@@ -116,7 +67,8 @@
     //接收后台传来的单条消息
     chatHub.client.receiveGroupMessage = function (message) {
  
-        MessageHandler(message);
+        var ChattingId = message.GroupId;
+        MessageHandler(message, ChattingId);
 
     }
     
@@ -133,15 +85,7 @@
         if (result === LoginStatus.UserUnExist) { alert("用户名不存在"); }
 
     };
-    chatHub.client.OutLogin = function () {
-
-
-        $.connection.hub.stop();
-        alert("你的账号在别处登录，被迫下线！");
-        location.reload();
-
-
-    };
+   
 
     chatHub.client.change = function (oldcid, newcid) {
 

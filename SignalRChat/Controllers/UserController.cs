@@ -77,7 +77,7 @@ namespace SignalRChat.Controllers
         
         }
 
-
+        [MyAuthorize]
         public ActionResult Login()
         {
 
@@ -94,7 +94,12 @@ namespace SignalRChat.Controllers
             };
            
         }
-
+        private enum LoginStatus
+        {
+            Success = 0,
+            UserUnExist = 1,
+            Failed = 2
+        }
 
         //检查用户名是否存在，并且保存UserId字段的值
         private string CheckUserInRedis(string userName)

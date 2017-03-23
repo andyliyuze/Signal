@@ -18,16 +18,41 @@ using SignalRChat.Extend;
 namespace SignalRChat
 {
        
-    public class MyBaseHub : Hub 
+    public class MyBaseHub : Hub
     {
+           private readonly ICacheService _service ;
 
+        private readonly ILifetimeScope _hubLifetimeScope;
+        public MyBaseHub(ILifetimeScope lifetimeScope)
+        {
+            _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
+            _service = _hubLifetimeScope.Resolve<ICacheService>();
 
+        }
+        public MyBaseHub()
+        {
+            string a = "1";
+        }
         protected virtual MyFormsPrincipal<UserDetail> User
         {
             get {
-
-                MyFormsPrincipal<UserDetail> Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
-                return Principal; }
+                MyFormsPrincipal<UserDetail> Principal;
+                try
+                {                
+                    if (HttpContext.Current != null)
+                    {
+                        Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
+                    }
+                    else
+                    {
+                        Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipalV2(Context.RequestCookies);
+                    }
+                    return Principal;
+                }
+                catch {
+                    return null;
+                }      
+            }
         }
 
         protected  string UserId { get; set; }
@@ -40,12 +65,7 @@ namespace SignalRChat
         }
 
 
-        public MyBaseHub()
-        {
-        
-      
-        
-        }
+
     }
 
 

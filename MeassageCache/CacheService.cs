@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
- 
+
 using Model;
 using ServiceStack;
 using ServiceStack.Redis;
@@ -21,12 +21,12 @@ namespace MeassageCache
 {
     public class CacheService : ICacheService
     {
-      
-     
+
+
         //用户注册
-        public bool Register(string id, string UserName, string Pwd,string avatarPic)
+        public bool Register(string id, string UserName, string Pwd, string avatarPic)
         {
-           
+
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
                 string key = "UserDetail:" + id + "";
@@ -37,11 +37,11 @@ namespace MeassageCache
                 redisClient.SetRangeInHash(key, kvp);
                 //插入用户账号信息
                 string key2 = "UserInfo:" + detail.UserDetailId + "";
-                UserInfo userinfo =new UserInfo{AddTime=DateTime.Now,Pwd=Pwd,UserName=UserName,UserId=Guid.Parse(id)};
+                UserInfo userinfo = new UserInfo { AddTime = DateTime.Now, Pwd = Pwd, UserName = UserName, UserId = Guid.Parse(id) };
                 var kvp2 = SerializeHelper.ConvetToKeyValuePairs(userinfo);
                 redisClient.SetRangeInHash(key2, kvp2);
 
-                
+
 
 
                 //同时将用户信息，用户账号信息插入到list中,持久化到sqlserver使用
@@ -53,7 +53,7 @@ namespace MeassageCache
 
         }
         //登录检验
-        public bool Login(string Id,string pwd)
+        public bool Login(string Id, string pwd)
         {
             //1.根据用户名找到uid
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
@@ -66,49 +66,37 @@ namespace MeassageCache
                 string Pwd = User.Pwd;
                 if (pwd == Pwd)
                 {
-                  
-                
-                 
                     return true;
                 }
-
                 else { return false; }
             }
         }
 
-        
+
 
         //用户登录成功之后的操作
-        public string AfterLogin(string Id,string cid)
+        public string AfterLogin(string Id, string cid)
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
                 try
                 {
-
-
                     string oldCid = redisClient.Get<string>("UserCIdById:" + Id + ":cid");
                     //UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid
-                     redisClient.Del("UserIdByCId:" + oldCid + ":uid");
-
-
-                          
+                    redisClient.Del("UserIdByCId:" + oldCid + ":uid");
                     //设置新的cId，根据cid找到uid
                     redisClient.Set<string>("UserIdByCId:" + cid + ":uid", Id);
-
                     redisClient.Set<string>("UserCIdById:" + Id + ":cid", cid);
                     //设置用户在线状态
                     redisClient.SetEntryInHash("UserDetail:" + Id + "", "IsOnline", "true");
-                    //获取未读消息
-                 
+                    //获取未读消息               
                     return oldCid;
-
                 }
                 catch
                 {
                     return null;
                 }
-              
+
             }
         }
 
@@ -126,14 +114,14 @@ namespace MeassageCache
 
         }
         //更新用户Cid
-        public bool UpdateUserCId(string Uid, string Cid)
+        public bool UpdateUserCId(string Uid, string NewCid)
         {
 
 
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
 
-                return redisClient.SetEntryInHash("UserDetail:" + Uid + "", "UserCId", Cid);
+                return redisClient.SetEntryInHash("UserDetail:" + Uid + "", "UserCId", NewCid);
             }
 
         }
@@ -182,7 +170,7 @@ namespace MeassageCache
                 {
                     //先往OnlineUsers集合里插入元素，表示在线用户信息
                     var ser = new ObjectSerializer();
-                    byte[] buffer = ser.Serialize(new UserDetail { UserDetailId =Guid.Parse(id), UserName = username });
+                    byte[] buffer = ser.Serialize(new UserDetail { UserDetailId = Guid.Parse(id), UserName = username });
 
                     redisClient.SAdd("OnlineUsers", buffer);
                     //接着设置不同字段，该作用是用来条件查询
@@ -209,27 +197,28 @@ namespace MeassageCache
                     //UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid
                     redisClient.Del("UserIdByCId:" + oldCid + ":uid");
                     redisClient.Del("UserCIdById:" + uid + ":cid");
+
                 }
                 catch { }
-             
+
             }
-                UserDetail model = GetUserDetail(uid);
-                if (model != null)
-                {
-                    //设置用户在线状态为false
-                    UpdateUserField("IsOnline", "false", model.UserDetailId.ToString());
-                    
-                    return model.UserName;
-                }
-                else { return null; }
+            UserDetail model = GetUserDetail(uid);
+            if (model != null)
+            {
+                //设置用户在线状态为false
+                UpdateUserField("IsOnline", "false", model.UserDetailId.ToString());
+
+                return model.UserName;
             }
-         
-        
+            else { return null; }
+        }
+
+
         public string GetUserIdByCId(string cid)
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
-                string cmd = "UserIdByCId:"+cid+ ":uid";
+                string cmd = "UserIdByCId:" + cid + ":uid";
                 string uid = redisClient.Get<string>(cmd);
                 if (uid != null)
                 {
@@ -251,60 +240,51 @@ namespace MeassageCache
                 else { return null; }
             }
         }
-
-
-
-    
         public bool AddBroadcastMessage(List<BroadcastMessage> list)
         {
-
-
             RedisClient redisClient = new RedisClient("127.0.0.1", 6379);
-
-
-
-            //   byte[] buffer3 = SerializeUtilities.Serialize<BroadcastMessage>(bro);
             //使用ServiceStack.Redis.Support提供的序列化方法
             var ser = new ObjectSerializer();
             byte[] buffer3 = ser.Serialize(list);
-
-
             // 将序列化后的集合查到到redis的list类型
             long BeforeLen = redisClient.LLen("BroadCastList");
             long AfterLen = redisClient.LPush("BroadCastList", buffer3);
             list.Clear();
             if (AfterLen - BeforeLen > 0) { return true; }
             else { return false; }
-
-
-
         }
         public bool AddPrivateMessage(List<PrivateMessage> list)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            try
             {
-                // byte[] buffer3 = SerializeUtilities.Serialize<PrivateMessage>(bro);               
-                //使用ServiceStack.Redis.Support提供的序列化方法
-                var ser = new ObjectSerializer();
-                byte[] buffer3 = ser.Serialize(list);
-                long BeforeLen = redisClient.LLen("PrivateList");
-                long AfterLen = redisClient.LPush("PrivateList", buffer3);
-                if (AfterLen - BeforeLen > 0) { return true; }
-                else { return false; }
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+                    // byte[] buffer3 = SerializeUtilities.Serialize<PrivateMessage>(bro);               
+                    //使用ServiceStack.Redis.Support提供的序列化方法
+                    var ser = new ObjectSerializer();
+                    byte[] buffer3 = ser.Serialize(list);
+                    long BeforeLen = redisClient.LLen("PrivateList");
+                    long AfterLen = redisClient.LPush("PrivateList", buffer3);
+                    if (AfterLen - BeforeLen > 0) { return true; }
+                    else { return false; }
+                }
             }
+            catch { return false; }
         }
 
         public bool UpdateUserField(string key, string value, string UId)
         {
-
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            try
             {
-
-                return redisClient.SetEntryInHash("UserDetail:" + UId + "", key, value);
-
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+                    return redisClient.SetEntryInHash("UserDetail:" + UId + "", key, value);
+                }
             }
+            catch { return false; }
         }
 
+ 
     }
 
 }

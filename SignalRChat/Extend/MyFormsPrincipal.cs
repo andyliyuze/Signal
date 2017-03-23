@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -107,6 +108,41 @@ namespace SignalRChat.Extend
 
             // 1. 读登录Cookie
             HttpCookie cookie = request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie == null || string.IsNullOrEmpty(cookie.Value))
+                return null;
+
+            try
+            {
+                TUserData userData = null;
+                // 2. 解密Cookie值，获取FormsAuthenticationTicket对象
+                FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+
+                if (ticket != null && string.IsNullOrEmpty(ticket.UserData) == false)
+                    // 3. 还原用户数据
+                    userData = (new JavaScriptSerializer()).Deserialize<TUserData>(ticket.UserData);
+
+                if (ticket != null && userData != null)
+                    // 4. 构造我们的MyFormsPrincipal实例，重新给context.User赋值。
+                    return new MyFormsPrincipal<TUserData>(ticket, userData);
+            }
+            catch { /* 有异常也不要抛出，防止攻击者试探。 */ }
+            return null;
+        }
+
+
+
+        /// <summary>
+        /// 尝试从HttpRequest.Cookies中构造一个MyFormsPrincipal对象
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static MyFormsPrincipal<TUserData> TryParsePrincipalV2(IDictionary<string, Cookie> Cookies)
+        {
+            if (Cookies == null)
+                throw new ArgumentNullException("Cookies");
+
+            // 1. 读登录Cookie
+            Cookie cookie = Cookies[FormsAuthentication.FormsCookieName];
             if (cookie == null || string.IsNullOrEmpty(cookie.Value))
                 return null;
 
