@@ -6,8 +6,8 @@
 function getTime(text, type) {
     var date = new Date(text);
     var year = date.getYear();
-    var month = date.getMonth();
-    var day = date.getDay();
+    var month =eval( date.getMonth()+1);
+    var day = date.getDate();
 
 
 

@@ -1,7 +1,9 @@
-﻿using Model;
+﻿using Microsoft.Owin.Security.Cookies;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
@@ -38,10 +40,11 @@ namespace SignalRChat.Extend
                 Domain = FormsAuthentication.CookieDomain,
                 Path = FormsAuthentication.FormsCookiePath,
             };
+       
             if (rememberMe)
                 cookie.Expires = DateTime.Now.AddDays(CookieSaveDays);
-
             //写入Cookie
+  
             HttpContext.Current.Response.Cookies.Remove(cookie.Name);
             HttpContext.Current.Response.Cookies.Add(cookie);
         }

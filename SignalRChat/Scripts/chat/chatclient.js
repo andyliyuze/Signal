@@ -20,7 +20,7 @@
 
         var chattingUid = message.SenderId;
         //将消息push进Storage，本地存储
-        var key = "MessageListWith_" + message.ChattingId;
+        var key = "MessageListWith_" + chattingUid;
         PushSeesionStorage(key, message);
 
         //绑定消息在聊天对话框框

@@ -77,7 +77,7 @@ namespace SignalRChat.Controllers
         
         }
 
-        [MyAuthorize]
+       
         public ActionResult Login()
         {
 
@@ -90,7 +90,7 @@ namespace SignalRChat.Controllers
             if (!string.IsNullOrEmpty(uid)&& TryLogin(uid, pwd))
             {
                 GetUserDetail(uid);
-                Response.Redirect("/Chat.html");
+                Response.Redirect("/Chat/Index");
             };
            
         }

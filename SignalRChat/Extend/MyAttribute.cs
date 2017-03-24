@@ -13,10 +13,16 @@ namespace SignalRChat.Extend
         protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
         {
 
+            if(httpContext.User==null || !httpContext.User.Identity.IsAuthenticated)
+            { return false; }
+          else  return true;
 
-            MyFormsPrincipal<UserDetail> Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
-            return true;
+        }
 
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+           
+          filterContext.Result= new RedirectResult("/User/Login");
         }
     }
 }

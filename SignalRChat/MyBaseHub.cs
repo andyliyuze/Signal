@@ -20,14 +20,16 @@ namespace SignalRChat
        
     public class MyBaseHub : Hub
     {
-           private readonly ICacheService _service ;
-
+         private readonly ICacheService _service ;
+        private readonly IGroup_DAL _IGroupDal;
+        private readonly IMessageService _Msgservice;
         private readonly ILifetimeScope _hubLifetimeScope;
         public MyBaseHub(ILifetimeScope lifetimeScope)
         {
             _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
             _service = _hubLifetimeScope.Resolve<ICacheService>();
-
+            _IGroupDal = _hubLifetimeScope.Resolve<IGroup_DAL>();
+            _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
         }
         public MyBaseHub()
         {
@@ -41,6 +43,7 @@ namespace SignalRChat
                 {                
                     if (HttpContext.Current != null)
                     {
+
                         Principal = MyFormsPrincipal<UserDetail>.TryParsePrincipal(HttpContext.Current.Request);
                     }
                     else
@@ -63,7 +66,6 @@ namespace SignalRChat
 
             User.UserData.UserCId = cid;
         }
-
 
 
     }

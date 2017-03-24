@@ -15,7 +15,7 @@ using System.Web;
 
 namespace SignalRChat
 {
-
+    
     public class UserHub :MyBaseHub
     {
 
@@ -159,17 +159,20 @@ namespace SignalRChat
         }
 
 
-    
+
+
+        [HubAuthorize]
 
         //建立连接，业务上是用户正式上线操作
         public override Task OnConnected()
         {
+
             UserDetail CurrentUser = User.UserData;
 
             //当有新的用户上线
             OnNewUserContented();
 
-         
+
             //获得与每位好友的历史消息，最新一条以及未读消息数量
             List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsg(CurrentUser.UserDetailId.ToString());
             //获得好友列表
@@ -183,6 +186,7 @@ namespace SignalRChat
 
             foreach (var model in friendlist.Where(a => a.IsOnline == true).ToList())
             {
+               
                 Groups.Add(model.UserCId, Onlinegruop);
             }
 
@@ -197,6 +201,36 @@ namespace SignalRChat
               );
             return base.OnConnected();
         }
+        public void Join(List<Group> grouplist)
+        {
+            IHubContext Chat = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            foreach (var group in grouplist)
+            {
+                
+                Chat.Groups.Add(Context.ConnectionId, group.GroupName);
+            }
+
+        }
+        private void OnNewUserContented()
+        {
+
+            string uid = User.UserData.UserDetailId.ToString();
+            string newcid = Context.ConnectionId;
+            //获取此前的cid
+            string oldcid = _service.GetUserDetail(uid).UserCId;
+
+            if (!string.IsNullOrEmpty(oldcid) && newcid != oldcid)
+            {
+                //在前端迫使之前登录的用户下线
+                Clients.Client(oldcid).OutLogin();
+            }
+            //将新的cid更新到redis
+            _service.UpdateUserCId(uid, newcid);
+            _service.UpdateUserField("IsOnline", "true", uid);
+        }
+
+
+        [HubAuthorize]
         //重新连接，业务上表示重新上线，更新用户Cid到redis
         public override Task OnReconnected()
         {
@@ -204,9 +238,12 @@ namespace SignalRChat
             string newcid = Context.ConnectionId;
             _service.UpdateUserCId(uid, newcid);
             _service.UpdateUserField("IsOnline", "true", uid);
+            //获取群列表
+            List<Group> grouplist = _IGroupDal.GetMyGroups(Guid.Parse(uid));
+            Join(grouplist);
             return base.OnReconnected();
         }
-
+        [HubAuthorize]
 
         //用户下线
         public override Task OnDisconnected(bool flag)
@@ -227,14 +264,7 @@ namespace SignalRChat
             Clients.Group(Onlinegruop).onUserDisconnected(uid, name);
             return base.OnDisconnected(false);
         }
-        public void Join(List<Group> grouplist)
-        {
-            foreach (var group in grouplist)
-            {
-                Groups.Add(Context.ConnectionId, group.GroupName);
-            }
-
-        }
+     
 
         //检查是否已经是好友
 
@@ -311,23 +341,7 @@ namespace SignalRChat
  
 
 
-        private void OnNewUserContented()
-        {
-
-            string uid = User.UserData.UserDetailId.ToString();
-            string newcid = Context.ConnectionId;
-            //获取此前的cid
-            string oldcid = _service.GetUserDetail(uid).UserCId;
-           
-            if (!string.IsNullOrEmpty(oldcid)&& newcid!=oldcid)
-            {
-                //在前端迫使之前登录的用户下线
-                Clients.Client(oldcid).OutLogin();
-            }
-            //将新的cid更新到redis
-            _service.UpdateUserCId(uid, newcid);
-            _service.UpdateUserField("IsOnline", "true", uid);
-        }
+      
 
 
         //好友申请结果更新

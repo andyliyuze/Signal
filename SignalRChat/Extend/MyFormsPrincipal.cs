@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Security.Cookies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -88,7 +90,9 @@ namespace SignalRChat.Extend
                 HttpContext context = HttpContext.Current;
                 if (context == null)
                     throw new InvalidOperationException();
-
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationType);
+                identity.AddClaim(new Claim(ClaimTypes.Name, loginName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, "Andyuser"));
                 // 5. 写登录Cookie
                 context.Response.Cookies.Remove(cookie.Name);
                 context.Response.Cookies.Add(cookie);

@@ -48,9 +48,10 @@ namespace SignalRChat
 
     
  
-
+        [HubAuthorize]
         public void SendPrivateMessage(Message model)
         {
+            var User= Context.User;
             model.RecevierId = model.ChattingId;
             model.type = "friend";      
             //接受者uid
@@ -67,8 +68,8 @@ namespace SignalRChat
             }        
             // 加入到缓存
            bool result=  _Msgservice.InsertPrivateMsg(model);
-          
-           if (result)
+
+            if (result)
            {
                //告诉发送者发送成功
                Clients.Caller.sendMessageResult(SendMessageStatus.Success);
@@ -161,34 +162,16 @@ namespace SignalRChat
             //组别Id就是接受者Id
             model.GroupId = model.ChattingId;
             model.type = "group";
-           
             //接受者uid
-            string GroupName = _IGroupDal.GetItemByGroupId(Guid.Parse(model.GroupId)).GroupName;
+            string GroupName = _IGroupDal.GetItemByGroupId(Guid.Parse(model.GroupId)).GroupName.Trim(); ;
             //定义消息实体
-
             model.CreateTime = DateTime.Now;
             model.MessageId = Guid.NewGuid();
             model.SenderId = CurrentUser.UserDetailId.ToString();
-
-
-            Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);
-
-
-
-
-
-
-        }
-
-
-       
+          
+            Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);  
+                     
+        }       
         #endregion
-
-
     }
-
-
-
-
- 
 }

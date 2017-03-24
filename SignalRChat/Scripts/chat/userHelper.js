@@ -55,9 +55,9 @@ function UserIsOnlined(id) {
     var str = $("#ul_item_" + id + "").html();
     $("#ul_item_" + id + "").remove();
 
-    str = "<div class='chat_ul_item'id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
-    if ($(".chat_ul_item.OffLine").length != 0) { $(".chat_ul_item.OffLine").before(str); return; }
-    if ($(".chat_ul_item.Online").length != 0) { $(".chat_ul_item.Onlie").after(str); return; }
+    str = "<div class='chat_ul_item friends_item Online' id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
+    if ($(".friends_item.OffLine").length != 0) { $(".friends_item.OffLine").before(str); return; }
+    if ($(".friends_item.Online").length != 0) { $(".friends_item.Onlie").after(str); return; }
     else { $(".chat_ul .chat_ul_div").append(str); }
 }
 

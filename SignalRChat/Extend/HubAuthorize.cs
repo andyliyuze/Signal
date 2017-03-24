@@ -8,41 +8,24 @@ using System.Web;
 
 namespace SignalRChat.Extend
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = false)]
     public class HubAuthorizeAttribute : AuthorizeAttribute
     {
         protected override bool UserAuthorized(System.Security.Principal.IPrincipal user)
         {
-        
-
-           
-            if (user == null)
+          
+            if (user == null || !user.Identity.IsAuthenticated)
             {
-                throw new ArgumentNullException("user");
-            }
-         
-            var principal = user as ClaimsPrincipal;
-
-            if (principal != null)
-            {
-                Claim authenticated = principal.FindFirst(ClaimTypes.Authentication);
-                if (authenticated != null && authenticated.Value == "true")
-                {
-                    return true;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
             }
             else
-            {
+            {                       
                 return true;
             }
         }
 
 
-         
+      
     }
 
 

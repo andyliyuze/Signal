@@ -61,6 +61,7 @@
             $.connection.hub.logging = true;
             chatHub  = $.connection.chatHub;
             userHub = $.connection.userHub;
+         
             setScreen(false);
         
             //      Declare a proxy to reference the hub.
@@ -69,12 +70,13 @@
             registerClientMethodsForUser(userHub);
             // Start Hub
             $.connection.hub.start().done(function () {
-          
-                console.log("连接完成");
                 registerEvents(chatHub, userHub);
-              
+                console.log("连接完成");
+             
+                userHub.server.connect();
             });
             $.connection.hub.disconnected(function () {
+                console.log("Disconnected. Reason: " + $.connection.hub.lastError.message); 
                 console.log("正在尝试重新连接");
                 setTimeout(function () {
                     $.connection.hub.start().done(function () {

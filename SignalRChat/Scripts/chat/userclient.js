@@ -29,15 +29,15 @@
 
         }
         //延时获取申请消息，回复消息
-        setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
-        setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
-        setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
-        setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
+        //setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
+        //setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
+        //setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
+        //setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
     };
 
     // On New User Connected
     userHub.client.onNewUserConnected = function (uid, name) {
-        alert("有人来啦");
+        alert(name+"来啦");
         UserIsOnlined(uid);
         //AddUser(chatHub, id, name);
     };
@@ -45,7 +45,7 @@
 
     // On User Disconnected
     userHub.client.onUserDisconnected = function (id, userName) {
-        alert(userName + "下线啦！");
+        alert(userName + "下线啦");
         $("#img_" + id + "").addClass("gray");
 
     };
