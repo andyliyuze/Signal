@@ -31,15 +31,12 @@ namespace SignalRChat
          #endregion
         public ChatHub(ILifetimeScope lifetimeScope)
         {
-            
             // Create a lifetime scope for the hub.
             _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
-
             // Resolve dependencies from the hub lifetime scope.
             _service = _hubLifetimeScope.Resolve<ICacheService>();
             _DALservice = _hubLifetimeScope.Resolve<IUserDetail_DAL>();
             _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
-
             _IGroupDal= _hubLifetimeScope.Resolve<IGroup_DAL>();
             _DALFriendsApplyservice = _hubLifetimeScope.Resolve<IFriendsApply_DAL>();
             CurrentUser = User.UserData;
