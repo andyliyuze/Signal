@@ -60,12 +60,9 @@
         $(function () {
             $.connection.hub.logging = true;
             chatHub  = $.connection.chatHub;
-            userHub = $.connection.userHub;
-         
-            setScreen(false);
-        
+            userHub = $.connection.userHub;         
+            setScreen(false);        
             //      Declare a proxy to reference the hub.
-
             registerClientMethodsForChat(chatHub);
             registerClientMethodsForUser(userHub);
             // Start Hub

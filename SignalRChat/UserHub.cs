@@ -211,6 +211,13 @@ namespace SignalRChat
             }
 
         }
+        public void Leave(List<string> groupNames)
+        {
+            foreach (var groupName in groupNames)
+            {
+                Groups.Remove(Context.ConnectionId, groupName);
+            }
+        }
         private void OnNewUserContented()
         {
 
