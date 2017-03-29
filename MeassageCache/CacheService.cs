@@ -231,13 +231,9 @@ namespace MeassageCache
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
-                string cmd = "UserCIdById:" + uid + ":cid";
-                string cid = redisClient.Get<string>(cmd);
-                if (cid != null)
-                {
-                    return cid;
-                }
-                else { return null; }
+                var map = redisClient.GetAllEntriesFromHash("UserDetail:" + uid + "");
+                UserDetail model = SerializeHelper.ConvetToEntity<UserDetail>(map);
+                return model.UserCId;
             }
         }
         public bool AddBroadcastMessage(List<BroadcastMessage> list)

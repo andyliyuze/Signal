@@ -28,11 +28,11 @@
             bindingMsg(hisMsglist[i]);
 
         }
-        //延时获取申请消息，回复消息
-        //setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
-        //setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
-        //setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
-        //setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
+       // 延时获取申请消息，回复消息
+        setTimeout(function () { userHub.server.getUnreadGroupReply(); }, 1000);
+        setTimeout(function () { userHub.server.gettUnapproveGroupApply(); }, 2000);
+        setTimeout(function () { userHub.server.getUnreadFriendsReply(); }, 3000);
+        setTimeout(function () { userHub.server.getUnapproveFriendsApply(); }, 4000);
     };
 
     // On New User Connected

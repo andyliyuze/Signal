@@ -11,14 +11,19 @@ namespace MeassageCache
     {
        List<PrivateMessage> GetPrivateMessage(string key, string beginStamp, string endStamp);
        bool  InsertPrivateMsg(PrivateMessage model);
-        bool InsertBroadcastMsg(BroadcastMessage model);
-        int GetUnReadCount(string Uid);
+    
        List<HistoryMsgViewModel> GetHistoryMsg(string Id);
-       bool SetUnreadMsgCount(string RecevierId, string SenderId, int count);
-       List<PrivateMessage> GetUnreadMsg(string ReceiverId, string SenderId, string MsgId, int count);
+       bool SetUnreadPrivateMsgCount(string RecevierId, string SenderId, int count);
+       List<PrivateMessage> GetPrivateUnreadMsg(string ReceiverId, string SenderId, string MsgId, int count);
 
        List<PrivateMessage> PopMesFromMessageList(string MessageListkey, int count);
 
-      
+
+
+
+        bool InsertBroadcastMsg(BroadcastMessage model);
+
+        List<BroadcastMessage> GetUnreadBroadcastMsg(string groupId, string msgId, int count);
+        bool SetUnreadBroadcasMsgCount(string groupId, int count);
     }
 }

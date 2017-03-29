@@ -67,7 +67,7 @@ namespace SignalRChat
             //通知通过者
             Clients.Caller.beFriends(applicantModel);
             //接受者uid
-            string toUserCId = _service.GetUserCId(uidB);
+            string toUserCId = _service.GetUserDetail(uidB).UserCId;
             //回复模型
             FriendsReplyViewModel ReplyViewModel = FriendsReplyViewModel.Create(respondserModel, ReplyStatus.Pass,applyId,false);
             //接受者在线说明存在cid
@@ -135,7 +135,7 @@ namespace SignalRChat
         private void TryTellReceiverForFriendsApply(string uidA, string uidB,Guid ApplyId)
         {
             //接受者uid
-            string toUserCId = _service.GetUserCId(uidB);
+            string toUserCId = _service.GetUserDetail(uidB).UserCId;
             if (!string.IsNullOrEmpty(toUserCId))
             {
                 //发送人信息
@@ -329,7 +329,7 @@ namespace SignalRChat
             //回复模型
             FriendsReplyViewModel ReplyViewModel = FriendsReplyViewModel.Create(respondserModel, ReplyStatus.Decline, applyId, false);
             //检查申请人是否在线
-            string Cid = _service.GetUserCId(applyUserId);
+            string Cid = _service.GetUserDetail(applyUserId).UserCId;
             if (!string.IsNullOrEmpty(Cid))
             {
 
@@ -413,7 +413,7 @@ namespace SignalRChat
             //uidB为群Id，需要先找出群住Id
             string ownerId= group.OwnerId.ToString();
             //接受者uid
-            string toUserCId = _service.GetUserCId(ownerId);
+            string toUserCId = _service.GetUserDetail(ownerId).UserCId;
             if (!string.IsNullOrEmpty(toUserCId))
             {
                 //发送人信息
@@ -437,7 +437,7 @@ namespace SignalRChat
             //通知通过者
             Clients.Caller.beGroupMember(applicantModel);
             //接受者uid
-            string toUserCId = _service.GetUserCId(uidB);
+            string toUserCId = _service.GetUserDetail(uidB).UserCId;
             //回复模型
             GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Pass, applyId, false);
             //接受者在线说明存在cid
@@ -476,7 +476,7 @@ namespace SignalRChat
             //回复模型
             GroupReplyViewModel ReplyViewModel = GroupReplyViewModel.Create(group, ReplyStatus.Decline, applyId, false);
             //检查申请人是否在线
-            string Cid = _service.GetUserCId(applyUserId);
+            string Cid = _service.GetUserDetail(applyUserId).UserCId;
             if (!string.IsNullOrEmpty(Cid))
             {
 

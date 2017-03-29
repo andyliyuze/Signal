@@ -110,7 +110,7 @@ namespace UnitTest
         
         
         
-    List<PrivateMessage> list=    _Msgservice.GetUnreadMsg("","","",0);
+    List<PrivateMessage> list=    _Msgservice.GetPrivateUnreadMsg("","","",0);
         
         }
           [TestMethod]

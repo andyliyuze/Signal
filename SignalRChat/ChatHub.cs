@@ -41,7 +41,7 @@ namespace SignalRChat
         }     
         #region Methods
     
-        public void SendPrivateMessage(Message model)
+        public void SendPrivateMessage(PrivateMessage model)
         {
             var User= Context.User;
             model.RecevierId = model.ChattingId;
@@ -58,7 +58,7 @@ namespace SignalRChat
                 Clients.Client(toUserCId).receivePrivateMessage(model);
             }        
             // 加入到缓存
-           bool result=  _Msgservice.InsertPrivateMsg(model);
+            bool result=  _Msgservice.InsertPrivateMsg(model);
             if (result)
            {
                //告诉发送者发送成功
@@ -73,7 +73,7 @@ namespace SignalRChat
         public void MessageConfirm(string ChatingUserId)      
         {
             //让未读消息变为0
-            _Msgservice.SetUnreadMsgCount(CurrentUser.UserDetailId.ToString(), ChatingUserId, 0);   
+            _Msgservice.SetUnreadPrivateMsgCount(CurrentUser.UserDetailId.ToString(), ChatingUserId, 0);   
         }
         public void GetLastMessage()
         {
@@ -84,11 +84,11 @@ namespace SignalRChat
         //获取未读消息数量
         public void GetUnreadMsg(string ChatingUserId, string MsgId, int count)
         {
-                List<PrivateMessage> list = _Msgservice.GetUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, count);
+                List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, count);
                list= list.OrderBy(a => a.CreateTime).ToList();
                Clients.Caller.messageListReceived(list);
             //让未读消息变为0
-               _Msgservice.SetUnreadMsgCount(CurrentUser.UserDetailId.ToString(), ChatingUserId, 0);
+               _Msgservice.SetUnreadPrivateMsgCount(CurrentUser.UserDetailId.ToString(), ChatingUserId, 0);
         }
 
         private enum SendMessageStatus
@@ -98,7 +98,7 @@ namespace SignalRChat
         }
        
        [HubAuthorize]
-        public void sendGroupMessage(Message model)
+        public void sendGroupMessage(BroadcastMessage model)
         {
             //组别Id就是接受者Id
             model.GroupId = model.ChattingId;
@@ -111,7 +111,17 @@ namespace SignalRChat
             model.SenderId = CurrentUser.UserDetailId.ToString();       
             Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);
             // 加入到缓存
-            bool result = _Msgservice.InsertPrivateMsg(model);
+            bool result = _Msgservice.InsertBroadcastMsg(model);
+            if (result)
+            {
+                //告诉发送者发送成功
+                Clients.Caller.sendMessageResult(SendMessageStatus.Success);
+            }
+            else
+            {
+                //告诉发送者发送失败
+                Clients.Caller.sendMessageResult(SendMessageStatus.Failed);
+            }
         }       
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,33 +11,33 @@ using System.Threading.Tasks;
 namespace Model
 {
     [Serializable]
-    public class BroadcastMessage
+    public class BroadcastMessage:Message
     {
 
         [Key]
-        public Guid MessageId { get; set; }
-        public string SenderId { get; set; }
+        public override Guid MessageId { get; set; }
+        public override string SenderId { get; set; }
         [MaxLength(500, ErrorMessage = "消息长度不能超过500字")]
-        public string content { get; set; }
+        public override string content { get; set; }
         [MaxLength(10, ErrorMessage = "用户名不能超过10字符")]
-        public string SenderName { get; set; }
+        public override string SenderName { get; set; }
         public string GroupId { get; set; }
-        public DateTime CreateTime { get; set; }
-
+        public override DateTime  CreateTime { get; set; }
+     
     }
     [Serializable]  //必须添加序列化特性
-    public class PrivateMessage
+    public class PrivateMessage:Message
     {
 
         [Key]
-        public Guid MessageId { get; set; }
-        public string SenderId { get; set; }
+        public override Guid MessageId { get; set; }
+        public override string SenderId { get; set; }
         [MaxLength(500, ErrorMessage = "消息长度不能超过500字")]
-        public string content { get; set; }
+        public override string content { get; set; }
         [MaxLength(10, ErrorMessage = "用户名不能超过10字符")]
-        public string SenderName { get; set; }
+        public override string SenderName { get; set; }
         public string RecevierId { get; set; }
-        public DateTime CreateTime { get; set; }
+        public override  DateTime CreateTime { get; set; }
 
     }
     [Serializable]  //必须添加序列化特性

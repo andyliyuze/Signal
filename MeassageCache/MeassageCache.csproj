@@ -68,7 +68,9 @@
     <Compile Include="Common\RedisWorkQueue.cs" />
     <Compile Include="Common\SerializeHelper.cs" />
     <Compile Include="Common\TestConfig.cs" />
+    <Compile Include="GroupCacheService.cs" />
     <Compile Include="ICacheService.cs" />
+    <Compile Include="IGroupCacheService.cs" />
     <Compile Include="IMessageService.cs" />
     <Compile Include="IUserCacheService.cs" />
     <Compile Include="MessageService.cs" />
