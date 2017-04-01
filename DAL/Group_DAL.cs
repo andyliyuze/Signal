@@ -12,30 +12,14 @@ namespace DAL
 {
     public class Group_DAL : BaseDAL<Group>, IGroup_DAL
     {
+        //创建群
         public bool Create(Group model)
         {
             return Add(model);
         }
 
-        public List<Group> GetGroup(Guid UserId)
-        {
-            using (var context = new ChatContext())
-            {
-                List<Group> list =
-                    context.GroupMember.Where(a => a.MemberId ==  UserId).Join(context.Group, a => a.GroupId, b => b.GroupId, (a, b) =>
-                   new Group()
-                   {
-                       GroupAvatar = b.GroupAvatar,
-                       GroupId = b.GroupId,
-                       GroupName = b.GroupName,
-                       OwnerId = b.OwnerId
-                   }).ToList();
-                return list;
 
-            }
-
-        }
-
+        //搜索群
         public GroupViewModel GetGroupDeatailByGroupName(string Name)
         {
             using (var context = new ChatContext())
@@ -44,7 +28,7 @@ namespace DAL
                 {
                     var model = context.Group.Where(a => a.GroupName.Contains(Name))
                         .Join(context.UserDetail, a => a.OwnerId, b => b.UserDetailId,
-                        (a, b) => new GroupViewModel() { Group = a, OwnerName = b.UserName }).FirstOrDefault();
+                        (a, b) => new GroupViewModel() { GroupAvatar = a.GroupAvatar,GroupId=a.GroupId,GroupName=a.GroupName,OwnerId=a.OwnerId, OwnerName = b.UserName }).FirstOrDefault();
                     return model;
                 }
                 catch
@@ -55,6 +39,8 @@ namespace DAL
             }
         }
 
+
+        //发送群消息，同意入群，通知群主入群申请，拒绝入群
         public Group GetItemByGroupId(Guid Id)
         {
             using (ChatContext context = new ChatContext())
@@ -63,7 +49,7 @@ namespace DAL
                 return model;
             }
         }
-
+        //查找个人的所有群
         public List<Group> GetMyGroups(Guid UserId)
         {
             try

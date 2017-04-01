@@ -69,8 +69,10 @@
     <Compile Include="Common\SerializeHelper.cs" />
     <Compile Include="Common\TestConfig.cs" />
     <Compile Include="GroupCacheService.cs" />
+    <Compile Include="GroupMemberService.cs" />
     <Compile Include="ICacheService.cs" />
     <Compile Include="IGroupCacheService.cs" />
+    <Compile Include="IGroupMemberService.cs" />
     <Compile Include="IMessageService.cs" />
     <Compile Include="IUserCacheService.cs" />
     <Compile Include="MessageService.cs" />

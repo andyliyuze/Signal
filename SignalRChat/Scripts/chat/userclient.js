@@ -92,11 +92,11 @@
 
         }
         else {
-            $("#searchresult_avatar").attr("src", json.result.Group.GroupAvatar);
-            $("#searchresult_uid").val(json.result.Group.GroupId);
+            $("#searchresult_avatar").attr("src", json.result.GroupAvatar);
+            $("#searchresult_uid").val(json.result.GroupId);
             //设置一下该Id的类型，是群还是好友，用于发送添加申请时，定位到不同方法中
             $("#searchresult_uid").attr("data-type", "Group");
-            $("#searchresult_name").text(json.result.Group.GroupName);
+            $("#searchresult_name").text(json.result.GroupName);
             $(".searchresult_owner_span").show();
             $("#searchresult_owner").text(json.result.OwnerName);
         }

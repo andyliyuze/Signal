@@ -95,8 +95,7 @@ namespace SignalRChat
             if (type == "好友")
             {
                 string id = _service.GetUserIdByName(name);
-                UserDetail model = _service.GetUserDetail(id);
-              
+                UserDetail model = _service.GetUserDetail(id); 
                 var json = new { result = model, type = "User" };
                 Clients.Caller.searchResultReceived(json);
             }

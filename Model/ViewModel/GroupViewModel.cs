@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model.ViewModel
 {
-    public  class GroupViewModel
+    public  class GroupViewModel:Group
     {
         public string OwnerName { get; set; }
-        public Group Group { get; set; }
+        
     }
 }
