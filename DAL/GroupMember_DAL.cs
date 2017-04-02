@@ -9,13 +9,13 @@ namespace DAL
     {
 
 
-        public GroupMember GetItemByMemberId(Guid MemberId)
+        public GroupMember GetItemByMemberId(Guid MemberId,Guid GroupId)
         {
             using (ChatContext context = new ChatContext())
             {
                 try
                 {
-                    var model = context.GroupMember.Where(a => a.MemberId == MemberId).FirstOrDefault();
+                    var model = context.GroupMember.Where(a => a.MemberId == MemberId &&a.GroupId==GroupId).FirstOrDefault();
                     if (model != null) { return model; }
                     return null;
                 }

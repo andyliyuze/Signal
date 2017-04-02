@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace MeassageCache.Common
 {
    public static class RedisExtend
     {

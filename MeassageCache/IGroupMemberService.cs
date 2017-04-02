@@ -1,11 +1,10 @@
-﻿using Model;
-using System;
- 
+﻿using System;
+
 
 namespace MeassageCache
 {
     interface IGroupMemberService
     {
-        GroupMember GetItemByMemberId(Guid MemberId);
+        bool GetItemByMemberId(Guid MemberId, Guid GroupId);
     }
 }

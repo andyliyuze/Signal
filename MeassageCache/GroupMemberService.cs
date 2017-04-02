@@ -1,17 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Model;
+using ServiceStack.Redis;
 
 namespace MeassageCache
 {
     public class GroupMemberService : IGroupMemberService
     {
-        public GroupMember GetItemByMemberId(Guid MemberId)
+        public bool GetItemByMemberId(Guid MemberId, Guid GroupId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+                    string key = "Group:UserId" + MemberId.ToString();
+                    byte[] value = GroupId.ToByteArray();
+                    long i = redisClient.SIsMember(key, value);
+                    if (i >= 1) { return true; }
+                    else { return false; }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

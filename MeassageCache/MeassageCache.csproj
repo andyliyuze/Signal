@@ -64,16 +64,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheService.cs" />
+    <Compile Include="Common\RedisExtend.cs" />
     <Compile Include="Common\RedisHashHelper.cs" />
     <Compile Include="Common\RedisWorkQueue.cs" />
     <Compile Include="Common\SerializeHelper.cs" />
     <Compile Include="Common\TestConfig.cs" />
+    <Compile Include="FriendsApplyService.cs" />
     <Compile Include="GroupCacheService.cs" />
     <Compile Include="GroupMemberService.cs" />
     <Compile Include="ICacheService.cs" />
     <Compile Include="IGroupCacheService.cs" />
     <Compile Include="IGroupMemberService.cs" />
     <Compile Include="IMessageService.cs" />
+    <Compile Include="Interface\IFriendsApplyService.cs" />
+    <Compile Include="Interface\IGroupApplyService.cs" />
     <Compile Include="IUserCacheService.cs" />
     <Compile Include="MessageService.cs" />
     <Compile Include="NumFullManager.cs" />

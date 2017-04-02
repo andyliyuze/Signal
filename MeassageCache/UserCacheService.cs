@@ -33,30 +33,7 @@ namespace MeassageCache
             }
           
         }
-         //好友申请操作
-        public void SendAddFriendsApply(string uidA, string uidB) {
-
-            //uidA代表申请发出者
-            //uidB代表申请接受者
-            try
-            {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
-                {
-                    string key = "Friends:Reply:" + uidA + "";
-                    string key2 = "Friends:Receive:" + uidB + "";
-                    //Friends:Reply代表发出的好友添加申请
-                    //Friends:Receive代表收到的好友添加申请
-                    redisClient.AddItemToList(key, uidB);
-                    redisClient.AddItemToList(key2, uidA);
-               
-                }
-            }
-            catch(Exception e)
-            {
-                throw e;
-
-            }
-        }
+   
 
  
     }

@@ -361,10 +361,10 @@ namespace SignalRChat
         }
 
 
-        //发送添加群操作
-        public void SendAdGroupReply(string uidA,string uidB)
+        //发送添加群操作，groupId表示群id
+        public void SendAdGroupReply(string uidA,string groupId)
         {
-            if (!CheckIsvalid(uidA) || CheckIsInGruop(uidA, uidB)) { return; };
+            if (!CheckIsvalid(uidA) || CheckIsInGruop(uidA, groupId)) { return; };
             try
             {
                 //将添加请求持久化到sqlserver
@@ -373,7 +373,7 @@ namespace SignalRChat
                 {
                     ApplyTime = DateTime.Now,
                     ApplyUserId = Guid.Parse(uidA),
-                    GroupId = Guid.Parse(uidB),
+                    GroupId = Guid.Parse(groupId),
                     HasReadResult = "待回复",
                     Id= ApplyId,
                     ReplyTime=DateTime.Now,
@@ -383,7 +383,7 @@ namespace SignalRChat
             
                 Clients.Caller.applyResult(ApplyStatus.Success);
                 //尝试通知接受者
-                TryTellReceiverForGroupApply(uidA, uidB, ApplyId);
+                TryTellReceiverForGroupApply(uidA, groupId, ApplyId);
             }
             catch
             {
@@ -393,9 +393,9 @@ namespace SignalRChat
 
 
         //检查是否添加人已经在群里
-        private bool CheckIsInGruop(string uidA,string  uidB)
+        private bool CheckIsInGruop(string uidA,string groupId)
         {
-            if (_IGroupMemberDal.GetItemByMemberId(Guid.Parse(uidA)) != null)
+            if (_IGroupMemberDal.GetItemByMemberId(Guid.Parse(uidA), Guid.Parse(groupId)) != null)
             {
                 Clients.Caller.applyResult(ApplyStatus.BeenMember);
                 return true;

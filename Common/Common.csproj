@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RedisExtend.cs" />
     <Compile Include="ReplyStatusHelper.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="UploadHelper.cs" />
