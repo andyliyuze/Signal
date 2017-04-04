@@ -3,6 +3,7 @@ using Autofac.Integration.SignalR;
 using DAL;
 using DAL.Interface;
 using MeassageCache;
+using MeassageCache.Interface;
 using Microsoft.AspNet.SignalR;
 using Model;
 using System;

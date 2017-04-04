@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-
 using Model;
 using ServiceStack;
 using ServiceStack.Redis;
-using ServiceStack.Redis.Generic;
 using ServiceStack.Redis.Support;
-using System.Diagnostics;
 using MeassageCache.Common;
-using Common;
-using DAL;
+using MeassageCache.Interface;
 
 namespace MeassageCache
 {

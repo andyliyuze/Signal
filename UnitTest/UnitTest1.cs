@@ -11,7 +11,7 @@ using DAL;
 using Model.ViewModel;
 using Common;
 using SignalRChat;
-
+using MeassageCache.Interface;
 namespace UnitTest
 {
     [TestClass]

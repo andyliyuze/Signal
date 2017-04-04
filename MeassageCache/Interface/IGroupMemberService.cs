@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace MeassageCache
+namespace MeassageCache.Interface
 {
     interface IGroupMemberService
     {

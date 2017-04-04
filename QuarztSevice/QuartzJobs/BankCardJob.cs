@@ -4,6 +4,7 @@ using DAL;
 using DAL.Interface;
 using log4net;
 using MeassageCache;
+using MeassageCache.Interface;
 using Model;
 using Quartz;
 using System;

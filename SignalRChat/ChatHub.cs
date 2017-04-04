@@ -12,6 +12,7 @@ using Model.ViewModel;
 using System.Diagnostics;
 using SignalRChat.Extend;
 using System.Web.Security;
+using MeassageCache.Interface;
 
 namespace SignalRChat
 {

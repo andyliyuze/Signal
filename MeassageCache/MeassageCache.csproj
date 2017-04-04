@@ -70,17 +70,17 @@
     <Compile Include="Common\SerializeHelper.cs" />
     <Compile Include="Common\TestConfig.cs" />
     <Compile Include="FriendsApplyService.cs" />
+    <Compile Include="GroupApplyService.cs" />
     <Compile Include="GroupCacheService.cs" />
     <Compile Include="GroupMemberService.cs" />
-    <Compile Include="ICacheService.cs" />
-    <Compile Include="IGroupCacheService.cs" />
-    <Compile Include="IGroupMemberService.cs" />
-    <Compile Include="IMessageService.cs" />
+    <Compile Include="Interface\IGroupMemberService.cs" />
+    <Compile Include="Interface\IMessageService.cs" />
+    <Compile Include="Interface\ICacheService.cs" />
     <Compile Include="Interface\IFriendsApplyService.cs" />
     <Compile Include="Interface\IGroupApplyService.cs" />
-    <Compile Include="IUserCacheService.cs" />
+    <Compile Include="Interface\IGroupCacheService.cs" />
+    <Compile Include="Interface\IUserCacheService.cs" />
     <Compile Include="MessageService.cs" />
-    <Compile Include="NumFullManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserCacheService.cs" />
   </ItemGroup>

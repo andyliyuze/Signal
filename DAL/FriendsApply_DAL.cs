@@ -43,7 +43,7 @@ namespace DAL
         }
 
 
-      
+
 
 
 
@@ -166,14 +166,13 @@ namespace DAL
                         {
                             ReplyTime = a.ReplyTime,
                             AppyId = a.FriendsApplyId,
-                       ReplyUserAvatar=b.AvatarPic,
-                       ReplyUserId=b.UserDetailId,
-                       ReplyUserName=b.UserName,
+                            ReplyUserAvatar = b.AvatarPic,
+                            ReplyUserId = b.UserDetailId,
+                            ReplyUserName = b.UserName,
                             ReplyStatus = ReplyStatusHelper.ConvertToReplyStatus(a.Result),
                             HasReadResult = false
                         };
-
-                    var list = context.FriendsApply.Where(a => a.ApplyUserId == Id && a.HasReadResult == "未读" &&a.Result!="忽略")
+                    var list = context.FriendsApply.Where(a => a.ApplyUserId == Id && a.HasReadResult == "未读" && a.Result != "忽略")
                         .Join(context.UserDetail, a => a.ReceiverUserId, b => b.UserDetailId, expression.Compile()
                     ).ToList();
                     return list;

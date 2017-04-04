@@ -17,7 +17,6 @@ namespace Model.ViewModel
         public Guid ApplyUserId { get; set; }
         public string ApplyUserName { get; set; }
         public string ApplyUserAvatar { get; set; }
-
         public bool IsOnline { get; set; }
         public Guid OwnerId { get; set; }
         public Guid GroupId { get; set; }
@@ -25,6 +24,27 @@ namespace Model.ViewModel
         public DateTime ApplyTime { get; set; }
 
 
+        public static GroupApplyViewModel ConvertToGroupApplyViewModel(UserDetail user, JoinGroupApply apply, Group group)
+        {
+            if (user == null || apply == null) { return null; }
+            GroupApplyViewModel ViewModel = new GroupApplyViewModel()
+            {
+                ApplyTime=apply.ApplyTime,
+                ApplyUserAvatar=user.AvatarPic,
+                ApplyUserId=apply.ApplyUserId,
+                ApplyUserName=user.UserName,
+                GroupApplyId=apply.Id,
+                GroupId=apply.GroupId,             
+                IsOnline=user.IsOnline,
+                OwnerId=group.OwnerId,
+                GroupName = group.GroupName,
+            };
+            return ViewModel;
+
+
+
+
+        }
         public static GroupApplyViewModel Create(UserDetail applymodel, Guid ApplyId,Group groupmodel)
         {
 

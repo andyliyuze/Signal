@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MeassageCache
+namespace MeassageCache.Interface
 {
   public  interface IMessageService
     {

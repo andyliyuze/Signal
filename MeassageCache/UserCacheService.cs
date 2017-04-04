@@ -1,12 +1,5 @@
-﻿using MeassageCache.Common;
-using Model;
-using ServiceStack.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using ServiceStack.Redis;
+using MeassageCache.Interface;
 namespace MeassageCache
 {
     public class UserCacheService : IUserCacheService
@@ -31,10 +24,6 @@ namespace MeassageCache
                 return false;
             
             }
-          
-        }
-   
-
- 
+        } 
     }
 }

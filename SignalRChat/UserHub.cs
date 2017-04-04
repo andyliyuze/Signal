@@ -12,6 +12,7 @@ using SignalRChat.Extend;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using MeassageCache.Interface;
 
 namespace SignalRChat
 {

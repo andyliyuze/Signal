@@ -5,6 +5,7 @@ using System.Linq;
 using Model.ViewModel;
 using ServiceStack.Redis;
 using MeassageCache.Common;
+using MeassageCache.Interface;
 namespace MeassageCache
 {
     class GroupCacheService : IGroupCacheService

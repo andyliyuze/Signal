@@ -13,6 +13,7 @@ using DAL.Interface;
 using SignalRChat.Models;
 using Common;
 using SignalRChat.Extend;
+using MeassageCache.Interface;
 
 namespace SignalRChat.Controllers
 {

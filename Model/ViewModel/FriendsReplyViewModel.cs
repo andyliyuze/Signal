@@ -1,4 +1,5 @@
 ﻿using Common;
+using Model;
 using System;
 
 namespace Model.ViewModel
@@ -27,7 +28,30 @@ namespace Model.ViewModel
                 HasReadResult=HasReadResult
             };
         }
-   
+        public static FriendsReplyViewModel ConvertToFriendsReplyViewModel(UserDetail user, FriendsApply apply)
+        {
+            if (user == null || apply == null) { return null; }
+            ReplyStatus status= ReplyStatusHelper.ConvertToReplyStatus(apply.Result);
+            bool HasReadResult = false;
+            if (apply.HasReadResult == "已读") {  HasReadResult = true; }
+
+            FriendsReplyViewModel model = new FriendsReplyViewModel()
+            {
+                AppyId = apply.FriendsApplyId,
+                HasReadResult = HasReadResult,
+                ReplyUserAvatar = user.AvatarPic,
+                ReplyStatus = status,
+                ReplyTime = apply.ReplyTime,
+                ReplyUserId = apply.ReceiverUserId,
+                ReplyUserName = user.UserName
+
+            };
+            return model;
+            
+        }
+
+
+      
     }
 
 

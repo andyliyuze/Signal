@@ -9,8 +9,8 @@ namespace DAL.Interface
     {
       bool SendAddFriendsApply(FriendsApply model);
       List<FriendsApplyViewModel> GetFriendsApplyByUId(Guid Id);
-        List<FriendsReplyViewModel> GetFriendsReplyByUId(Guid Id);
-        bool UpdateResult(FriendsApply model);
+      List<FriendsReplyViewModel> GetFriendsReplyByUId(Guid Id);
+      bool UpdateResult(FriendsApply model);
       bool SetReadByIds(List<string> ids);
     }
 }

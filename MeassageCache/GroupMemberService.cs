@@ -1,6 +1,6 @@
 ﻿using System;
 using ServiceStack.Redis;
-
+using MeassageCache.Interface;
 namespace MeassageCache
 {
     public class GroupMemberService : IGroupMemberService

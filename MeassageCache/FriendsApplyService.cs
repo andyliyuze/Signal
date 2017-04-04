@@ -39,7 +39,26 @@ namespace MeassageCache
 
         public List<FriendsReplyViewModel> GetFriendsReplyByUId(Guid Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+
+                    //首先取得该用户所有申请记录Id，并且是未读的，已读的话会被清理了
+                   List<string> applyIds=  redisClient.GetAllItemsFromSet("FreindsApply:ApplyUser:" + Id).ToList();
+                    List<FriendsReplyViewModel> replys = new List<FriendsReplyViewModel>();
+
+                    foreach (string id in applyIds)
+                    {
+                       FriendsApply apply=   redisClient.GetEntity<FriendsApply>(id);
+                       UserDetail user= redisClient.GetEntity<UserDetail>(apply.ReceiverUserId.ToString());
+                        FriendsReplyViewModel item =FriendsReplyViewModel.ConvertToFriendsReplyViewModel(user, apply);
+                        if (item != null) { replys.Add(item); }
+                    }
+                    return replys;
+                }
+            }
+            catch { return new List<FriendsReplyViewModel>(); }
         }
 
         public bool SendAddFriendsApply(FriendsApply model)
@@ -60,12 +79,38 @@ namespace MeassageCache
 
         public bool SetReadByIds(List<string> ids)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+                    string key = "HasReadResult";
+                    string value = "已读";
+                    foreach (string id in ids)
+                    {
+                         redisClient.SetEntryInHash("FriendsApply:" + id + "", key, value);
+                    }
+                    return true;
+                }
+            }
+            catch { return false; }
         }
 
         public bool UpdateResult(FriendsApply model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                {
+                    List<KeyValuePair<string, string>> kvp = new List<KeyValuePair<string, string>>();
+                    kvp.Add(new KeyValuePair<string, string>("Result", model.Result));
+                    kvp.Add(new KeyValuePair<string, string>("ReplyTime", model.ReplyTime.ToString()));
+                    kvp.Add(new KeyValuePair<string, string>("HasReadResult", model.HasReadResult));
+                    string key = "FriendsApply" + model.FriendsApplyId;
+                    redisClient.SetRangeInHash(key, kvp);
+                    return true;
+                }
+            }
+            catch { return false; }
         }
     }
 }

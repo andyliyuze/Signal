@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Model;
 using ServiceStack.Redis;
 using Common;
 using ServiceStack;
-using Model.Extend;
+using MeassageCache.Interface;
 namespace MeassageCache
 {
     public class MessageService : IMessageService

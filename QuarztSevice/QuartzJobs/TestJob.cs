@@ -9,6 +9,8 @@ using MeassageCache;
 using Model;
 using DAL;
 using DAL.Interface;
+using MeassageCache.Interface;
+
 namespace QuarztSevice.QuartzJobs
 {
     public sealed class TestJob : IJob
