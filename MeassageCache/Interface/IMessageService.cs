@@ -1,13 +1,9 @@
 ﻿using Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MeassageCache.Interface
 {
-  public  interface IMessageService
+    public  interface IMessageService
     {
        List<PrivateMessage> GetPrivateMessage(string key, string beginStamp, string endStamp);
        bool  InsertPrivateMsg(PrivateMessage model);

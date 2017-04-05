@@ -63,7 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheService.cs" />
+    <Compile Include="UserService.cs" />
     <Compile Include="Common\RedisExtend.cs" />
     <Compile Include="Common\RedisHashHelper.cs" />
     <Compile Include="Common\RedisWorkQueue.cs" />
@@ -71,18 +71,18 @@
     <Compile Include="Common\TestConfig.cs" />
     <Compile Include="FriendsApplyService.cs" />
     <Compile Include="GroupApplyService.cs" />
-    <Compile Include="GroupCacheService.cs" />
+    <Compile Include="GroupService.cs" />
     <Compile Include="GroupMemberService.cs" />
     <Compile Include="Interface\IGroupMemberService.cs" />
     <Compile Include="Interface\IMessageService.cs" />
-    <Compile Include="Interface\ICacheService.cs" />
+    <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Interface\IFriendsApplyService.cs" />
     <Compile Include="Interface\IGroupApplyService.cs" />
     <Compile Include="Interface\IGroupCacheService.cs" />
-    <Compile Include="Interface\IUserCacheService.cs" />
+    <Compile Include="Interface\IFriendsService.cs" />
     <Compile Include="MessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserCacheService.cs" />
+    <Compile Include="FriendsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

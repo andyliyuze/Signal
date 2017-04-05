@@ -8,7 +8,7 @@ using MeassageCache.Common;
 using MeassageCache.Interface;
 namespace MeassageCache
 {
-    class GroupCacheService : IGroupCacheService
+   public  class GroupService : IGroupService
     {
         //创建群
         public bool Create(Group model)

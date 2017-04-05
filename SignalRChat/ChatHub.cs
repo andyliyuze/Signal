@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Autofac;
-using MeassageCache;
 using Model;
 using DAL;
-using System.Threading.Tasks;
 using DAL.Interface;
-using Model.ViewModel;
-using System.Diagnostics;
 using SignalRChat.Extend;
-using System.Web.Security;
 using MeassageCache.Interface;
 
 namespace SignalRChat
@@ -21,7 +16,7 @@ namespace SignalRChat
     {
         #region Data Members
         private readonly ILifetimeScope _hubLifetimeScope;
-        private readonly ICacheService _service;
+        private readonly IUserService _service;
         private readonly IMessageService _Msgservice;
         private readonly IUserDetail_DAL _DALservice;
         private readonly IFriendsApply_DAL _DALFriendsApplyservice;
@@ -33,7 +28,7 @@ namespace SignalRChat
             // Create a lifetime scope for the hub.
             _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
             // Resolve dependencies from the hub lifetime scope.
-            _service = _hubLifetimeScope.Resolve<ICacheService>();
+            _service = _hubLifetimeScope.Resolve<IUserService>();
             _DALservice = _hubLifetimeScope.Resolve<IUserDetail_DAL>();
             _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
             _IGroupDal= _hubLifetimeScope.Resolve<IGroup_DAL>();

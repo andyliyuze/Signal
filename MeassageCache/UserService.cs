@@ -10,7 +10,7 @@ using MeassageCache.Interface;
 
 namespace MeassageCache
 {
-    public class CacheService : ICacheService
+    public class UserService : IUserService
     {
 
 
@@ -129,30 +129,33 @@ namespace MeassageCache
             }
 
         }
-        //获取好友Id
-        public List<string> GetFriendsIds(string id)
+
+        //获取UserId
+
+        public string GetUserIdByCId(string cid)
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
-                List<string> IdList = redisClient.GetAllItemsFromSet("Friends:UserId:" + id + "").ToList<string>();
-
-                return IdList;
+                string cmd = "UserIdByCId:" + cid + ":uid";
+                string uid = redisClient.Get<string>(cmd);
+                if (uid != null)
+                {
+                    return uid;
+                }
+                else { return null; }
             }
         }
-        // 获取好友信息
-        public List<UserDetail> GetMyFriendsDetail(List<string> ids)
+        //获取Uid
+        public string GetUserCIdByUId(string uid)
         {
-            List<UserDetail> userlist = new List<UserDetail>();
-            foreach (var id in ids)
+            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
-
-                userlist.Add(GetUserDetail(id));
-
-
+                var map = redisClient.GetAllEntriesFromHash("UserDetail:" + uid + "");
+                UserDetail model = SerializeHelper.ConvetToEntity<UserDetail>(map);
+                return model.UserCId;
             }
-            return userlist;
-
         }
+
         public bool AddNewUser(string id, string cid, string username)
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
@@ -205,60 +208,8 @@ namespace MeassageCache
         }
 
 
-        public string GetUserIdByCId(string cid)
-        {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
-            {
-                string cmd = "UserIdByCId:" + cid + ":uid";
-                string uid = redisClient.Get<string>(cmd);
-                if (uid != null)
-                {
-                    return uid;
-                }
-                else { return null; }
-            }
-        }
-        public string GetUserCId(string uid)
-        {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
-            {
-                var map = redisClient.GetAllEntriesFromHash("UserDetail:" + uid + "");
-                UserDetail model = SerializeHelper.ConvetToEntity<UserDetail>(map);
-                return model.UserCId;
-            }
-        }
-        public bool AddBroadcastMessage(List<BroadcastMessage> list)
-        {
-            RedisClient redisClient = new RedisClient("127.0.0.1", 6379);
-            //使用ServiceStack.Redis.Support提供的序列化方法
-            var ser = new ObjectSerializer();
-            byte[] buffer3 = ser.Serialize(list);
-            // 将序列化后的集合查到到redis的list类型
-            long BeforeLen = redisClient.LLen("BroadCastList");
-            long AfterLen = redisClient.LPush("BroadCastList", buffer3);
-            list.Clear();
-            if (AfterLen - BeforeLen > 0) { return true; }
-            else { return false; }
-        }
-        public bool AddPrivateMessage(List<PrivateMessage> list)
-        {
-            try
-            {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
-                {
-                    // byte[] buffer3 = SerializeUtilities.Serialize<PrivateMessage>(bro);               
-                    //使用ServiceStack.Redis.Support提供的序列化方法
-                    var ser = new ObjectSerializer();
-                    byte[] buffer3 = ser.Serialize(list);
-                    long BeforeLen = redisClient.LLen("PrivateList");
-                    long AfterLen = redisClient.LPush("PrivateList", buffer3);
-                    if (AfterLen - BeforeLen > 0) { return true; }
-                    else { return false; }
-                }
-            }
-            catch { return false; }
-        }
-
+        //更新属性值
+      
         public bool UpdateUserField(string key, string value, string UId)
         {
             try
@@ -270,8 +221,39 @@ namespace MeassageCache
             }
             catch { return false; }
         }
+        
+        
+        //获取好友
+        public List<UserDetail> GetMyFriends(string Uid)
+        {
+            
+            var ids = GetFriendsIds(Uid);
+            return GetMyFriendsDetail(ids);
+        }
+        //获取好友Id
+        private List<string> GetFriendsIds(string id)
+        {
+            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            {
+                List<string> IdList = redisClient.GetAllItemsFromSet("Friends:UserId:" + id + "").ToList<string>();
 
- 
+                return IdList;
+            }
+        }
+        // 获取好友信息
+        private List<UserDetail> GetMyFriendsDetail(List<string> ids)
+        {
+            List<UserDetail> userlist = new List<UserDetail>();
+            foreach (var id in ids)
+            {
+
+                userlist.Add(GetUserDetail(id));
+
+
+            }
+            return userlist;
+
+        }
     }
 
 }

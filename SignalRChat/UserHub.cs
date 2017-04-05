@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
 using Autofac;
-using MeassageCache;
 using Model;
 using DAL.Interface;
 using Model.ViewModel;
-using Newtonsoft.Json.Linq;
 using Common;
 using SignalRChat.Extend;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MeassageCache.Interface;
 
 namespace SignalRChat
 {
-    
+
     public class UserHub :MyBaseHub
     {
 
@@ -26,11 +23,11 @@ namespace SignalRChat
 
 
         private readonly ILifetimeScope _hubLifetimeScope;
-        private readonly IUserCacheService _Userservice;
+        private readonly IFriendsService _Userservice;
         private readonly IFriendsApply_DAL _friendsApplyDal;
         private readonly IFriends_DAL _friendsDal;
         private readonly IMessageService _Msgservice;
-        private readonly ICacheService _service;
+        private readonly IUserService _service;
         private readonly IGroup_DAL _IGroupDal;
         private readonly IGroupMember_DAL _IGroupMemberDal;
         private readonly IJoinGroupApply_DAL _IJoinGroupApplyDal;
@@ -40,11 +37,11 @@ namespace SignalRChat
             // Create a lifetime scope for the hub.
             _hubLifetimeScope = lifetimeScope.BeginLifetimeScope();
             // Resolve dependencies from the hub lifetime scope.
-            _Userservice = _hubLifetimeScope.Resolve<IUserCacheService>();
+            _Userservice = _hubLifetimeScope.Resolve<IFriendsService>();
             _friendsApplyDal = _hubLifetimeScope.Resolve<IFriendsApply_DAL>();
             _friendsDal = _hubLifetimeScope.Resolve<IFriends_DAL>();
             _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
-            _service = _hubLifetimeScope.Resolve<ICacheService>();
+            _service = _hubLifetimeScope.Resolve<IUserService>();
             _IGroupDal = _hubLifetimeScope.Resolve<IGroup_DAL>();
             _IGroupMemberDal = _hubLifetimeScope.Resolve<IGroupMember_DAL>();
             _IJoinGroupApplyDal = _hubLifetimeScope.Resolve<IJoinGroupApply_DAL>();
@@ -176,7 +173,7 @@ namespace SignalRChat
             //获得与每位好友的历史消息，最新一条以及未读消息数量
             List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsg(CurrentUser.UserDetailId.ToString());
             //获得好友列表
-            List<UserDetail> friendlist = _service.GetMyFriendsDetail(_service.GetFriendsIds(CurrentUser.UserDetailId.ToString()));
+            List<UserDetail> friendlist = _service.GetMyFriends(CurrentUser.UserDetailId.ToString());
 
             friendlist.OrderBy(a => a.IsOnline).ToList();
             string Onlinegruop = CurrentUser.UserName + "的在线好友";
@@ -260,7 +257,7 @@ namespace SignalRChat
             //用户下线方法
             string name = _service.LogOut(uid);
             //获得在线好友列表
-            List<UserDetail> list = _service.GetMyFriendsDetail(_service.GetFriendsIds(uid)).Where(a => a.IsOnline == true).ToList();
+            List<UserDetail> list = _service.GetMyFriends(uid).Where(a => a.IsOnline == true).ToList();
 
             string Onlinegruop = name + "的在线好友";
             foreach (var model in list)

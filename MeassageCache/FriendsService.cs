@@ -2,7 +2,7 @@
 using MeassageCache.Interface;
 namespace MeassageCache
 {
-    public class UserCacheService : IUserCacheService
+    public class FriendsService : IFriendsService
     {
         //正式成为好友操作
         public bool BeFriends(string uidA, string uidB) 

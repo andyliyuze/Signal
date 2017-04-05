@@ -36,22 +36,21 @@ namespace SignalRChat
             //signalR的特殊注册方法
             builder.RegisterType<ChatHub>().ExternallyOwned();
             builder.RegisterType<UserHub>().ExternallyOwned();
-            builder.RegisterType<CacheService>().As<ICacheService>();
-
-            
+            builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<MessageService>().As<IMessageService>();
-            builder.RegisterType<UserCacheService>().As<IUserCacheService>();
+            builder.RegisterType<FriendsService>().As<IFriendsService>();
+            builder.RegisterType<FriendsApplyService>().As<IFriendsApplyService>();
+            builder.RegisterType<GroupApplyService>().As<IGroupApplyService>();
+            builder.RegisterType<GroupService>().As<IGroupService>();
+            builder.RegisterType<GroupMemberService>().As<IGroupMemberService>();
 
-            builder.RegisterType<FriendsApply_DAL>().As<IFriendsApply_DAL>();
-           
+            builder.RegisterType<FriendsApply_DAL>().As<IFriendsApply_DAL>(); 
             builder.RegisterType<Friends_DAL>().As<IFriends_DAL>();
             builder.RegisterType<UserDetail_DAL>().As<IUserDetail_DAL>();
             builder.RegisterType<BroadcastMessages_DAL>().As<IBroadcastMessages_DAL>();
             builder.RegisterType<PrivateMessages_DAL>().As<IPrivateMessages_DAL>();
-            builder.RegisterType<GroupMember_DAL>().As<IGroupMember_DAL>();
-            
+            builder.RegisterType<GroupMember_DAL>().As<IGroupMember_DAL>();         
             builder.RegisterType<Group_DAL>().As<IGroup_DAL>();
-
             builder.RegisterType<JoinGroupApply_DAL>().As<IJoinGroupApply_DAL>();
             
             //builder.RegisterType<PopCache>();

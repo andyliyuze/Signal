@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace MeassageCache.Interface
 {
-    interface IGroupCacheService
+  public  interface IGroupService
     {
         bool Create(Group model);
         GroupViewModel GetGroupDeatailByGroupName(string Name);

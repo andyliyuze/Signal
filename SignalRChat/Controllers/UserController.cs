@@ -22,7 +22,7 @@ namespace SignalRChat.Controllers
 
         private static IUserDetail_DAL _DALService = new UserDetail_DAL();
         private static IUserInfo_DAL _InfoDALService = new UserInfo_DAL();
-        private static ICacheService _cache = new CacheService();
+        private static IUserService _cache = new UserService();
         // GET: User
         [AllowAnonymous]
         public ActionResult Register()

@@ -2,13 +2,10 @@
 using Model.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MeassageCache.Interface
 {
-    interface IGroupApplyService
+   public interface IGroupApplyService
     {
         bool Add(JoinGroupApply model);
         bool SetReadByIds(List<string> ids);

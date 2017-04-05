@@ -18,7 +18,7 @@ namespace UnitTest
     public class UnitTest1
     {
         RedisClient redisClient = new RedisClient("127.0.0.1", 6379);
-        CacheService service = new CacheService();
+        UserService service = new UserService();
         MessageService _Msgservice = new MessageService();
         PrivateMessages_DAL _DAL = new PrivateMessages_DAL();
         FriendsApply_DAL _applydal = new FriendsApply_DAL();
@@ -48,7 +48,7 @@ namespace UnitTest
         {
 
 
-            List<string> ids = service.GetFriendsIds("06879b5b-33f4-4a26-a530-e0ea31004d86");
+      //      List<string> ids = service.GetFriendsIds("06879b5b-33f4-4a26-a530-e0ea31004d86");
         }
 
 
@@ -57,8 +57,8 @@ namespace UnitTest
         public void Test_CacheService_GetMyFriendsDetail()
         {
 
-            List<string> ids = service.GetFriendsIds("06879b5b-33f4-4a26-a530-e0ea31004d86");
-            List<UserDetail> list = service.GetMyFriendsDetail(ids);
+       //     List<string> ids = service.GetFriendsIds("06879b5b-33f4-4a26-a530-e0ea31004d86");
+        //    List<UserDetail> list = service.GetMyFriendsDetail(ids);
         }
           
         [TestMethod]
@@ -95,7 +95,7 @@ namespace UnitTest
 
               string key = "PrivateMessageSet:eb94d0af-3c0d-46f8-9870-5470f2c2ef40:06879b5b-33f4-4a26-a530-e0ea31004d86";
         //      string key = "PrivateMessageSet:eb94d0af-3c0d-46f8-9870-5470f2c2ef40:06879b5b-33f4-4a26-a530-e0ea31004d86";
-              int CurrentIndex = 1;
+          //    int CurrentIndex = 1;
 
             int   startIndex=0;
             int EndIndex = 11;
