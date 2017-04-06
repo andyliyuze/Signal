@@ -501,6 +501,16 @@
             })
             //清除
 
+
+            $(".web_wechat_add").click(function () {
+                if ($("#mmpop_system_menu").css("display") == "none") {
+                    $("#mmpop_system_menu").fadeIn();
+                }
+                else {
+
+                    $("#mmpop_system_menu").fadeOut();
+                }
+            });
         }
 
     </script>
@@ -529,7 +539,7 @@
                     <span style="color: #fff;" data-uid="" id="hdUserName"></span>
                     <a style="margin-left: 100px;">
                         <i class="web_wechat_add"></i>
-                        <i class="web_wechat_addUser" id="AddUser"></i>
+                   
                     </a>
                 </div>
             </div>
@@ -583,7 +593,29 @@
                 </div>
             </div>
 
+            <div id="mmpop_system_menu" class="mmpop ng-scope system_menu" tabindex="-1" style="top: 60px; left: 85px;display:none">
+                <ul class="dropdown_menu">
+                    <li>
+                        <a tabindex="-1" href="javascript:;"   title="添加">
+                            <i class="web_wechat_addUser" id="AddUser"></i>添加
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <!-- ngIf: !isSoundOpen -->
+                        <!-- ngIf: isSoundOpen --><a tabindex="-1" href="javascript:;"  title="关闭声音" class="ng-scope">
+                            <i class="menuicon_volume_on"></i>关闭声音
+                        </a><!-- end ngIf: isSoundOpen -->
+                    </li>
+                   
+                    <li class="last_child">
+                        <a tabindex="-1" href="javascript:;"  title="退出">
+                            <i class="menuicon_quit"></i>退出
+                        </a>
+                    </li>
+                </ul>
 
+            </div>
 
 
 

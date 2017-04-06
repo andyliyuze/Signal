@@ -522,3 +522,64 @@
 .hide {
     display: none !important;
 }
+/*//弹出板*/
+.mmpop {
+    position: absolute;
+    background-color: #fff;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+.system_menu {
+    width: 180px;
+}.system_menu {
+    background: transparent!important;
+    z-index: 102!important;
+}
+ .dropdown_menu {
+    background-color: #fff;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #d6d6d6;
+    box-shadow: 2px 3px 10px rgba(0,0,0,.1);
+    -moz-box-shadow: rgba(0,0,0,.1) 2px 3px 10px;
+    -webkit-box-shadow: rgba(0,0,0,.1) 2px 3px 10px;
+    min-width: 125px;
+}
+ .dropdown_menu li a {
+    display: block;
+    text-decoration: none;
+    color: #000;
+    font-size: 14px;
+    padding: 8px;
+    border-bottom: 1px solid #f1f1f1;
+    text-align: left;
+}
+ .dropdown_menu li i {
+    margin-right: 8px;
+}
+ .menuicon_chat, .menuicon_copylink {
+    display: inline-block;
+    vertical-align: middle;
+    width: 34px;
+    height: 34px;
+}
+ .menuicon_chat, .menuicon_copylink {
+    width: 34px;
+    height: 34px;
+    vertical-align: middle;
+    display: inline-block;
+}
+ .menuicon_chat {
+    /*background: url(/Images/sprite308b49.png) 0 -1916px;
+    background-position: -238px -398px;
+    -webkit-background-size: 487px 462px;
+    background-size: 487px 462px;*/
+}
+ ol, ul {
+    padding-left: 0;
+    list-style-type: none;
+}
