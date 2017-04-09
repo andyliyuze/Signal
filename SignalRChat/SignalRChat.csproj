@@ -226,6 +226,11 @@
     <Content Include="Content\upload\image\HeadImage\20170306093339.Jpeg" />
     <Content Include="Css\Chat.css" />
     <Content Include="Css\ChatStyle.css" />
+    <Content Include="Css\Font-Awesome-3.2.1\css\font-awesome-ie7.css" />
+    <Content Include="Css\Font-Awesome-3.2.1\css\font-awesome-ie7.min.css" />
+    <Content Include="Css\Font-Awesome-3.2.1\css\font-awesome.css" />
+    <Content Include="Css\Font-Awesome-3.2.1\css\font-awesome.min.css" />
+    <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.svg" />
     <Content Include="Css\group.css" />
     <Content Include="Css\JQueryUI\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Css\JQueryUI\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -367,6 +372,7 @@
     <Content Include="Images\web_wechat_login_bg31e225.jpg" />
     <Content Include="Images\weixinlogo.jpg" />
     <Content Include="Images\新建文本文档.txt" />
+    <Content Include="Images\暖色木纹背景.jpg" />
     <Content Include="Scripts\avartar\constants.js" />
     <Content Include="Scripts\avartar\cropit.js" />
     <Content Include="Scripts\avartar\jquery-1.10.2.min.js" />
@@ -379,6 +385,10 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.css" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.eot" />
+    <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.ttf" />
+    <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.woff" />
+    <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />
     <Content Include="Scripts\chat\chatHelper.js" />
@@ -458,7 +468,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Css\Font-Awesome-3.2.1\" />
     <Folder Include="Images\UserAvartar\" />
     <Folder Include="Views\Hub\" />
   </ItemGroup>

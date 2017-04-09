@@ -132,17 +132,22 @@ namespace DAL
             {
                 using (var context = new ChatContext())
                 {
-                    List<FriendsApplyViewModel> list =
-                        context.FriendsApply.Where(a => a.Result == "待审" && a.ReceiverUserId == Id).Join(context.UserDetail, a => a.ApplyUserId, b => b.UserDetailId, (a, b) => new FriendsApplyViewModel()
-                        {
-                            ApplyUserId = a.ApplyUserId,
-                            ApplyUserAvatar = b.AvatarPic,
-                            ApplyUserName = b.UserName,
-                            ReceiverUserId = a.ReceiverUserId,
-                            FriendsApplyId = a.FriendsApplyId,
-                            ApplyTime = a.ApplyTime,
-                            IsOnline = b.IsOnline
-                        }).OrderByDescending(a => a.ApplyTime).ToList<FriendsApplyViewModel>();
+
+                    Expression<Func<FriendsApply, UserDetail, FriendsApplyViewModel>>
+                         expression = (a, b) => new FriendsApplyViewModel()
+                         {
+
+                             ApplyUserId = a.ApplyUserId,
+                             ApplyUserAvatar = b.AvatarPic,
+                             ApplyUserName = b.UserName,
+                             ReceiverUserId = a.ReceiverUserId,
+                             FriendsApplyId = a.FriendsApplyId,
+                             ApplyTime = a.ApplyTime,
+                             IsOnline = b.IsOnline
+                         };
+                    var list =
+                     context.FriendsApply.Where(a => a.Result == "待审" && a.ReceiverUserId == Id)
+                     .Join(context.UserDetail, a => a.ApplyUserId, b => b.UserDetailId, expression.Compile()).ToList();
                     return list;
 
                 }

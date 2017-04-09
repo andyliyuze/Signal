@@ -10,7 +10,8 @@
     <link href="~/Scripts/bootstrap.min.css" rel="stylesheet" />
 
     <link href="~/Css/Chat.css" rel="stylesheet" />
-
+    <link href="~/Css/Font-Awesome-3.2.1/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Css/Font-Awesome-3.2.1/css/font-awesome-ie7.css" rel="stylesheet" />
     <link href="~/Css/group.css" rel="stylesheet" />
      <script src="/Scripts/jquery-2.0.0.min.js"></script>
     <script src="/Scripts/bootstrap.min.js"></script>
@@ -375,25 +376,26 @@
             //tab切换
             $(".tab .tab_item").click(function () {
                 $(".pannel .item").addClass("hide");
-                var type = $(this).attr("data-type");
-                $(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2049px");
-                $(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2232px");
-                $(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2140px");
-                if (type == "chat") {
-                    $(".pannel .item.chat_ul").removeClass("hide");
-                    $(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2085px");
-                    return;
-                }
-                if (type == "friends") {
-                    $(".pannel .item.friends_ul").removeClass("hide");
-                    $(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2267px");
-                    return;
-                }
-                if (type == "gruops") {
-                    $(".pannel .item.groups_ul").removeClass("hide");
-                    $(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2175px");
-                    return;
-                }
+                //var type = $(this).attr("data-type");
+                //$(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2049px");
+                //$(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2232px");
+                //$(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2140px");
+                //if (type == "chat") {
+                //    $(".pannel .item.chat_ul").removeClass("hide");
+                //    $(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2085px");
+                //    return;
+                //}
+                //if (type == "friends") {
+                //    $(".pannel .item.friends_ul").removeClass("hide");
+                //    $(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2267px");
+                //    return;
+                //}
+                //if (type == "gruops") {
+                //    $(".pannel .item.groups_ul").removeClass("hide");
+                //    $(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2175px");
+                //    return;
+                //}
+                $(this).css("color", "#0d68ab");
             });
 
             $(document).on('click', "#ul_item_createGroup", function () {
@@ -511,6 +513,14 @@
                     $("#mmpop_system_menu").fadeOut();
                 }
             });
+
+
+            //下线
+            $("#Logoff").click(function () {
+                $.connection.hub.stop();
+                location.href = "/User/Login";
+              
+            });
         }
 
     </script>
@@ -550,17 +560,17 @@
             <div class="tab">
                 <div class="tab_item" data-type="chat">
                     <a class="chat" title="聊天" href="#">
-                        <i class="web_wechat_tab_chat web_wechat_tab_chat_hl"></i>
+                        <i class="web_wechat_tab_chat icon-comments web_wechat_tab_chat_hl"></i>
                     </a>
                 </div>
                 <div class="tab_item " data-type="friends">
                     <a class="chat" title="阅读" href="#">
-                        <i class="web_wechat_tab_public"></i>
+                        <i class="web_wechat_tab_public icon-user"></i>
                     </a>
                 </div>
                 <div class="tab_item" data-type="gruops">
                     <a class="chat" title="通讯录" href="#">
-                        <i class="web_wechat_tab_friends"></i>
+                        <i class="web_wechat_tab_friends icon-group"></i>
                     </a>
                 </div>
             </div>
@@ -596,21 +606,21 @@
             <div id="mmpop_system_menu" class="mmpop ng-scope system_menu" tabindex="-1" style="top: 60px; left: 85px;display:none">
                 <ul class="dropdown_menu">
                     <li>
-                        <a tabindex="-1" href="javascript:;"   title="添加">
-                            <i class="web_wechat_addUser" id="AddUser"></i>添加
+                        <a tabindex="-1" href="javascript:;"   id="AddUser" title="添加">
+                            <i class="web_wechat_addUser icon-plus"></i>添加
                         </a>
                     </li>
                     
                     <li>
                         <!-- ngIf: !isSoundOpen -->
                         <!-- ngIf: isSoundOpen --><a tabindex="-1" href="javascript:;"  title="关闭声音" class="ng-scope">
-                            <i class="menuicon_volume_on"></i>关闭声音
+                            <i class="menuicon_volume_on icon-volume-off"></i>关闭声音
                         </a><!-- end ngIf: isSoundOpen -->
                     </li>
                    
                     <li class="last_child">
-                        <a tabindex="-1" href="javascript:;"  title="退出">
-                            <i class="menuicon_quit"></i>退出
+                        <a tabindex="-1" href="javascript:;" id="Logoff" title="退出">
+                            <i class="menuicon_quit icon-off"></i>退出
                         </a>
                     </li>
                 </ul>

@@ -1,12 +1,13 @@
 ﻿body {
+    background: url('../Images/暖色木纹背景.jpg') repeat 0 0;
  
-    background: #4e5359 url(../Images/bg.png) repeat 0 0;
     color: #3a4a59;
     font: 14px/1.5 Helvetica, Arial, Tahoma'微软雅黑';
 }
         body {
             padding: 0;
             margin: 0;
+            overflow:hidden;
         }
 
         body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, fieldset, textarea {
@@ -18,9 +19,9 @@
             min-width: 800px;
                 max-width: 1000px;
             margin: auto;
-            margin-top:100px;
+            margin-top:50px;
             width: 80%;
-            background-color: #17232d;
+           
             position: relative;
         }
 
@@ -32,11 +33,11 @@
             float: left;
         }
 
-        .right {
+       #divChat .right {
             width: 74%;
             background-color: bisque;
             height: 600px;
-            margin-left: 280px;
+            margin-left: 320px;
         }
 
         .header .avatar {
@@ -92,13 +93,13 @@
         }
 
         .search_bar .frm_search {
-            width: 214px;
+            width: 239px;
             height: 32px;
             line-height: 32px;
             border: 0;
-            border-radius: 2px;
-            -moz-border-radius: 2px;
-            -webkit-border-radius: 2px;
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
             background-color: #26292E;
             color: #fff;
             padding-left: 30px;
@@ -108,7 +109,7 @@
         .tab {
             overflow: hidden;
             position: relative;
-            padding-bottom: 4px;
+            padding-bottom: 6px;
         }
 
             .tab .tab_item {
@@ -123,13 +124,16 @@
                 }
 
         .web_wechat_tab_chat_hl {
-            background: url(/Images/sprite308b49.png) 0 -2083px;
+           font-size:25px;
             width: 35px;
             height: 35px;
             vertical-align: middle;
             display: inline-block;
         }
+        i:before{
+            text-decoration:none !important;
 
+        }
         .tab .tab_item:after {
             content: '';
             position: absolute;
@@ -151,7 +155,7 @@
         }
 
         .web_wechat_tab_public {
-            background: url(/Images/sprite308b49.png) 0 -2232px;
+              font-size:25px;
             width: 35px;
             height: 35px;
             vertical-align: middle;
@@ -159,7 +163,7 @@
         }
 
         .web_wechat_tab_friends {
-            background: url(/Images/sprite308b49.png) 0 -2140px;
+        font-size:25px;
             width: 35px;
             height: 35px;
             vertical-align: middle;
@@ -582,4 +586,7 @@
  ol, ul {
     padding-left: 0;
     list-style-type: none;
+}
+.chat_ul_item:hover {
+background-color:#504f4e;
 }
