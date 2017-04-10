@@ -1,6 +1,6 @@
 ﻿function AddGroup(id, name, avatarPic) {
     var str =
-           " <div data-uid=" + id + " class='chat_ul_item 'id='ul_item_" + id + "'>" +
+           " <div data-uid=" + id + " class='chat_ul_item 'id='group_item_" + id + "'>" +
                 "<div class='ext'>" +
                     "<p class='attr ng-binding'></p>" +
                    " <p class='attr ng-scope'>" +

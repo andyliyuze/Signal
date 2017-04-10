@@ -141,7 +141,7 @@
             });
 
             //群发消息
-        //    $(".btn_send group").click(function () {
+       
                 $(document).on("click", ".btn_send.group", function () {
                 var message=  CreateMesModel();
                 if (message.content.length > 0)
@@ -216,48 +216,10 @@
             });
 
             //点击用户时绑定用户名和id
-            $(document).on('click', '.friends_item', function () {
-                if (IsCurrentUserOrNotUser(this)) { return; }
-                //获取当前用户用户名
-                var username = $(this).find(".nickname_text").text();
-                //更改聊天窗口的用户名
-                $("#currentUserName").text(username);
-                //获取当前聊天用户的Id
-                var id = $(this).attr("data-uid");
-                //更改聊天窗口的用户Id
-                $("#currentUserName").attr("data-uid", id);
-                //清空聊天对话框的消息
-                $(".message_ul .message_item ").remove();
-                if ($(this).hasClass("NeedGetMsgFromBack")) {
-                    //清楚需要从后台获取数据的标识
-                    $(this).removeClass("NeedGetMsgFromBack");
-                    //
-                    var MsgId = $(this).attr("data-unreadMsgId");
-                    //如果存在未读消息，则从去后台获取未读消息数据
-                    var unreadcount = $(this).attr("data-unreadcount");
-                    //  unreadcount = getNum(unreadcount);
-                    if (unreadcount > 0) {
-                        chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
-                            //将浏览器的本地缓存消息加载到聊天窗口中
-                            GetStrogeMessage(id);
-
-                        });
-                    }
-                }
-                else {
-                    //将浏览器的本地缓存消息加载到聊天窗口中
-                    GetStrogeMessage(id);
-                }
-
-
-
-
-                //让未读标志的红点消失
-                $(this).find("i.icon").removeClass("web_wechat_reddot");
-                //让未读条数变为0，前端
-                $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
-                //让发送消息按钮标记为单人消息
-                $(".btn_send").removeClass("group").addClass("single");
+            $(document).on('click', '.chat_item', function () {
+                $(".right .box").addClass('hide');
+                $(".right .panel").removeClass('hide');
+                BindingUserInfo(this);
 
             });
             //点击+号弹出搜索弹框
@@ -376,26 +338,25 @@
             //tab切换
             $(".tab .tab_item").click(function () {
                 $(".pannel .item").addClass("hide");
-                //var type = $(this).attr("data-type");
-                //$(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2049px");
-                //$(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2232px");
-                //$(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2140px");
-                //if (type == "chat") {
-                //    $(".pannel .item.chat_ul").removeClass("hide");
-                //    $(".tab .tab_item .web_wechat_tab_chat").css("background-position", "0 -2085px");
-                //    return;
-                //}
-                //if (type == "friends") {
-                //    $(".pannel .item.friends_ul").removeClass("hide");
-                //    $(".tab .tab_item .web_wechat_tab_public").css("background-position", "0 -2267px");
-                //    return;
-                //}
-                //if (type == "gruops") {
-                //    $(".pannel .item.groups_ul").removeClass("hide");
-                //    $(".tab .tab_item .web_wechat_tab_friends").css("background-position", "0 -2175px");
-                //    return;
-                //}
-                $(this).css("color", "#0d68ab");
+                $(".tab .tab_item").find("i").css("color", "#5f88a7");
+                var type = $(this).attr("data-type");         
+                $(this).find("i").css("color", "#0e94f7");
+                if (type == "chat")
+                {
+                    $(".pannel .item.chat_ul").removeClass("hide");        
+                    return;
+                }
+                if (type == "friends")
+                {
+                    $(".pannel .item.friends_ul").removeClass("hide");            
+                    return;
+                }
+                if (type == "gruops")
+                {
+                    $(".pannel .item.groups_ul").removeClass("hide");
+                    return;
+                }
+              
             });
 
             $(document).on('click', "#ul_item_createGroup", function () {
@@ -521,6 +482,36 @@
                 location.href = "/User/Login";
               
             });
+
+
+
+            $(document).on('click', '.friends_item', function ()
+            {
+                $(".friends_item").removeClass("selected");
+                $(this).addClass("selected");
+                $(".right .box").removeClass('hide');
+                $(".right .panel").addClass('hide');
+                var uid = $(this).attr("data-uid");
+                var user = GetUserByUserId(uid);
+
+            });
+
+
+            $(document).on('click', '.action_area .button', function () {
+
+                $(".right .box").addClass('hide');
+                $(".right .panel").removeClass('hide');
+                $(".tab_item[data-type='chat']").click();
+
+                var uid = $(".friends_item.selected").attr("data-uid");
+                if ($("#ul_item_" + uid + "").length <= 0)
+                {
+                   var user= GetUserByUserId(uid);
+                   AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline);                 
+                }
+              
+                BindingUserInfo("#ul_item_" + uid + "");
+            });
         }
 
     </script>
@@ -564,29 +555,26 @@
                     </a>
                 </div>
                 <div class="tab_item " data-type="friends">
-                    <a class="chat" title="阅读" href="#">
+                    <a class="chat" title="好友" href="#">
                         <i class="web_wechat_tab_public icon-user"></i>
                     </a>
                 </div>
                 <div class="tab_item" data-type="gruops">
-                    <a class="chat" title="通讯录" href="#">
+                    <a class="chat" title="群组" href="#">
                         <i class="web_wechat_tab_friends icon-group"></i>
                     </a>
                 </div>
             </div>
             <div class="item chat_ul">
                 <div class="chat_ul_div">
-
-
-
                 </div>
             </div>
             <div class="item friends_ul hide">
-
+                <div class="chat_ul_div">
+                </div>
             </div>
             <div class="item groups_ul hide">
                 <div class="chat_ul_div">
-
                     <div data-uid="a401ff37-857f-4816-b981-b91419f37726" class="chat_ul_item" id="ul_item_createGroup">
 
                         <div class="avatar">
@@ -683,8 +671,44 @@
                     <div class="action">
                         <!-- ngIf: !isMacOS --><span ng-if="!isMacOS" class="desc ng-scope">按下Ctrl+Enter换行</span><!-- end ngIf: !isMacOS -->
                         <!-- ngIf: isMacOS -->
-                        <a class="btn btn_send" href="javascript:;" ng-click="sendTextMessage()">发送</a>
+                        <a class="btn btn_send" href="javascript:;" >发送</a>
                     </div>
+                </div>
+            </div>
+
+
+            <div class="box ng-scope hide">
+                <div class="box_hd with_border">
+                    <div class="title_wrap">
+                        <div class="title">详细信息</div>
+                    </div>
+                </div>
+                <div class="box_bd">
+                    <div     class="ng-scope ng-isolate-scope">
+                        <div class="profile">
+
+                            <div class="avatar">
+                                <img class="img" alt="">
+                            </div>
+
+                            <div class="nickname_area">
+                                <h4 class="nickname ng-binding"  >林伯</h4>
+                                <i  class="web_wechat_men"></i>
+                            </div>
+
+                        
+
+                            <div class="meta_area">
+                              
+                            </div>
+
+                            <div class="action_area">
+                                <a class="button"  href="#">发消息</a>
+                            </div>
+                         
+                        </div>
+                    </div> 
+                   
                 </div>
             </div>
         </div>

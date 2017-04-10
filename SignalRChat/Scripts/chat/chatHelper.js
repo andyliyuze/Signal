@@ -27,7 +27,21 @@
 
 //绑定聊天消息到聊天面板
 function bindingMsg(model) {
+    //首先检查当前用户是否在聊天列表
     var uid = model.Message.SenderId;
+
+    if ($("#ul_item_" + uid + "").length <= 0)
+    {
+        var user = GetSeesionStorageList("FriendsList");
+       user= user.filter(function (index) {
+            if(index["UserDetailId"].trim()==uid)
+            return true;
+        });
+        user = user[0];
+        AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline);
+
+    }
+   
     //绑定历史最新消息
     var unreadhtml = "<span class='ng-binding' data-creatime='"
         + model.Message.CreateTime + "'>"
@@ -94,13 +108,7 @@ function AddMessage(message) {
                              " </div>" +
                               "  </div</div></div></div>";
     $(".message_ul").append(str);
-    //绑定好友列表出的聊天消息，前端
-    //if ($("#ul_item_" + message.RecevierId + "").find(".chat_item_info p.msg").find("span").length === 0) {
-
-    //    var unreadhtml = "<span class='ng-binding' data-creatime='" + message.CreateTime + "'>"
-    //    + message.content + "</span>";
-    //    $("#ul_item_" + message.RecevierId + "").find(".chat_item_info p.msg").append(unreadhtml);
-    //}
+     
   
 }
 
@@ -129,7 +137,7 @@ function MessageHandler(message, ChattingId)
         $unreadText.text("[" + unreadcount + "条]");
 
         $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").find("span:eq(1)").text(message.content);
+        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
         return;
     }
         //绑定消息在好友列表处，之前不存在未读消息
@@ -144,6 +152,8 @@ function MessageHandler(message, ChattingId)
         $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
         $("#ul_item_" + ChattingId + "").find(".avatar .icon").addClass("web_wechat_reddot");
         unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" + unreadhtml;
+
+       
         $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
         return;
     }
@@ -179,5 +189,74 @@ function SendMsgHandlerForView(message)
     AddMessage(message);
     //好友列表出也要绑定最新消息以及时间
     $("#ul_item_" + message.ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").find("span:eq(0)").text(message.content);
+
+     var unreadhtml = "<span class='ng-binding' data-creatime='"
+        +  message.CreateTime + "'>"
+    + message.content + "</span>"; '';
+    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").find("span").remove();
+    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
+    
+}
+
+function BindingUserInfo(e)
+{
+
+    if (IsCurrentUserOrNotUser(e)) { return; }
+    //
+  
+    //获取当前用户用户名
+    var username = $(e).find(".nickname_text").text();
+    //更改聊天窗口的用户名
+    $("#currentUserName").text(username);
+    //获取当前聊天用户的Id
+    var id = $(e).attr("data-uid");
+
+
+
+
+    //更改聊天窗口的用户Id
+    $("#currentUserName").attr("data-uid", id);
+    //清空聊天对话框的消息
+    $(".message_ul .message_item ").remove();
+    if ($(e).hasClass("NeedGetMsgFromBack")) {
+        //清楚需要从后台获取数据的标识
+        $(e).removeClass("NeedGetMsgFromBack");
+        //
+        var MsgId = $(e).attr("data-unreadMsgId");
+        //如果存在未读消息，则从去后台获取未读消息数据
+        var unreadcount = $(e).attr("data-unreadcount");
+        //  unreadcount = getNum(unreadcount);
+        if (unreadcount > 0) {
+            chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
+                //将浏览器的本地缓存消息加载到聊天窗口中
+                GetStrogeMessage(id);
+
+            });
+        }
+    }
+    else {
+        //将浏览器的本地缓存消息加载到聊天窗口中
+        GetStrogeMessage(id);
+    }
+
+
+
+
+    //让未读标志的红点消失
+    $(e).find("i.icon").removeClass("web_wechat_reddot");
+    //让未读条数变为0，前端
+    $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
+    //让发送消息按钮标记为单人消息
+    $(".btn_send").removeClass("group").addClass("single");
+
+
+    $(".chat_ul_item").removeClass("selected");
+    $("#ul_item_" + id + "").addClass("selected");
+
+}
+
+function BindingUserInfoInBox(user)
+{
+    $(".right .profile .nickname_area .nickname").text(user.UserName);
+    $(".right .profile .avatar img").attr(user.AvatarPic);
 }

@@ -15,6 +15,7 @@
         for (i = 0; i < allUsers.length; i++) {
 
             AddUser(allUsers[i].UserDetailId, allUsers[i].UserName, allUsers[i].AvatarPic, allUsers[i].IsOnline);
+            PushSeesionStorage("FriendsList", allUsers[i]);
         }
         // Add All Groups
         for (i = 0; i < grouplist.length; i++) {

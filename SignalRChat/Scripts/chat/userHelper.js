@@ -1,6 +1,45 @@
 ﻿function AddUser(id, name, avatarPic, IsOnline) {
     var str =
-           " <div data-uid=" + id + " class='chat_ul_item OffLine friends_item'id='ul_item_" + id + "'>" +
+           " <div data-uid=" + id + " class='chat_ul_item OffLine friends_item'id='friends_item_" + id + "'>" +
+              
+                "<div class='avatar'>" +
+
+                    "<img class='img gray' id='img_" + id + "' src='" + avatarPic + "' />" +
+
+                    "<i class='icon ng-scope'></i>" +
+
+
+
+               " </div>" +
+                "<div class='chat_item_info'>" +
+                    "<h3 class='nickname'>" +
+                        "<span class='nickname_text ng-binding friends_item_nickname'>" + name + "</span>" +
+                      
+                    "</h3>" +
+
+                   "</div></div>";
+
+    if (IsOnline == true) {
+        str = str.replace("class='img gray'", "class='img'");
+        str = str.replace("chat_ul_item OffLine", "chat_ul_item OnLine");
+    }
+ 
+
+   
+    $(".friends_ul .chat_ul_div").append(str); return;
+
+
+}
+
+
+
+
+
+
+
+function AddUserForChat(id, name, avatarPic, IsOnline) {
+    var str =
+               " <div data-uid=" + id + " class='chat_ul_item OffLine chat_item'id='ul_item_" + id + "'>" +
                 "<div class='ext'>" +
                     "<p class='attr ng-binding'>22:29</p>" +
                    " <p class='attr ng-scope'>" +
@@ -19,14 +58,13 @@
                 "<div class='chat_item_info'>" +
                     "<h3 class='nickname'>" +
                         "<span class='nickname_text ng-binding'>" + name + "</span>" +
-                       "<p class='msg ng-scope'></p>" +
+                     
                     "</h3>" +
-
+                   " <p class='msg ng-scope' >"+
+                   
+                  
+              "  </p>"
                    "</div></div>";
-
-
-
-
 
     if (IsOnline == true) {
         str = str.replace("class='img gray'", "class='img'");
@@ -50,14 +88,25 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 function UserIsOnlined(id) {
     $("#img_" + id + "").removeClass("gray");
     var str = $("#ul_item_" + id + "").html();
     $("#ul_item_" + id + "").remove();
 
-    str = "<div class='chat_ul_item friends_item Online' id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
-    if ($(".friends_item.OffLine").length != 0) { $(".friends_item.OffLine").before(str); return; }
-    if ($(".friends_item.Online").length != 0) { $(".friends_item.Onlie").after(str); return; }
+    str = "<div class='chat_ul_item chat_item Online' id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
+    if ($(".chat_item.OffLine").length != 0) { $(".chat_item.OffLine").before(str); return; }
+    if ($(".chat_item.Online").length != 0) { $(".chat_item.Onlie").after(str); return; }
     else { $(".chat_ul .chat_ul_div").append(str); }
 }
 
@@ -390,7 +439,7 @@ function AppendApplyMsgIntoUl()
         var name = "添加申请";
         var avatarPic = "Images/usericon.jpg";
         var IsOnline = true;
-        AddUser(id, name, avatarPic, IsOnline);
+        AddUserForChat(id, name, avatarPic, IsOnline);
     }
 }
 //好友，群通用
@@ -404,9 +453,21 @@ function AppendReplyMsgIntoUl()
         var Name = "申请回复";
         var avatarPic = "Images/usericon.jpg";
         //append一条好友申请的回复
-        AddUser(Id, Name, avatarPic, IsOnline);
+        AddUserForChat(Id, Name, avatarPic, IsOnline);
     }
 }
 
 
- 
+function GetUserByUserId(Id)
+{
+
+    var user = GetSeesionStorageList("FriendsList");
+    user = user.filter(function (index) {
+        if (index["UserDetailId"].trim() == Id)
+        { return true; }
+        else { return false; }
+    });
+    user = user[0];
+    return user;
+
+}
