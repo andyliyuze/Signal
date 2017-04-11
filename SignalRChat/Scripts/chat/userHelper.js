@@ -491,3 +491,11 @@ function UpdateIsOnlineForSessionStroage(Id, IsOnline)
     RemoveByKey("FriendsList");
     PushArrInSessionStroage("FriendsList", friends);
 }
+//获取用户
+function GetUserByKeyword(keyword) {
+    var users = [];
+    if ($.trim(keyword) == "") { return users; }
+    var friends = GetSeesionStorageList("FriendsList");
+     users = JSLINQ(friends).Where(item=> item.UserName.indexOf(keyword) > -1).items;
+    return users;
+}

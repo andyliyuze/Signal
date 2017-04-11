@@ -255,3 +255,29 @@ function BindingUserInfoInBox(user)
     $(".right .profile .nickname_area .nickname").text(user.UserName);
     $(".right .profile .avatar img").attr("src",user.AvatarPic);
 }
+
+function BindingUserInSearchBox(users)
+{
+    $(".search_bar .mmpop").find(".search_item").remove();
+    if (users.length<= 0) {
+
+        $("#mmpop5").slideUp();
+        return;
+    }
+    $("#mmpop5").slideDown();
+    var html = "<div class='ng-scope'> <h4 class='search_item contact_title ng-binding ng-scope first'>好友</h4> </div>";
+    for (var i = 0; i < users.length; i++)
+    {
+     var item= " <div class='ng-scope search_item'>"+
+           " <div  data-class-name='on' class='ng-isolate-scope'>"+
+                                "<div class='contact_item'  >"+
+                                 "   <div class='avatar'>"+
+                                       " <img class='img lazy'alt='' src="+users[i].AvatarPic+">"+
+                                    "</div>"+
+                                    "<div class='info'>"+
+                                       " <h4 class='nickname ng-binding' data-uid=" + users[i].UserDetailId + ">" + users[i].UserName + "</h4>" +
+                                 "   </div></div> </div> </div>";
+                                    html = html + item;
+    }
+    $(".search_bar .mmpop").find(".bottom-placeholder").before(html);
+}
