@@ -48,7 +48,7 @@
             top: 22%;
         }
 
-        .info {
+      .header .info {
             width: 73%;
             height: 40px;
             position: absolute;
@@ -129,7 +129,7 @@
             height: 35px;
             vertical-align: middle;
             display: inline-block;
-                color: #5f88a7;
+                color:#5f88a7;
         }
         i:before{
             text-decoration:none !important;
@@ -652,10 +652,97 @@ margin-top:8px;
     text-align: center;
     color: #fff;
     line-height: 40px;
-    background-color: #42ac3e;
+    background-color: #38adff;
     font-size: 14px;
     text-decoration: none;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+}
+
+/*//搜索结果*/
+.recommendation {
+    background: #33363b;
+    width: 244px;
+    top: 36px;
+    left: 0;
+    box-shadow: 0 0 10px #2a2a2a;
+    -moz-box-shadow: 0 0 10px #2a2a2a;
+    -webkit-box-shadow: 0 0 10px #2a2a2a;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+.recommendation .contacts {
+    max-height: 420px;
+    overflow: hidden;
+}
+.scroll-wrapper {
+    overflow: hidden!important;
+    padding: 0!important;
+    position: relative;
+}
+.scroll-wrapper>.scroll-content {
+    border: none!important;
+    box-sizing: content-box!important;
+    height: auto;
+    left: 0;
+    margin: 0;
+    max-height: none!important;
+    max-width: none!important;
+    overflow: scroll!important;
+    padding: 0;
+    position: relative!important;
+    top: 0;
+    width: auto!important;
+}
+.recommendation .contact_title.first {
+    margin-top: 0;
+        font-size: 16px;
+    padding: 6px 9px;
+}
+.recommendation .contact_title {
+    padding: 3px 9px;
+    font-weight: 400;
+    color: #787b87;
+    margin-top: 10px;
+    background-color: #393c43;
+}
+.recommendation .contact_item.on {
+    background: #595b64;
+}
+.recommendation .contact_item {
+    overflow: hidden;
+    padding: 10px 9px;
+    cursor: pointer;
+    border-bottom: 1px solid #33363b;
+    background-color: #393c43;
+}
+.recommendation .avatar {
+    float: left;
+    margin-right: 10px;
+}
+.recommendation .avatar .img {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+}
+.recommendation .info {
+    overflow: hidden;
+    line-height: 30px;
+}
+.recommendation .info .nickname {
+    font-weight: 400;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+      
+}
+.top-placeholder h4{
+     line-height: inherit !important;
 }

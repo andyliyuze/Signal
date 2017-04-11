@@ -17,56 +17,14 @@
 
     //接收后台传来的单条消息
     chatHub.client.receivePrivateMessage = function (message) {
-
-        var chattingUid = message.SenderId;
-        //将消息push进Storage，本地存储
-        var key = "MessageListWith_" + chattingUid;
-        PushSeesionStorage(key, message);
-
-        //绑定消息在聊天对话框框
-        if (message.SenderId.trim() === $("#currentUserName").attr("data-uid").trim()) {
-            
-            AddMessage(message);
-            $("#ul_item_" + chattingUid + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-            $("#ul_item_" + chattingUid + "").find(".chat_item_info p.msg").find("span:eq(0)").text(message.content);
-            chatHub.server.messageConfirm($("#currentUserName").attr("data-uid").trim());
-            return;
-        }
-        //绑定消息在好友列表处,之前已存在未读
-        if ($("#ul_item_" + chattingUid + "").find(".avatar .icon").hasClass("web_wechat_reddot")) {
-            var $unreadText = $("#ul_item_" + chattingUid + "").find(".chat_item_info p.msg").find(".unreadcount");
-            var unreadcount = $unreadText.text();
-            unreadcount = eval(getNum($unreadText.text())) + 1;
-            $unreadText.text("[" + unreadcount + "条]");
-
-            $("#ul_item_" + chattingUid + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-            $("#ul_item_" + chattingUid + "").find(".chat_item_info p.msg").find("span:eq(1)").text(message.content);
-            return;
-        }
-            //绑定消息在好友列表处，之前不存在未读消息
-        else {
-            //先请掉之前的消息
-            $("#ul_item_" + chattingUid + "").find(".chat_item_info p.msg").find("span").remove();
-            //绑定历史最新消息
-            var unreadhtml = "<span class='ng-binding' data-creatime='"
-                + message.CreateTime + "'>"
-              + message.content + "</span>";
-            //如果未读消息大于0
-            $("#ul_item_" + chattingUid + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-            $("#ul_item_" + chattingUid + "").find(".avatar .icon").addClass("web_wechat_reddot");
-             unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" + unreadhtml;
-             $("#ul_item_" + chattingUid + "").find(".chat_item_info p.msg").append(unreadhtml);
-            return;
-        }
-
-
+        var ChattingId = message.SenderId;
+        MessageHandler(message, ChattingId);
     }
 
      
 
     //接收后台传来的单条消息
     chatHub.client.receiveGroupMessage = function (message) {
- 
         var ChattingId = message.GroupId;
         MessageHandler(message, ChattingId);
 

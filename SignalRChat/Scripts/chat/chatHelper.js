@@ -28,7 +28,7 @@
 //绑定聊天消息到聊天面板
 function bindingMsg(model) {
     //首先检查当前用户是否在聊天列表
-    var uid = model.Message.SenderId;
+    var uid = model.Message.ChattingId;
 
     if ($("#ul_item_" + uid + "").length <= 0)
     {
@@ -42,23 +42,21 @@ function bindingMsg(model) {
 
     }
    
-    //绑定历史最新消息
-    var unreadhtml = "<span class='ng-binding' data-creatime='"
-        + model.Message.CreateTime + "'>"
-    + model.Message.content + "</span>";
+    
     //如果未读消息大于0
     if (model.UnReadMsgCount > 0) {
         $("#ul_item_" + uid + "").find(".avatar .icon").addClass("web_wechat_reddot");
-         unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[" + model.UnReadMsgCount + "条]</span>" + unreadhtml;
+         var    unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[" + model.UnReadMsgCount + "条]</span>";
         $("#ul_item_" + uid + "").addClass("NeedGetMsgFromBack");
         $("#ul_item_" + uid + "").attr("data-unreadCount", model.UnReadMsgCount);
         $("#ul_item_" + uid + "").attr("data-unreadMsgId", model.Message.MessageId);
+        $("#ul_item_" + uid + "").find(".chat_item_info p.msg").prepend(unreadhtml);
     }
 
 
 
-
-    $("#ul_item_" + uid + "").find(".chat_item_info p.msg").append(unreadhtml);
+    $("#ul_item_" + uid + "").find(".chat_item_info p.msg").find(".content").attr("data-creatime", model.Message.CreateTime);
+    $("#ul_item_" + uid + "").find(".chat_item_info p.msg").find(".content").text(model.Message.content);
 
 }
 
@@ -120,41 +118,45 @@ function MessageHandler(message, ChattingId)
     var key = "MessageListWith_" + ChattingId;
     PushSeesionStorage(key, message);
 
-    //绑定消息在聊天对话框框
-    if (message.ChattingId.trim() === $("#currentUserName").attr("data-uid").trim()) {
 
+
+    if ($("#ul_item_" + ChattingId + "").length <= 0)
+    {
+        var user = GetUserByUserId(ChattingId);
+        AddUserForChat(ChattingId, user.UserName, user.AvatarPic, user.IsOnline);
+
+    }
+    //绑定消息在好友列表处
+    $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
+    $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").find(".content").text(message.content);
+
+    //绑定消息在聊天对话框框
+    if (ChattingId.trim() === $("#currentUserName").attr("data-uid").trim())
+    {
         AddMessage(message);
-        $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").find("span:eq(0)").text(message.content);
         chatHub.server.messageConfirm($("#currentUserName").attr("data-uid").trim());
         return;
     }
-    //绑定消息在好友列表处,之前已存在未读
+  
+
+    
+     
+  
+    //之前已存在未读
     if ($("#ul_item_" + ChattingId + "").find(".avatar .icon").hasClass("web_wechat_reddot")) {
         var $unreadText = $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").find(".unreadcount");
         var unreadcount = $unreadText.text();
         unreadcount = eval(getNum($unreadText.text())) + 1;
         $unreadText.text("[" + unreadcount + "条]");
 
-        $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
+  
         return;
     }
         //绑定消息在好友列表处，之前不存在未读消息
     else {
-        //先请掉之前的消息
-        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").find("span").remove();
-        //绑定历史最新消息
-        var unreadhtml = "<span class='ng-binding' data-creatime='"
-            + message.CreateTime + "'>"
-          + message.content + "</span>";
-        //如果未读消息大于0
-        $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
         $("#ul_item_" + ChattingId + "").find(".avatar .icon").addClass("web_wechat_reddot");
-        unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" + unreadhtml;
-
-       
-        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
+        var unreadhtml = "<span class='ng-binding ng-scope unreadcount'>[1条]</span>" ;
+        $("#ul_item_" + ChattingId + "").find(".chat_item_info p.msg").prepend(unreadhtml);
         return;
     }
 }
@@ -189,12 +191,8 @@ function SendMsgHandlerForView(message)
     AddMessage(message);
     //好友列表出也要绑定最新消息以及时间
     $("#ul_item_" + message.ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
-
-     var unreadhtml = "<span class='ng-binding' data-creatime='"
-        +  message.CreateTime + "'>"
-    + message.content + "</span>"; '';
-    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").find("span").remove();
-    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").append(unreadhtml);
+    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").find(".content").attr("data-creatime", message.CreateTime);
+    $("#ul_item_" + message.ChattingId + "").find(".chat_item_info p.msg").find(".content").text(message.content);
     
 }
 
@@ -219,19 +217,16 @@ function BindingUserInfo(e)
     //清空聊天对话框的消息
     $(".message_ul .message_item ").remove();
     if ($(e).hasClass("NeedGetMsgFromBack")) {
-        //清楚需要从后台获取数据的标识
+        //清除需要从后台获取数据的标识
         $(e).removeClass("NeedGetMsgFromBack");
         //
         var MsgId = $(e).attr("data-unreadMsgId");
         //如果存在未读消息，则从去后台获取未读消息数据
         var unreadcount = $(e).attr("data-unreadcount");
-        //  unreadcount = getNum(unreadcount);
-        if (unreadcount > 0) {
-            chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
-                //将浏览器的本地缓存消息加载到聊天窗口中
-                GetStrogeMessage(id);
-
-            });
+       
+        if (unreadcount > 0)
+        {
+            chatHub.server.getUnreadMsg(id, MsgId, unreadcount);
         }
     }
     else {
@@ -258,5 +253,5 @@ function BindingUserInfo(e)
 function BindingUserInfoInBox(user)
 {
     $(".right .profile .nickname_area .nickname").text(user.UserName);
-    $(".right .profile .avatar img").attr(user.AvatarPic);
+    $(".right .profile .avatar img").attr("src",user.AvatarPic);
 }

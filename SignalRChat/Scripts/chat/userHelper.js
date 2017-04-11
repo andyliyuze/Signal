@@ -4,7 +4,7 @@
               
                 "<div class='avatar'>" +
 
-                    "<img class='img gray' id='img_" + id + "' src='" + avatarPic + "' />" +
+                    "<img class='img' id='img_" + id + "' src='" + avatarPic + "' />" +
 
                     "<i class='icon ng-scope'></i>" +
 
@@ -38,10 +38,11 @@
 
 
 function AddUserForChat(id, name, avatarPic, IsOnline) {
+
     var str =
                " <div data-uid=" + id + " class='chat_ul_item OffLine chat_item'id='ul_item_" + id + "'>" +
                 "<div class='ext'>" +
-                    "<p class='attr ng-binding'>22:29</p>" +
+                    "<p class='attr ng-binding'>" + getTime( Date.now(), "ext") + "</p>" +
                    " <p class='attr ng-scope'>" +
                        " <i class='web_wechat_no-remind'></i>" +
                     "</p>" +
@@ -61,7 +62,7 @@ function AddUserForChat(id, name, avatarPic, IsOnline) {
                      
                     "</h3>" +
                    " <p class='msg ng-scope' >"+
-                   
+                   "<span class='ng-binding content' data-creatime='2017-04-11T12:15:40.528+08:00'></span>"+
                   
               "  </p>"
                    "</div></div>";
@@ -100,16 +101,26 @@ function AddUserForChat(id, name, avatarPic, IsOnline) {
 
 
 function UserIsOnlined(id) {
-    $("#img_" + id + "").removeClass("gray");
-    var str = $("#ul_item_" + id + "").html();
-    $("#ul_item_" + id + "").remove();
+    if ($("#ul_item_" + id + "").length > 0)
+    {
+        $("#ul_item_" + id).find(".avatar img").removeClass("gray");
+        var str = $("#ul_item_" + id + "").html();
+        $("#ul_item_" + id + "").remove();
+        str = "<div class='chat_ul_item chat_item Online' id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
+        if ($(".chat_item.OffLine").length != 0) { $(".chat_item.OffLine").before(str); return; }
+        if ($(".chat_item.Online").length != 0) { $(".chat_item.Onlie").after(str); return; }
+        else { $(".chat_ul .chat_ul_div").append(str); }
+    }
+    //更改一下sessionstroage的值
+    UpdateIsOnlineForSessionStroage(id,true);
 
-    str = "<div class='chat_ul_item chat_item Online' id='ul_item_" + id + "' data-uid='" + id + "'>" + str + "</div>";
-    if ($(".chat_item.OffLine").length != 0) { $(".chat_item.OffLine").before(str); return; }
-    if ($(".chat_item.Online").length != 0) { $(".chat_item.Onlie").after(str); return; }
-    else { $(".chat_ul .chat_ul_div").append(str); }
 }
-
+function UserIsOfflined(id)
+{
+    $("#ul_item_" + id).find(".avatar img").addClass("gray");
+    //更改一下sessionstroage的值
+    UpdateIsOnlineForSessionStroage(id,false);
+}
 
 function IsCurrentUserOrNotUser(e) {
 
@@ -457,17 +468,26 @@ function AppendReplyMsgIntoUl()
     }
 }
 
-
+//获取用户
 function GetUserByUserId(Id)
 {
-
     var user = GetSeesionStorageList("FriendsList");
     user = user.filter(function (index) {
-        if (index["UserDetailId"].trim() == Id)
-        { return true; }
-        else { return false; }
+        return index["UserDetailId"].trim() == Id;
     });
     user = user[0];
     return user;
+}
 
+//更新用户在线状态
+function UpdateIsOnlineForSessionStroage(Id, IsOnline)
+{
+    var friends = GetSeesionStorageList("FriendsList");
+    var user = JSLINQ(friends).Where(item=> item.UserDetailId == Id).items[0];
+    
+    var index = friends.indexOf(user);
+    user.IsOnline = IsOnline;
+    friends.splice(index, user);
+    RemoveByKey("FriendsList");
+    PushArrInSessionStroage("FriendsList", friends);
 }

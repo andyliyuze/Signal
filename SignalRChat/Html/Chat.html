@@ -237,7 +237,7 @@
             // On User Disconnected
             chatHub.client.onUserDisconnected = function (id, userName) {
                 alert(userName + "下线啦！");
-                $("#img_" + id + "").addClass("gray");
+                $("#ul_item_" + id).find(".avatar img").addClass("gray");
 
             }
             //接收后台传来的单条消息
@@ -370,7 +370,7 @@
         }
 
         function UserIsOnlined(id) {
-            $("#img_" + id + "").removeClass("gray");
+            $("#ul_item_" + id).find(".avatar img").removeClass("gray");
             var str = $("#ul_item_" + id + "").html();
             $("#ul_item_" + id + "").remove();
 
@@ -381,7 +381,7 @@
         }
         function AddMessage(message) {
             var chatingid = $("#currentUserName").attr("data-uid");
-            var src = $("#img_" + chatingid + "").attr("src");
+            var src = $("#ul_item_" + chatingid + "").find("avatar img").attr("src");
             var bubble_default = "bubble_default";
             var me = "";
             var MyId = $("#hdUserName").attr("data-uid");

@@ -111,8 +111,6 @@ function PushSeesionStorage(key, item) {
         list = JSON.parse(listStr);
     }
     //flag标识 表示是否存在
-    //var flag = list.Contain(item);
-    //if (flag) { return;}
     list.push(item);
 
     //将数组序列化为字符串
@@ -144,3 +142,11 @@ function PushArrInSessionStroage(key, Arr) {
 
     sessionStorage.setItem(key, ArrStr);
 }
+
+function RemoveByKey(key)
+{
+    sessionStorage.removeItem(key);
+
+}
+
+ 

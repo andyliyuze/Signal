@@ -40,15 +40,14 @@
     userHub.client.onNewUserConnected = function (uid, name) {
         alert(name+"来啦");
         UserIsOnlined(uid);
-        //AddUser(chatHub, id, name);
+     
     };
 
 
     // On User Disconnected
-    userHub.client.onUserDisconnected = function (id, userName) {
+    userHub.client.onUserDisconnected = function (uid, userName) {
         alert(userName + "下线啦");
-        $("#img_" + id + "").addClass("gray");
-
+        UserIsOfflined(uid);
     };
 
 

@@ -17,7 +17,7 @@
     <script src="/Scripts/bootstrap.min.js"></script>
 
     <script src="/Scripts/avartar/jquery.cropit.js"></script>
-
+    <script src="~/Scripts/JSLINQ.js"></script>
     <script src="/Scripts/chat/status.js"></script>
     <script src="/Scripts/chat/common.js"></script>
     <script src="/Scripts/chat/chatHelper.js"></script>
@@ -340,7 +340,7 @@
                 $(".pannel .item").addClass("hide");
                 $(".tab .tab_item").find("i").css("color", "#5f88a7");
                 var type = $(this).attr("data-type");         
-                $(this).find("i").css("color", "#0e94f7");
+                $(this).find("i").css("color", "#38adff");
                 if (type == "chat")
                 {
                     $(".pannel .item.chat_ul").removeClass("hide");        
@@ -493,7 +493,7 @@
                 $(".right .panel").addClass('hide');
                 var uid = $(this).attr("data-uid");
                 var user = GetUserByUserId(uid);
-
+                BindingUserInfoInBox(user);
             });
 
 
@@ -547,6 +547,42 @@
             <div class="search_bar">
                 <i class="web_wechat_search"></i>
                 <input class="frm_search ng-isolate-scope ng-pristine ng-valid" type="text" placeholder="搜索">
+
+                @*//搜索结果*@
+                <div id="mmpop5" class="mmpop ng-scope recommendation" tabindex="-1">
+                    <div class="scroll-wrapper contacts scrollbar-dynamic" style="position: relative;">
+                        <div jquery-scrollbar="" search-list-directive="" class="contacts scrollbar-dynamic scroll-content scroll-scrolly_visible" style="margin-bottom: 0px; margin-right: 0px; height: 420px;">
+                            
+                            <div mm-repeat="item in allContacts" data-height-calc="heightCalc" data-buffer-height="100" data-no-cache="true" class="ng-scope">
+                                <div  class="top-placeholder ng-scope" style="height: 0px;"></div>
+                                <div ng-repeat="item in allContacts" class="ng-scope">
+                                   <h4 ng-if="item.type==&quot;header&quot;" class="contact_title ng-binding ng-scope first" ng-class="{first:$index==0}">好友</h4>
+                                    
+                                </div>
+                                <div ng-repeat="item in allContacts" class="ng-scope">
+                                   
+                                    <div ng-if="item.type!=&quot;header&quot;" contact-item-directive="" data-class-name="on" data-user="item" data-click-user-callback="clickUserCallback" ng-class="{'active':currentContact.UserName == item.UserName}" class="ng-isolate-scope">
+                                       
+                                        <div class="contact_item on" ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)">
+                                            <div class="avatar">
+                                                <img class="img lazy"alt="">
+                                            </div>
+                                            <div class="info">
+                                                <h4 class="nickname ng-binding" ng-bind-html="user.getDisplayName()">诚記</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                                <div  class="bottom-placeholder ng-scope" style="height: 5191px;"></div>
+                            </div>
+                            
+                        </div>
+                        
+                        
+
+                    </div>
+                </div>
             </div>
             <div class="tab">
                 <div class="tab_item" data-type="chat">
@@ -688,7 +724,7 @@
                         <div class="profile">
 
                             <div class="avatar">
-                                <img class="img" alt="">
+                                <img class="img" alt="" style="border-radius: 15px;">
                             </div>
 
                             <div class="nickname_area">

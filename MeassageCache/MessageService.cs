@@ -33,7 +33,6 @@ namespace MeassageCache
                     //i等于1代表第一个参数大，第二个参数小，所以把小的放前面大的放后面
                     //从而构成
                     int i = String.Compare(model.SenderId, model.RecevierId);
-                    //if(model.RecevierId>model.SenderId){
                     string setKey = "";
                     if (i == 1)
                     {
@@ -62,48 +61,39 @@ namespace MeassageCache
         //单人消息的历史消息hash ,储存未读消息数量以及最新消息Id
         private void UpdateHistoryMsgHash(PrivateMessage model, RedisClient redisClient)
         {
-            //添加用户新消息到历史消息hash中，该hash对象存储a用户与b最新的MsgId，以及a用户未读b用户
+            //更新接受方与发送方，该hash对象存储a用户与b最新的MsgId，以及a用户未读b用户
             //发来的消息的条数
-            string setHisMsgKey = "HistoryMsgHash:" + model.RecevierId + ":" + model.SenderId;
+            string HisMsgKeyForRecevier = "HistoryMsgHash:" + model.RecevierId + ":" + model.SenderId;
             HistoryMsgHashModel hisMsgModel = new HistoryMsgHashModel();
-            hisMsgModel = redisClient.GetAllEntriesFromHash(setHisMsgKey).ToJson().FromJson<HistoryMsgHashModel>();
+            hisMsgModel = redisClient.GetAllEntriesFromHash(HisMsgKeyForRecevier).ToJson().FromJson<HistoryMsgHashModel>();
             hisMsgModel.MessageId = model.MessageId.ToString();
             hisMsgModel.UnReadMsgCount = hisMsgModel.UnReadMsgCount + 1;
             var HisMsgkvp = RedisClient.ConvertToHashFn(hisMsgModel);
-            redisClient.SetRangeInHash(setHisMsgKey, HisMsgkvp);
+            redisClient.SetRangeInHash(HisMsgKeyForRecevier, HisMsgkvp);
+
+
+            //更新发送方与接收方的最新消息Id
+            string HisMsgKeyForSender = "HistoryMsgHash:" + model.SenderId + ":" + model.RecevierId;
+            redisClient.SetEntryInHash(HisMsgKeyForSender, "MessageId", model.MessageId.ToString());
         }
       
         public List<PrivateMessage> GetPrivateMessage(string key, string beginStamp, string endStamp)
         {
-
-
             try
             {
-
                 using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
                 {
-
                     List<string> msglist = redisClient.SearchSortedSet(key, beginStamp, endStamp);
-
                     List<PrivateMessage> list = new List<PrivateMessage>(); ;
                     foreach (string str in msglist)
                     {
-
                         PrivateMessage model = redisClient.GetAllEntriesFromHash(str).ToJson().FromJson<PrivateMessage>();
                         list.Add(model);
-
                     }
                     return list;
                 }
             }
             catch { return null; }
-
-
-
-
-
-
-
         }
   
         //登陆后就获得与每个好友的历史消息
@@ -113,15 +103,14 @@ namespace MeassageCache
             {
                 using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
                 {
+                    //接收方与发送方
                     List<string> list = redisClient.SearchKeys("HistoryMsgHash:" + UserId + "*");
                     List<HistoryMsgViewModel> hisList = new List<HistoryMsgViewModel>();
                     foreach (string str in list)
                     {
-
                         HistoryMsgHashModel hisMsgModel = new HistoryMsgHashModel();
                         HistoryMsgViewModel hisMsgViewModel = new HistoryMsgViewModel();
                         PrivateMessage priMsgModel = new PrivateMessage();
-
                         //获得对应的历史消息model，存在redis的model
                         hisMsgModel = redisClient.GetAllEntriesFromHash(str).ToJson().FromJson<HistoryMsgHashModel>();
                         //获得单条消息model
@@ -129,9 +118,10 @@ namespace MeassageCache
                         //获得历史消息model ，前端显示的model
                         hisMsgViewModel.UnReadMsgCount = hisMsgModel.UnReadMsgCount;
                         hisMsgViewModel.Message = priMsgModel;
+                        if (priMsgModel.SenderId.Trim() == UserId.Trim()) { hisMsgViewModel.Message.ChattingId = priMsgModel.RecevierId; }
+                        else { hisMsgViewModel.Message.ChattingId = priMsgModel.SenderId; }
                         hisList.Add(hisMsgViewModel);
                     }
-
                     return hisList;
                 }
             }
@@ -139,12 +129,12 @@ namespace MeassageCache
             {
                 return null;
             }
-
         }
         //让未读消息变为0
-        public bool SetUnreadPrivateMsgCount(string RecevierId, string SenderId, int count)
+        public bool SetUnreadPrivateMsgCount(string recevierId, string senderId, int count)
         {
-            string HisMsgKey = "HistoryMsgHash:" + RecevierId + ":" + SenderId;
+
+            string HisMsgKey = "HistoryMsgHash:" + recevierId + ":" + senderId;
             return SetUnreadMsgCount(HisMsgKey, count);
         }
 
@@ -187,6 +177,28 @@ namespace MeassageCache
 
         }
         #endregion
+
+
+        private string GetKeyForTowUserOrder(string keyBegin, string senderId, string recevierId)
+        {
+            //i等于1代表第一个参数大，第二个参数小，所以把小的放前面大的放后面
+            //从而构成
+            int i = String.Compare(senderId, recevierId);
+            //if(model.RecevierId>model.SenderId){
+            string setKey = keyBegin;
+            if (i == 1)
+            {
+                setKey = setKey + senderId + ":" + recevierId + "";
+            }
+            else
+            {
+
+                setKey = setKey + recevierId + ":" + senderId + "";
+            }
+            return setKey;
+
+        }
+
 
         #region 群聊消息
         //插入多人消息
