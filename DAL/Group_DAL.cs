@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DAL.Interface;
 using Model.ViewModel;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -15,7 +16,19 @@ namespace DAL
         //创建群
         public bool Create(Group model)
         {
-            return Add(model);
+            using (var context = new ChatContext())
+            {
+                //创建群
+                context.Group.Add(model);
+                //将群主入群
+                GroupMember groupMember = new GroupMember { ApproverId = model.OwnerId, GroupId = model.GroupId, Id = Guid.NewGuid(), MemberId = model.OwnerId };
+                context.GroupMember.Add(groupMember);
+
+                //这是一个事务操作
+                return context.SaveChanges() > 0;
+
+
+            }
         }
 
 
@@ -26,15 +39,26 @@ namespace DAL
             {
                 try
                 {
+                    Expression<Func<Group, UserDetail, GroupViewModel>>
+                      expression = (a, b) => new GroupViewModel()
+                      {
+                          GroupAvatar = a.GroupAvatar,
+                          GroupId = a.GroupId,
+                          GroupName = a.GroupName,
+                          OwnerId = a.OwnerId,
+                          OwnerName = b.UserName
+                      };
                     var model = context.Group.Where(a => a.GroupName.Contains(Name))
                         .Join(context.UserDetail, a => a.OwnerId, b => b.UserDetailId,
-                        (a, b) => new GroupViewModel() { GroupAvatar = a.GroupAvatar,GroupId=a.GroupId,GroupName=a.GroupName,OwnerId=a.OwnerId, OwnerName = b.UserName }).FirstOrDefault();
+            //(a, b) => new GroupViewModel() { GroupAvatar = a.GroupAvatar, GroupId = a.GroupId, GroupName = a.GroupName, OwnerId = a.OwnerId, OwnerName = b.UserName }
+            expression.Compile()
+                        ).FirstOrDefault();
                     return model;
                 }
-                catch
+                catch(Exception e)
                 {
 
-                    return null;
+                    throw e;
                 }
             }
         }

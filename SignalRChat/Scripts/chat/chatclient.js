@@ -18,7 +18,7 @@
     //接收后台传来的单条消息
     chatHub.client.receivePrivateMessage = function (message) {
         var ChattingId = message.SenderId;
-        MessageHandler(message, ChattingId);
+       MessageHandler(message, ChattingId);
     }
 
      
@@ -26,7 +26,7 @@
     //接收后台传来的单条消息
     chatHub.client.receiveGroupMessage = function (message) {
         var ChattingId = message.GroupId;
-        MessageHandler(message, ChattingId);
+       MessageHandler(message, ChattingId);
 
     }
     

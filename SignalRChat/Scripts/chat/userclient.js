@@ -22,7 +22,7 @@
 
             var group = grouplist[i];
             AddGroup(group.GroupId, group.GroupName, group.GroupAvatar);
-            $("#ul_item_" + group.GroupId).addClass("group_item");
+            PushSeesionStorage("GroupList", group);
         }
 
         for (i = 0; i < hisMsglist.length; i++) {
@@ -165,7 +165,13 @@
     userHub.client.receiveGroupReplyResult = function (replyModel) {
         //将数据缓存到SeesionStorage       
         PushSeesionStorage("GroupReplys", replyModel);
-
+        var group =
+            {
+            GroupId:replyModel.ReplyGroupId,
+            GroupName:replyModel.ReplyGroupName,
+            GroupAvatar:replyModel.ReplyGroupAvatar
+        }
+        PushSeesionStorage("GroupList", group);
 
         if (replyModel.ReplyStatus === ReplyStatus.Pass) {
             //append一条好友头像信息

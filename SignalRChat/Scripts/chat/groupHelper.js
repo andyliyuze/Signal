@@ -1,6 +1,6 @@
 ﻿function AddGroup(id, name, avatarPic) {
     var str =
-           " <div data-uid=" + id + " class='chat_ul_item 'id='group_item_" + id + "'>" +
+           " <div data-uid=" + id + " class='chat_ul_item group_item'id='group_item_" + id + "'>" +
                 "<div class='ext'>" +
                     "<p class='attr ng-binding'></p>" +
                    " <p class='attr ng-scope'>" +
@@ -18,4 +18,16 @@
                     "</h3>" +
                    "</div></div>";
     $(".groups_ul .chat_ul_div").append(str);
+}
+
+function GetGroupByGroupId(Id)
+{
+
+    var group = GetSeesionStorageList("GroupList");
+    group = group.filter(function (index) {
+        return index["GroupId"].trim() == Id;
+    });
+    group = group[0];
+    return group;
+
 }

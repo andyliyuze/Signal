@@ -127,7 +127,7 @@
             //私信消息
             $(document).on("click", ".btn_send.single", function () {
            // $(".btn_send.single").click(function () {
-                var message = CreateMesModel();
+                var message = CreateMesModel("single");
 
                 if (message.content.length > 0)
                 {
@@ -143,7 +143,7 @@
             //群发消息
        
                 $(document).on("click", ".btn_send.group", function () {
-                var message=  CreateMesModel();
+                    var message = CreateMesModel("group");
                 if (message.content.length > 0)
                 {
                     SendMsgHandlerForView(message);
@@ -219,7 +219,9 @@
             $(document).on('click', '.chat_item', function () {
                 $(".right .box").addClass('hide');
                 $(".right .panel").removeClass('hide');
-                BindingUserInfo(this);
+                if ($(this).hasClass("group")) { BindingGroupInfo(this); }
+                else { BindingUserInfo(this); }
+               
 
             });
             //点击+号弹出搜索弹框
@@ -336,29 +338,11 @@
 
 
             //tab切换
-            $(".tab .tab_item").click(function () {
-                $(".pannel .item").addClass("hide");
-                $(".tab .tab_item").find("i").css("color", "#5f88a7");
-                var type = $(this).attr("data-type");         
-                $(this).find("i").css("color", "#38adff");
-                if (type == "chat")
-                {
-                    $(".pannel .item.chat_ul").removeClass("hide");        
-                    return;
-                }
-                if (type == "friends")
-                {
-                    $(".pannel .item.friends_ul").removeClass("hide");            
-                    return;
-                }
-                if (type == "gruops")
-                {
-                    $(".pannel .item.groups_ul").removeClass("hide");
-                    return;
-                }
-              
+            $(".tab .tab_item").click(function (e) {
+               
+                TabClickHander(this);
             });
-
+ 
             $(document).on('click', "#ul_item_createGroup", function () {
                 $("#modal").load("/Group/_CreateGroupPage", function (response, status, xhr) {
                     $("#CreateGroupModal").modal('show');
@@ -383,6 +367,13 @@
                         if (data.result == true) {
                             alert("创建成功");
                             AddGroup(data.groupId, data.groupName, data.groupAvatar);
+                            var group=
+                                {
+                                    GroupId:data.groupId,
+                                    GroupName:data.groupName,
+                                    GroupAvatar: data.groupAvatar
+                                }
+                            PushSeesionStorage("GroupList", group);
                             $("#CreateGroupModal").modal('hide');
                         }
                         else {
@@ -402,53 +393,7 @@
                 $(".search_type").html(text+"<span class=caret></span>");
             });
 
-            //点击群列表
-
-            //点击用户时绑定用户名和id
-            $(document).on('click', '.group_item', function () {
-                if (IsCurrentGroupOrNotUser(this)) { return; }
-                //获取当前用户用户名
-                var username = $(this).find(".nickname_text").text();
-                //更改聊天窗口的用户名
-                $("#currentUserName").text(username);
-                //获取当前聊天用户的Id
-                var id = $(this).attr("data-uid");
-                //更改聊天窗口的用户Id
-                $("#currentUserName").attr("data-uid", id);
-                //清空聊天对话框的消息
-                $(".message_ul .message_item ").remove();
-                if ($(this).hasClass("NeedGetMsgFromBack")) {
-                    //清除需要从后台获取数据的标识
-                    $(this).removeClass("NeedGetMsgFromBack");
-                    //
-                    var MsgId = $(this).attr("data-unreadMsgId");
-                    //如果存在未读消息，则从去后台获取未读消息数据
-                    var unreadcount = $(this).attr("data-unreadcount");
-                    //  unreadcount = getNum(unreadcount);
-                    if (unreadcount > 0) {
-                        chatHub.server.getUnreadMsg(id, MsgId, unreadcount).done(function () {
-                            //将浏览器的本地缓存消息加载到聊天窗口中
-                            GetStrogeMessage(id);
-
-                        });
-                    }
-                }
-                else {
-                    //将浏览器的本地缓存消息加载到聊天窗口中
-                    GetStrogeMessage(id);
-                }
-
-
-
-
-                //让未读标志的红点消失
-                $(this).find("i.icon").removeClass("web_wechat_reddot");
-                //让未读条数变为0，前端
-                $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
-
-                //让发送消息按钮标记为群发消息
-                $(".btn_send").removeClass("single").addClass("group");
-            });
+      
 
 
 
@@ -462,9 +407,9 @@
                 // 执行一些动作...
                 $("#modal").children().remove();
             })
-            //清除
+            
 
-
+            //主界面按钮按钮点击事件
             $(".web_wechat_add").click(function () {
                 if ($("#mmpop_system_menu").css("display") == "none") {
                     $("#mmpop_system_menu").fadeIn();
@@ -484,36 +429,61 @@
             });
 
 
-
+            //点击好友列表
             $(document).on('click', '.friends_item', function ()
             {
                 $(".friends_item").removeClass("selected");
+                $(".action_area .button").addClass("single").removeClass("group");
                 $(this).addClass("selected");
-                $(".right .box").removeClass('hide');
+                $(".right .box").removeClass('hide');  
                 $(".right .panel").addClass('hide');
                 var uid = $(this).attr("data-uid");
                 var user = GetUserByUserId(uid);
                 BindingUserInfoInBox(user);
             });
+            //点击群列表
+            $(document).on('click', '.group_item', function () {
+                $(".group_item").removeClass("selected");
+                $(".action_area .button").removeClass("single").addClass("group");
+                $(this).addClass("selected");
+                $(".right .box").removeClass('hide');
+                $(".right .panel").addClass('hide');
+                var groupId = $(this).attr("data-uid");
+                var group = GetGroupByGroupId(groupId);
+                BindingGroupInfoInBox(group);
+                
+            });
 
 
+            //点击发消息按钮
             $(document).on('click', '.action_area .button', function () {
 
                 $(".right .box").addClass('hide');
                 $(".right .panel").removeClass('hide');
                 $(".tab_item[data-type='chat']").click();
+                if ($(this).hasClass("single")) {
+                    var uid = $(".friends_item.selected").attr("data-uid");
+                    if ($("#ul_item_" + uid + "").length <= 0) {
+                        var user = GetUserByUserId(uid);
+                        AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline, "single");
+                    }
 
-                var uid = $(".friends_item.selected").attr("data-uid");
-                if ($("#ul_item_" + uid + "").length <= 0)
-                {
-                   var user= GetUserByUserId(uid);
-                   AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline);                 
+                    BindingUserInfo("#ul_item_" + uid + "");
                 }
-              
-                BindingUserInfo("#ul_item_" + uid + "");
+                else
+                {
+                    var groupId = $(".group_item.selected").attr("data-uid");
+                    if ($("#ul_item_" + groupId + "").length <= 0) {
+                        var group = GetGroupByGroupId(groupId);
+                        AddUserForChat(groupId, group.GroupName, group.GroupAvatar, true,"group");
+                    }
+
+                    BindingGroupInfo("#ul_item_" + groupId + "");
+
+                }
             });
-
-
+         
+            //搜索框输入事件
             $(".search_bar .frm_search").keyup(function () {
                 var keyword = $(".search_bar .frm_search").val();
 
@@ -521,21 +491,31 @@
                 var userList = GetUserByKeyword(keyword);
                 BindingUserInSearchBox(userList);
             });
+
+            //搜索结果列表点击事件
             $(document).on('click', '.search_bar .search_item', function ()
             {
                 $(".right .box").addClass('hide');
                 $(".right .panel").removeClass('hide');
-                $(".tab_item[data-type='chat']").click();
-
+                
+                TabClickHander(".tab_item[data-type='chat']");
                 var uid = $(this).find(".nickname").attr("data-uid");
                 if ($("#ul_item_" + uid + "").length <= 0) {
                     var user = GetUserByUserId(uid);
-                    AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline);
+                    AddUserForChat(uid, user.UserName, user.AvatarPic, user.IsOnline,"single");
                 }
 
                 BindingUserInfo("#ul_item_" + uid + "");
             });
-           
+            $("body").click(function (e) {
+                var IsClickSearchBarFlag = $(e.target).parents(".recommendation").length >= 1 || $(e.target).parents(".search_bar").length >= 1;
+              
+                if (!IsClickSearchBarFlag) { $("#mmpop5").slideUp(); }
+                var IsClickSystemMenu = $(e.target).parents(".system_menu").length >= 1 || $(e.target).closest(".web_wechat_add").length >= 1
+            
+                if (!IsClickSystemMenu) { $(".system_menu").hide(); }
+                console.log("IsClickSearchBarFlag:" + IsClickSearchBarFlag + "  IsClickSystemMenu:" + IsClickSystemMenu);
+            });
         }
 
     </script>
@@ -575,13 +555,13 @@
                 @*//搜索结果*@
                 <div id="mmpop5" class="mmpop ng-scope recommendation" tabindex="-1" style="display:none">
                     <div class="scroll-wrapper contacts scrollbar-dynamic" style="position: relative;">
-                        <div jquery-scrollbar="" search-list-directive="" class="contacts scrollbar-dynamic scroll-content scroll-scrolly_visible" style="margin-bottom: 0px; margin-right: 0px; height: 420px;">
+                        <div jquery-scrollbar="" search-list-directive="" class="contacts scrollbar-dynamic scroll-content scroll-scrolly_visible" style="margin-bottom: 0px; margin-right: 0px; height: 360px;">
                             
                             <div mm-repeat="item in allContacts" data-height-calc="heightCalc" data-buffer-height="100" data-no-cache="true" class="ng-scope">
                                 <div  class="top-placeholder ng-scope" style="height: 0px;"></div>
                     
                         
-                                <div  class="bottom-placeholder ng-scope" style="height: 5191px;"></div>
+                                <div  class="bottom-placeholder ng-scope"></div>
                             </div>
                             
                         </div>

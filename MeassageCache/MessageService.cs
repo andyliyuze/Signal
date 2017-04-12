@@ -125,9 +125,9 @@ namespace MeassageCache
                     return hisList;
                 }
             }
-            catch
+            catch(Exception e)
             {
-                return null;
+                return new List<HistoryMsgViewModel>() ;
             }
         }
         //让未读消息变为0
@@ -214,13 +214,15 @@ namespace MeassageCache
                     kvp.Remove("ChattingId");
                     kvp.Remove("type");
                     redisClient.SetRangeInHash(key, kvp);
+                //    var redisTodos = redisClient.As<BroadcastMessage>();
+                 //   redisTodos.[]
                     //将消息Id保存到list队列
                     redisClient.PushItemToList("BroadcastMessageList", model.MessageId.ToString());                  
                     string setKey = "BroadcastMessageSet:" + model.GroupId + "";
                     long stamp = TimeHelper.GetTimeStamp(model.CreateTime);
                     //讲消息id添加到消息集合
                     redisClient.AddItemToSortedSet(setKey, model.MessageId.ToString(), stamp);
-                    UpdateBroadcastMsgHash(model, redisClient);
+                  //  UpdateBroadcastMsgHash(model, redisClient);
                     return true;
                 }
             }
@@ -249,7 +251,7 @@ namespace MeassageCache
         //让未读消息变为0
         public bool SetUnreadBroadcasMsgCount(string groupId, int count)
         {
-            string HisMsgKey = "HistoryMsgHash:" + groupId;
+            string HisMsgKey = "HistoryBroadcastMsgHash:" + groupId;
             return SetUnreadMsgCount(HisMsgKey, count);
         }
         #endregion

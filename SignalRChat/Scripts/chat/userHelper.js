@@ -37,10 +37,10 @@
 
 
 
-function AddUserForChat(id, name, avatarPic, IsOnline) {
+function AddUserForChat(id, name, avatarPic, IsOnline ,type) {
 
     var str =
-               " <div data-uid=" + id + " class='chat_ul_item OffLine chat_item'id='ul_item_" + id + "'>" +
+               " <div data-uid=" + id + " class='chat_ul_item OffLine chat_item "+type+" 'id='ul_item_" + id + "'>" +
                 "<div class='ext'>" +
                     "<p class='attr ng-binding'>" + getTime( Date.now(), "ext") + "</p>" +
                    " <p class='attr ng-scope'>" +
@@ -448,9 +448,9 @@ function AppendApplyMsgIntoUl()
     if ($(".apply_ul_item").length <= 0) {
         var id = "Applys";
         var name = "添加申请";
-        var avatarPic = "Images/usericon.jpg";
+        var avatarPic = "/Images/usericon.jpg";
         var IsOnline = true;
-        AddUserForChat(id, name, avatarPic, IsOnline);
+        AddUserForChat(id, name, avatarPic, IsOnline,"apply");
     }
 }
 //好友，群通用
@@ -462,9 +462,9 @@ function AppendReplyMsgIntoUl()
         var IsOnline = true;
         var Id = "Replys";
         var Name = "申请回复";
-        var avatarPic = "Images/usericon.jpg";
+        var avatarPic = "/Images/usericon.jpg";
         //append一条好友申请的回复
-        AddUserForChat(Id, Name, avatarPic, IsOnline);
+        AddUserForChat(Id, Name, avatarPic, IsOnline,"reply");
     }
 }
 

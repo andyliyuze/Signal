@@ -442,7 +442,13 @@ namespace SignalRChat
             {
                 //通知申请人
                 Clients.Client(toUserCId).receiveGroupReplyResult(ReplyViewModel);
-            }      
+                //signalR保存一下  
+                List<Group> GroupList = new List<Group>();
+                GroupList.Add(group);
+                IHubContext Chat = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+                Chat.Groups.Add(toUserCId, group.GroupName);
+            }
+
             //持久化操作
             GroupMember model = new GroupMember { ApproverId=Guid.Parse(uidA),GroupId=GroupId,Id=Guid.NewGuid(),MemberId=Guid.Parse(uidB) };
             //成员表添加数据
