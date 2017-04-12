@@ -9,18 +9,22 @@ using System.IO;
 using Common;
 using DAL.Interface;
 using DAL;
+using Microsoft.AspNet.SignalR;
+using MeassageCache.Interface;
+using MeassageCache;
 
 namespace SignalRChat.Controllers
 {
     public class GroupController : Controller
     {
         private readonly IGroup_DAL _Groupservice = new Group_DAL();
+        private readonly IUserService _UserService = new UserService();
         //public GroupController(IGroup_DAL Groupservice) {
 
         //    _Groupservice = Groupservice;
         //}
 
-     
+
         // GET: Gruop
         public ActionResult _CreateGroupPage()
         {
@@ -54,6 +58,10 @@ namespace SignalRChat.Controllers
             {
                 json.Data = new { result = flag };
             }
+            IHubContext Chat = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            //接受者uid
+            string toUserCId = _UserService.GetUserDetail(uid).UserCId;
+            Chat.Groups.Add(toUserCId, GroupName);
             return json;
         }
 

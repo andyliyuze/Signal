@@ -33,7 +33,11 @@ namespace SignalRChat
             _Msgservice = _hubLifetimeScope.Resolve<IMessageService>();
             _IGroupDal= _hubLifetimeScope.Resolve<IGroup_DAL>();
             _DALFriendsApplyservice = _hubLifetimeScope.Resolve<IFriendsApply_DAL>();
-            CurrentUser = User.UserData;
+            try
+            {
+                CurrentUser = User.UserData;
+            }
+            catch { }
         }     
         #region Methods
     
