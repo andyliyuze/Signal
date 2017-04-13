@@ -23,7 +23,10 @@ namespace Model
         public override string SenderName { get; set; }
         public string GroupId { get; set; }
         public override DateTime  CreateTime { get; set; }
-     
+
+        public int Status { get; set; }
+
+
     }
     [Serializable]  //必须添加序列化特性
     public class PrivateMessage:Message
@@ -38,7 +41,7 @@ namespace Model
         public override string SenderName { get; set; }
         public string RecevierId { get; set; }
         public override  DateTime CreateTime { get; set; }
-
+        public int Status { get; set; }
     }
     [Serializable]  //必须添加序列化特性
     public class UserDetail

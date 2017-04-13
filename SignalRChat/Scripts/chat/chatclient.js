@@ -8,17 +8,18 @@
         for (var i = 0; i < MessageList.length; i++) {
             //将消息push进Storage，本地存储
             var key = "MessageListWith_" + MessageList[i].SenderId;
+         
             PushSeesionStorage(key, MessageList[i]);
             AddMessage(MessageList[i]);
-
         }
-
+        AudioPlayForNewMessage();
     };
 
     //接收后台传来的单条消息
     chatHub.client.receivePrivateMessage = function (message) {
         var ChattingId = message.SenderId;
-       MessageHandler(message, ChattingId);
+        MessageHandler(message, ChattingId);
+      
     }
 
      
@@ -29,8 +30,7 @@
        MessageHandler(message, ChattingId);
 
     }
-    
-
+ 
 
     //登陆结果
     chatHub.client.loginResult = function (result) {
@@ -63,5 +63,18 @@
         $('.waterfllow-loading.active').removeClass('active');
     };
 
-
+    chatHub.client.sendMessageResult = function (result, msgId,chattingId)
+    {
+        if (result == SendMessageStatus.Success)
+        {
+            UpdateMessageStatusForSessionStroage(chattingId, msgId, SendMessageStatus.Success);
+            $(".right.chat .message_ul .message_item[data-messageId='" + msgId + "']").find("i").hide();
+        }
+        else
+        {
+            UpdateMessageStatusForSessionStroage(chattingId, msgId, SendMessageStatus.Failed);
+            $(".right.chat .message_ul .message_item[data-messageId='" + msgId + "']").find(".ico_fail").show();
+        }
+         
+    }
 }

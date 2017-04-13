@@ -13,7 +13,8 @@
     <link href="~/Css/Font-Awesome-3.2.1/css/font-awesome.css" rel="stylesheet" />
     <link href="~/Css/Font-Awesome-3.2.1/css/font-awesome-ie7.css" rel="stylesheet" />
     <link href="~/Css/group.css" rel="stylesheet" />
-     <script src="/Scripts/jquery-2.0.0.min.js"></script>
+    
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="/Scripts/bootstrap.min.js"></script>
 
     <script src="/Scripts/avartar/jquery.cropit.js"></script>
@@ -22,10 +23,11 @@
     <script src="/Scripts/chat/common.js"></script>
     <script src="/Scripts/chat/chatHelper.js"></script>
     <script src="/Scripts/chat/userHelper.js"></script>
-    <script src="/Scripts/chat/chatclient.js"></script>
+    <script src="/Scripts/chat/chatclient.js"></script> 
     <script src="/Scripts/chat/userclient.js"></script>
 
     <script src="/Scripts/chat/groupHelper.js"></script>
+   
     <!--Script references. -->
     <!--Reference the jQuery library. -->
     <!--Reference the SignalR library. -->
@@ -487,7 +489,7 @@
             $(".search_bar .frm_search").keyup(function () {
                 var keyword = $(".search_bar .frm_search").val();
 
-                
+                console.log("触发输入框");
                 var userList = GetUserByKeyword(keyword);
                 BindingUserInSearchBox(userList);
             });
@@ -515,6 +517,18 @@
             
                 if (!IsClickSystemMenu) { $(".system_menu").hide(); }
                 console.log("IsClickSearchBarFlag:" + IsClickSearchBarFlag + "  IsClickSystemMenu:" + IsClickSystemMenu);
+            });
+
+            //音量
+            $(".dropdown_menu .volum-switch").click(function () {
+
+                var flag = $(this).find("i").hasClass("icon-volume-up");
+                if (flag) {
+                    $(this).find("i").removeClass("icon-volume-up").addClass("icon-volume-off");
+                    ChatRoomConfig.AudioState = "Off";
+                   
+                }
+                else { $(this).find("i").addClass("icon-volume-up").removeClass("icon-volume-off"); ChatRoomConfig.AudioState = "On";  }
             });
         }
 
@@ -624,8 +638,8 @@
                     
                     <li>
                         <!-- ngIf: !isSoundOpen -->
-                        <!-- ngIf: isSoundOpen --><a tabindex="-1" href="javascript:;"  title="关闭声音" class="ng-scope">
-                            <i class="menuicon_volume_on icon-volume-off"></i>关闭声音
+                        <!-- ngIf: isSoundOpen --><a tabindex="-1" href="javascript:;"  title="关闭声音"  class="ng-scope volum-switch  ">
+                            <i class="menuicon_volume_on icon-volume-up"></i>关闭声音
                         </a><!-- end ngIf: isSoundOpen -->
                     </li>
                    
@@ -739,7 +753,7 @@
 
     <div id="modal"></div>
 
-
+    <script src="~/Scripts/chat/ChatConfig.js"></script>
 
 </body>
 </html>

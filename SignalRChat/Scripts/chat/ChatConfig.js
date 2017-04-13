@@ -1,0 +1,4 @@
+﻿var ChatRoomConfig =
+{
+    AudioState: "On"
+}

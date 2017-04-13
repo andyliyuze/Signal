@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Chat.html" />
+    <Content Include="Content\audio\Bongo.mp3" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\upload\image\HeadImage\20170125223228.jpg" />
@@ -366,6 +367,7 @@
     <Content Include="Images\mushui.jpg" />
     <Content Include="Images\sprite308b49.png" />
     <Content Include="Images\usericon.jpg" />
+    <Content Include="Images\waiticon.gif" />
     <Content Include="Images\webwxgetheadimg.jpg" />
     <Content Include="Images\webwxgeticon %281%29.jpg" />
     <Content Include="Images\webwxgeticon %282%29.jpg" />
@@ -392,6 +394,7 @@
     <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />
+    <Content Include="Scripts\chat\ChatConfig.js" />
     <Content Include="Scripts\chat\chatHelper.js" />
     <Content Include="Scripts\chat\common.js" />
     <Content Include="Scripts\chat\emoji.js" />

@@ -238,6 +238,8 @@ namespace SignalRChat
         //重新连接，业务上表示重新上线，更新用户Cid到redis
         public override Task OnReconnected()
         {
+        
+         
             string uid = User.UserData.UserDetailId.ToString();
             string newcid = Context.ConnectionId;
             _service.UpdateUserCId(uid, newcid);
@@ -262,7 +264,7 @@ namespace SignalRChat
             string Onlinegruop = name + "的在线好友";
             foreach (var model in list)
             {
-                Groups.Add(model.UserCId, Onlinegruop);
+                Groups.Remove(model.UserCId, Onlinegruop);
             }
             //通知在线好友用户已下线
             Clients.Group(Onlinegruop).onUserDisconnected(uid, name);

@@ -22,6 +22,9 @@ namespace Model.ViewModel
 
         [NotMapped]
         public string type { get; set; }
+        [NotMapped]
+        public string MessageIdUserForJs { get; set; }
+
         public string SenderAvatar { get; set; }     
         public virtual Guid MessageId { get; set; }
         public virtual string SenderId { get; set; }     

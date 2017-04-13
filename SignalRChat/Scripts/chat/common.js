@@ -149,4 +149,34 @@ function RemoveByKey(key)
 
 }
 
- 
+// 播放音频文件，文件要带后缀名
+function AudioPlay(AudioName) {
+
+    
+    //游戏音效变量初始化
+    var audio = document.createElement("audio");
+    audio.src = AudioName;
+    audio.play();
+}
+
+function AudioPlayForNewMessage()
+{
+    var open = ChatRoomConfig.AudioState;
+    if (open == "On")
+    {
+        AudioPlay("/Content/audio/Bongo.mp3");
+        
+    }
+
+}
+
+//唯一标识
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+};

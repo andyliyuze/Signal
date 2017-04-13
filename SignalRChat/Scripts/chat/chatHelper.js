@@ -89,10 +89,11 @@ function AddMessage(message) {
     if (message.type == "group"  && me!="me") {
          nickName = "<h4 class='nickname' >" + message.SenderName + "</h4>";
     }
-   
+    if (message.Status == SendMessageStatus.Success) { var status = "style='display:none'"; }
+    else { var status = '';}
     //绑定聊天对话框消息，前端
     var str =
-   " <div class='message_item message " + me + "' style=' margin-bottom: 16px; float: left; width: 100%;'>" +
+   " <div class='message_item message " + me + "' data-messageId='" + message.MessageIdUserForJs + "' style=' margin-bottom: 16px; float: left; width: 100%;'>" +
                        " <p class='message_system ng-scope'>" +
                         " <span class='content ng-binding'>" + getTime(message.CreateTime, "") + "</span>" +
                       "</p>" +
@@ -103,6 +104,8 @@ function AddMessage(message) {
                           "<div class='bubble_cont ng-scope'>" +
                            "<div class='plain'>" +
                             "            <pre class='js_message_plain ng-binding'>" + message.content + "</pre>" +
+                          "  <i  class='ico_loading ng-hide icon-spin icon-spinner'  " + status + "></i>" +
+                          "<i class='ico_fail web_wechat_message_fail ng-hide icon-exclamation-sign'  title='重新发送' style='display: none; '></i>"
                              " </div>" +
                               "  </div</div></div></div>";
     $(".message_ul").append(str);
@@ -113,7 +116,7 @@ function AddMessage(message) {
 
 function  MessageHandler(message, ChattingId)
 {
-  
+    AudioPlayForNewMessage();
     //将消息push进Storage，本地存储
     var key = "MessageListWith_" + ChattingId;
     PushSeesionStorage(key, message);
@@ -186,8 +189,10 @@ function CreateMesModel(type)
     message.SenderAvatar = $("#myheadsrc").attr("src");
     message.content = msg;
     message.type = type;
+    message.MessageIdUserForJs = generateUUID();
     var time = new Date();
     message.CreateTime = time;
+    message.status = SendMessageStatus.Loading;
     return message;
 }
 
@@ -353,4 +358,16 @@ function UpdateUserStatesInChatul(e,id)
     $("#ul_item_" + id + "").addClass("selected");
 
 
+}
+
+//更新用户在线状态
+function UpdateMessageStatusForSessionStroage(userId, MessageIdUserForJs,status) {
+    var MessageList = GetSeesionStorageList("MessageListWith_"+userId);
+    var Message = JSLINQ(MessageList).Where(item=> item.MessageIdUserForJs == MessageIdUserForJs).items[0];
+
+    var index = MessageList.indexOf(Message);
+    Message.status = status;
+    MessageList.splice(index, Message);
+    RemoveByKey("MessageListWith_" + userId);
+    PushArrInSessionStroage("MessageListWith_" + userId, MessageList);
 }

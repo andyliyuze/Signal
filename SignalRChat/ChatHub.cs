@@ -45,15 +45,16 @@ namespace SignalRChat
         {
             var User= Context.User;
             model.RecevierId = model.ChattingId;
-            model.type = "friend";      
+            model.type = "single";      
             //接受者uid
             string toUserCId = _service.GetUserDetail(model.RecevierId).UserCId;
             //定义消息实体         
             model.CreateTime = DateTime.Now;
             model.MessageId = Guid.NewGuid();
-            model.SenderId = CurrentUser.UserDetailId.ToString();       
+            model.SenderId = CurrentUser.UserDetailId.ToString();
+            model.Status = (int)SendMessageStatus.Success;
             //接受者在线说明存在cid
-            if (string.IsNullOrEmpty(CurrentUser.UserDetailId.ToString()) != true && string.IsNullOrEmpty(toUserCId) != true)
+            if (string.IsNullOrEmpty(CurrentUser.UserDetailId.ToString()) != true && string.IsNullOrEmpty(toUserCId))
             {
                 Clients.Client(toUserCId).receivePrivateMessage(model);
             }        
@@ -62,11 +63,11 @@ namespace SignalRChat
             if (result)
            {
                //告诉发送者发送成功
-               Clients.Caller.sendMessageResult(SendMessageStatus.Success);
+               Clients.Caller.sendMessageResult(SendMessageStatus.Success,model.MessageIdUserForJs, model.RecevierId);
            }
            else {
                //告诉发送者发送失败
-               Clients.Caller.sendMessageResult(SendMessageStatus.Failed);
+               Clients.Caller.sendMessageResult(SendMessageStatus.Failed, model.MessageIdUserForJs, model.RecevierId);
            }           
         }
         //确认收到消息的方法
@@ -108,19 +109,20 @@ namespace SignalRChat
             //定义消息实体
             model.CreateTime = DateTime.Now;
             model.MessageId = Guid.NewGuid();
-            model.SenderId = CurrentUser.UserDetailId.ToString();       
+            model.SenderId = CurrentUser.UserDetailId.ToString();
+            model.Status = (int)SendMessageStatus.Success;
             Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);
             // 加入到缓存
             bool result = _Msgservice.InsertBroadcastMsg(model);
             if (result)
             {
                 //告诉发送者发送成功
-                Clients.Caller.sendMessageResult(SendMessageStatus.Success);
+                Clients.Caller.sendMessageResult(SendMessageStatus.Success,model.MessageIdUserForJs, model.GroupId);
             }
             else
             {
                 //告诉发送者发送失败
-                Clients.Caller.sendMessageResult(SendMessageStatus.Failed);
+                Clients.Caller.sendMessageResult(SendMessageStatus.Failed,model.MessageIdUserForJs, model.GroupId);
             }
         }       
         #endregion

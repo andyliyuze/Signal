@@ -442,6 +442,25 @@
         .bubble.bubble_primary {
             background-color:#38adff;
         }
+
+
+          .bubble_cont .plain .ico_loading {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    margin-top: -7px;
+    margin-right: 13px;
+}
+          .bubble_cont .plain .ico_fail {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    margin-top: -11px;
+    margin-right: 9px;
+    cursor: pointer;
+    color: #ef5f78;
+    font-size: 19px;
+}
         /*//图片变灰色效果*/
         .gray {     
              -webkit-filter: grayscale(100%);  
@@ -798,3 +817,5 @@ margin-top:8px;
                 background-color: #c3c3c3 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
                 background-color:#afb0b1;
             }
+
+      
