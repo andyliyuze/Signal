@@ -52,7 +52,7 @@ namespace SignalRChat
             model.CreateTime = DateTime.Now;
             model.MessageId = Guid.NewGuid();
             model.SenderId = CurrentUser.UserDetailId.ToString();
-            model.Status = (int)SendMessageStatus.Success;
+          
             //接受者在线说明存在cid
             if (string.IsNullOrEmpty(CurrentUser.UserDetailId.ToString()) != true && string.IsNullOrEmpty(toUserCId))
             {
@@ -110,7 +110,7 @@ namespace SignalRChat
             model.CreateTime = DateTime.Now;
             model.MessageId = Guid.NewGuid();
             model.SenderId = CurrentUser.UserDetailId.ToString();
-            model.Status = (int)SendMessageStatus.Success;
+            
             Clients.Group(GroupName,Context.ConnectionId).receiveGroupMessage(model);
             // 加入到缓存
             bool result = _Msgservice.InsertBroadcastMsg(model);

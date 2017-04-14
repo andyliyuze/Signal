@@ -89,7 +89,7 @@ function AddMessage(message) {
     if (message.type == "group"  && me!="me") {
          nickName = "<h4 class='nickname' >" + message.SenderName + "</h4>";
     }
-    if (message.Status == SendMessageStatus.Success) { var status = "style='display:none'"; }
+    if (message.status == SendMessageStatus.Success) { var status = "style='display:none'"; }
     else { var status = '';}
     //绑定聊天对话框消息，前端
     var str =

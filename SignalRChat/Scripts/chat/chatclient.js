@@ -8,7 +8,7 @@
         for (var i = 0; i < MessageList.length; i++) {
             //将消息push进Storage，本地存储
             var key = "MessageListWith_" + MessageList[i].SenderId;
-         
+            MessageList[i].Status == SendMessageStatus.Success;
             PushSeesionStorage(key, MessageList[i]);
             AddMessage(MessageList[i]);
         }

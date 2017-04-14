@@ -11,7 +11,7 @@ namespace SignalRChat.Controllers
 {
     public class HomeController : AsyncController
     {
-        [MyAuthorize]
+      
         public ActionResult Index()
         {
             return View();

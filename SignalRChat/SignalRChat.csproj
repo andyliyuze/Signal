@@ -366,6 +366,8 @@
     <Content Include="Images\delete.png" />
     <Content Include="Images\mushui.jpg" />
     <Content Include="Images\sprite308b49.png" />
+    <Content Include="Images\timg2.jpg" />
+    <Content Include="Images\timg.jpg" />
     <Content Include="Images\usericon.jpg" />
     <Content Include="Images\waiticon.gif" />
     <Content Include="Images\webwxgetheadimg.jpg" />
@@ -392,6 +394,7 @@
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.ttf" />
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.woff" />
     <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\chatConfig.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />
     <Content Include="Scripts\chat\ChatConfig.js" />

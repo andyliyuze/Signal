@@ -85,15 +85,15 @@ namespace SignalRChat.Controllers
             return View();
         }
         [HttpPost]
-        public void Login(string pwd,string name)
+        public ActionResult Login(string pwd,string name)
         {
             string uid = CheckUserInRedis(name);
             if (!string.IsNullOrEmpty(uid)&& TryLogin(uid, pwd))
             {
                 GetUserDetail(uid);
-                Response.Redirect("/Chat/Index");
-            };
-           
+                return RedirectToAction("Index", "Chat");
+            }
+           else{ return View("Login"); }
         }
         private enum LoginStatus
         {
