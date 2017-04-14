@@ -156,32 +156,9 @@ namespace MeassageCache
             }
         }
 
-        public bool AddNewUser(string id, string cid, string username)
-        {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
-            {
-                if (redisClient.Get<string>("UserIdByCId:" + cid + ":id") == null)
-                {
-                    //先往OnlineUsers集合里插入元素，表示在线用户信息
-                    var ser = new ObjectSerializer();
-                    byte[] buffer = ser.Serialize(new UserDetail { UserDetailId = Guid.Parse(id), UserName = username });
-
-                    redisClient.SAdd("OnlineUsers", buffer);
-                    //接着设置不同字段，该作用是用来条件查询
-
-                    bool flag = redisClient.Set<string>("user:" + id + ":name", username) //根据id找到用户名
-                    && redisClient.Set<string>("user:" + cid + ":id", id.ToString())     //根据cid找到 id
-                    && redisClient.Set<string>("user:" + id + ":cid", cid)  //根据id找到 cid
-                    && redisClient.Set<string>("user:" + username + ":id", id.ToString()); //根据用户名找到id
-
-
-                    return flag;
-                }
-                else { return false; }
-            }
-        }
+    
         //退出登录
-        public string LogOut(string uid)
+        public bool LogOut(string uid)
         {
             using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
             {
@@ -191,20 +168,19 @@ namespace MeassageCache
                     //UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid
                     redisClient.Del("UserIdByCId:" + oldCid + ":uid");
                     redisClient.Del("UserCIdById:" + uid + ":cid");
-
+                    UserDetail model = GetUserDetail(uid);
+                    if (model != null)
+                    {
+                        //设置用户在线状态为false
+                        UpdateUserField("IsOnline", "false", model.UserDetailId.ToString());
+                    }
+                    return true;
                 }
-                catch { }
+                catch { return false; }
 
             }
-            UserDetail model = GetUserDetail(uid);
-            if (model != null)
-            {
-                //设置用户在线状态为false
-                UpdateUserField("IsOnline", "false", model.UserDetailId.ToString());
-
-                return model.UserName;
-            }
-            else { return null; }
+          
+           
         }
 
 

@@ -56,6 +56,8 @@ namespace SignalRChat
             //builder.RegisterType<PopCache>();
             var container = builder.Build();
             GlobalHost.DependencyResolver = new AutofacDependencyResolver(container);
+            //同步数据
+
         }
     }
 }

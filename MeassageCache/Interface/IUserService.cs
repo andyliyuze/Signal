@@ -4,11 +4,11 @@ namespace MeassageCache.Interface
 {
     public interface IUserService
     {
-        bool AddNewUser(string id, string cid, string username);
+        
     
         bool UpdateUserCId(string Uid, string Cid);   
 
-        string LogOut(string uid);
+        bool LogOut(string uid);
 
         bool Register(string id, string UserName, string Pwd, string avatarPic);
          

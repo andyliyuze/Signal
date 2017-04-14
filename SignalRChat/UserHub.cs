@@ -126,9 +126,6 @@ namespace SignalRChat
                 Clients.Caller.applyResult(ApplyStatus.Failed);
             }
         }
-
-
-
         private void TryTellReceiverForFriendsApply(string uidA, string uidB,Guid ApplyId)
         {
             //接受者uid
@@ -143,7 +140,6 @@ namespace SignalRChat
             }
 
         }
-
         //检查是否合法用户
         private bool CheckIsvalid(string uid)
         {
@@ -154,10 +150,6 @@ namespace SignalRChat
             }
             #endregion
         }
-
-
-
-
         [HubAuthorize]
 
         //建立连接，业务上是用户正式上线操作
@@ -165,11 +157,8 @@ namespace SignalRChat
         {
 
             UserDetail CurrentUser = User.UserData;
-
             //当有新的用户上线
             OnNewUserContented();
-
-
             //获得与每位好友的历史消息，最新一条以及未读消息数量
             List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsg(CurrentUser.UserDetailId.ToString());
             //获得好友列表
@@ -232,8 +221,6 @@ namespace SignalRChat
             _service.UpdateUserCId(uid, newcid);
             _service.UpdateUserField("IsOnline", "true", uid);
         }
-
-
         [HubAuthorize]
         //重新连接，业务上表示重新上线，更新用户Cid到redis
         public override Task OnReconnected()
@@ -257,7 +244,8 @@ namespace SignalRChat
             if (User == null) return base.OnDisconnected(false);
             string uid = User.UserData.UserDetailId.ToString();
             //用户下线方法
-            string name = _service.LogOut(uid);
+            string name = User.UserData.UserName;
+             _service.LogOut(uid);
             //获得在线好友列表
             List<UserDetail> list = _service.GetMyFriends(uid).Where(a => a.IsOnline == true).ToList();
 
@@ -340,15 +328,6 @@ namespace SignalRChat
             UpdateApplyResult(result, applyId);
            
         }
-
-
-
-
- 
-
-
-      
-
 
         //好友申请结果更新
         private void UpdateApplyResult(string result, string applyId) 
@@ -494,10 +473,6 @@ namespace SignalRChat
 
         }
 
-
-
-
-
         //获取未读群添加回复
         public void GetUnreadGroupReply() {
             string uid = User.UserData.UserDetailId.ToString();
@@ -527,9 +502,5 @@ namespace SignalRChat
             var list = _friendsApplyDal.GetFriendsApplyByUId(Guid.Parse(uid));
             Clients.Caller.receiveFriendApplyList(list);
         }
-
- 
     }
-
-
 }

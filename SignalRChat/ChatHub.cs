@@ -54,7 +54,7 @@ namespace SignalRChat
             model.SenderId = CurrentUser.UserDetailId.ToString();
           
             //接受者在线说明存在cid
-            if (string.IsNullOrEmpty(CurrentUser.UserDetailId.ToString()) != true && string.IsNullOrEmpty(toUserCId))
+            if (string.IsNullOrEmpty(CurrentUser.UserDetailId.ToString()) != true && !string.IsNullOrEmpty(toUserCId))
             {
                 Clients.Client(toUserCId).receivePrivateMessage(model);
             }        

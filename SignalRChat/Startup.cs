@@ -15,7 +15,7 @@ namespace SignalRChat
             app.MapSignalR();
            
          
-           
+          
         }
     }
 }

@@ -143,6 +143,7 @@ function  MessageHandler(message, ChattingId)
     if (ChattingId.trim() === $("#currentUserName").attr("data-uid").trim())
     {
         AddMessage(message);
+        //这是有待改进的地方
         if (message.type != "group")
         {
             chatHub.server.messageConfirm($("#currentUserName").attr("data-uid").trim());
@@ -268,6 +269,7 @@ function BindingUserInfo(e)
     {
         //将浏览器的本地缓存消息加载到聊天窗口中
         GetStrogeMessage(Uid);
+        chatHub.server.messageConfirm(Uid);
     }
    
 }

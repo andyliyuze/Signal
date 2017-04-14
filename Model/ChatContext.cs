@@ -8,7 +8,7 @@ namespace Model
             : base("SignalRChat")
         {
 
-            Database.SetInitializer<ChatContext>(new DropCreateDatabaseIfModelChanges<ChatContext>());
+          
         }
         public DbSet<UserDetail> UserDetail { get; set; }
         public DbSet<PrivateMessage> PrivateMessage { get; set; }
