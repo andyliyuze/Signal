@@ -91,7 +91,7 @@
             margin-top: 20px;
         }
 
-        .btn {
+         .btn {
             width: 40%;
         }
 
@@ -108,6 +108,9 @@
         #ut {
             width: 200px;
             height: 30px;
+        }
+        .rotate-ccw ,   .rotate-cw {
+        width:17%
         }
     </style>
     <script>
@@ -209,7 +212,7 @@
 
                         <div style="display: inline;margin-left:47px;">
                             <img name="preview" id="preview" style="border-radius: 54px;width: 110px;" src="~/Images/webwxgeticon.jpg" />
-                            <input id="img-data" name="img-data" />
+                            <input id="img-data" name="img-data" style="display:none"/>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -232,8 +235,8 @@
 
         <!-- 模态框（Modal） -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel" aria-hidden="true" style="width:1200px;height:650px;">
-            <div class="modal-dialog" style="width:700px; ">
+             aria-labelledby="myModalLabel" aria-hidden="true" style="height:650px;">
+            <div class="modal-dialog" style="width:600px; ">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close"
@@ -252,17 +255,15 @@
                             <div class="image-size-label">
                                 Resize image
                             </div>
-                            <input type="range" class="cropit-image-zoom-input">
-                            <button class="rotate-ccw">Rotate counterclockwise</button>
-                            <button class="rotate-cw">Rotate clockwise</button>
-                            <button class="export">Export</button>
+                            <input type="range" class="cropit-image-zoom-input" style="width:44%">
+                            <button class="rotate-ccw btn btn-primary">左旋转</button>
+                            <button class="rotate-cw btn btn-primary">右旋转</button>
+                            @*<button class="export">Export</button>*@
                         </div>
-                        <img id="pre" src="" />
-
-
+                      
                     </div>
                     <div class="modal-footer">
-                        <button id="modal_close" type="button" class="btn btn-primary">
+                        <button id="modal_confirm" type="button" class="btn btn-primary">
                             确定
                         </button>
 
@@ -305,7 +306,12 @@
         $(function () { $("[data-toggle='tooltip']").tooltip(); });
     </script>
     <script type="text/javascript">
-        $("#modal_close").click(function () {
+        $("#modal_confirm").click(function () {
+            var imageData = $('.image-editor').cropit('export');
+            $("#pre").attr("src", imageData);
+            $("#preview").attr("src", imageData);
+            var data = imageData.replace("data:image/png;base64,", "");
+            $("#img-data").val(data);
 
             $('#myModal').modal('hide');
         });

@@ -150,10 +150,20 @@
     userHub.client.receiveReplyResult = function (replyModel) {
         //将数据缓存到SeesionStorage       
         PushSeesionStorage("FriendReplys", replyModel);
-
-        if (replyModel.ReplyStatus === ReplyStatus.Pass) {
+        var user =
+            {
+                UserDetailId: replyModel.ReplyUserId,
+                UserName:replyModel.ReplyUserName,
+                AvatarPic:replyModel.ReplyUserAvatar,
+                IsOnline:replyModel.IsOnline
+            }
+     
+        if (replyModel.ReplyStatus === ReplyStatus.Pass)
+        {
+            //添加一个好友到好友list
+            PushSeesionStorage("FriendsList", user);
             //append一条好友头像信息
-            AddUser(replyModel.ReplyUserId, replyModel.ReplyUserName, replyModel.ReplyUserAvatar, IsOnline);
+            AddUser(replyModel.ReplyUserId, replyModel.ReplyUserName, replyModel.ReplyUserAvatar, replyModel.IsOnline);
         }
         //在消息列表处添加回复消息，并添加红点
         AppendReplyMsgIntoUl();
@@ -265,7 +275,7 @@
             //将数据缓存到SeesionStorage       
             for (var i = 0; i < applyList.length; i++) {
                 var applyModel = applyList[i];
-                PushSeesionStorage("FriendApplys", applyModel);
+                PushSeesionStorage("FriendsApplys", applyModel);
             }
             //在消息列表处添加回复消息，并添加红点
             AppendApplyMsgIntoUl();

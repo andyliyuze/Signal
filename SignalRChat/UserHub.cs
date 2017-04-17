@@ -75,7 +75,7 @@ namespace SignalRChat
                 Clients.Client(toUserCId).receiveReplyResult(ReplyViewModel);
             }
             //自己的客户端也要更新一下用户好友表
-            Clients.Caller.onNewUserConnected(applicantModel);
+        //    Clients.Caller.onNewUserConnected(applicantModel);
 
             //redis操作
             _Userservice.BeFriends(uidA, uidB);

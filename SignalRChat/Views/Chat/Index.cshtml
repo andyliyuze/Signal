@@ -272,7 +272,17 @@
                 //根据鼠标点击结果获取reply数据
                 var ReplyModel = createReplyModel(this);
                 //更新一下自己的好友列表
-                AddUser(ReplyModel.ApplyUid, ReplyModel.ReplyName, ReplyModel.Avatar, ReplyModel.IsOnline);
+                AddUser(ReplyModel.ApplyUid, ReplyModel.ApplyName, ReplyModel.Avatar, ReplyModel.IsOnline);
+                //添加一个好友到好友list
+                var user={
+                
+                    UserDetailId:ReplyModel.ApplyUid,
+                    UserName: ReplyModel.ApplyName,
+                    AvatarPic: ReplyModel.Avatar,
+                    IsOnline: ReplyModel.IsOnline
+                   
+                }
+                PushSeesionStorage("FriendsList", user);
                 //更新一下Storage，该条申请消息的状态为已通过
                 UpdateItemById(ReplyModel.ApplyId, "已同意", "FriendsApplys", "FriendsApplyId");
 
@@ -555,8 +565,8 @@
                 </div>
 
                 <div class="info">
-                    <span style="color: #fff;" data-uid="" id="hdUserName"></span>
-                    <a style="margin-left: 100px;">
+                    <span style="color: #fff; position: relative; top: 2px;" data-uid="" id="hdUserName"></span>
+                    <a style="bottom: 3px;float: right; position: relative;">
                         <i class="web_wechat_add"></i>
                    
                     </a>

@@ -110,7 +110,7 @@ function AddMessage(message) {
                               "  </div</div></div></div>";
     $(".message_ul").append(str);
      
-  
+    $('.panel-body').scrollTop($('.panel-body')[0].scrollHeight);
 }
 
 

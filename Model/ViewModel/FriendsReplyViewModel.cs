@@ -15,7 +15,7 @@ namespace Model.ViewModel
 
    
         public DateTime ReplyTime { get; set; }
-
+        public bool IsOnline { get; set; }
         public ReplyStatus ReplyStatus { get; set; }
         public bool HasReadResult { get; set; }
         public static FriendsReplyViewModel Create(UserDetail model, ReplyStatus status, string AppyId, bool HasReadResult)
@@ -25,7 +25,8 @@ namespace Model.ViewModel
                 AppyId=Guid.Parse(AppyId), ReplyStatus = status, 
                 ReplyTime = DateTime.Now, ReplyUserAvatar = model.AvatarPic,
                 ReplyUserId = model.UserDetailId, ReplyUserName = model.UserName,
-                HasReadResult=HasReadResult
+                HasReadResult=HasReadResult,
+                IsOnline=true
             };
         }
         public static FriendsReplyViewModel ConvertToFriendsReplyViewModel(UserDetail user, FriendsApply apply)
@@ -43,7 +44,8 @@ namespace Model.ViewModel
                 ReplyStatus = status,
                 ReplyTime = apply.ReplyTime,
                 ReplyUserId = apply.ReceiverUserId,
-                ReplyUserName = user.UserName
+                ReplyUserName = user.UserName,
+                IsOnline=user.IsOnline
 
             };
             return model;

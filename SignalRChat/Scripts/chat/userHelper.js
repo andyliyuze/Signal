@@ -352,13 +352,13 @@ function createReplyModel(e) {
         IsOnline = true;
     }
     var ApplyId = $(e).parent().parent(".list-group-item").find(".reply-name").attr("data-applyid");
-    var ReplyName = $(e).parent().parent(".list-group-item").find(".reply-name").text();
+    var ApplyName = $(e).parent().parent(".list-group-item").find(".reply-name").text();
     var avatar = $(e).parent().parent(".list-group-item").find(".reply-avatar").attr("src");
     var ReplyModel = {
 
         ApplyUid: applyuid,
         ReceiverUserId: ReceiverUserId,
-        ReplyName: ReplyName,
+        ApplyName: ApplyName,
         IsOnline: IsOnline,
         ApplyId: ApplyId,
         Avatar: avatar,

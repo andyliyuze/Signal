@@ -14,6 +14,7 @@ using SignalRChat.Models;
 using Common;
 using SignalRChat.Extend;
 using MeassageCache.Interface;
+using Microsoft.AspNet.SignalR;
 
 namespace SignalRChat.Controllers
 {
@@ -33,7 +34,7 @@ namespace SignalRChat.Controllers
         [HttpPost]
         [AllowAnonymous]
 
-        public void RegisterConfire(RegisterModel model)
+        public ActionResult RegisterConfire(RegisterModel model)
         {
             string pic = Request.Form["img-data"];
             string name = DateTime.Now.ToString("yyyMMddHHmmss") + ".Jpeg";
@@ -53,8 +54,8 @@ namespace SignalRChat.Controllers
 
             }
 
-
-            Response.Redirect("/Chat.html");
+            return RedirectToAction("Login", "User");
+           
         }
 
         public ActionResult _SearchUserPage()
@@ -93,7 +94,10 @@ namespace SignalRChat.Controllers
                 GetUserDetail(uid);
                 return RedirectToAction("Index", "Chat");
             }
-           else{ return View("Login"); }
+           else{
+                return Content("<script>alert('密码或用户名错误！');location.href='/User/Login';</script>");
+
+            }
         }
         private enum LoginStatus
         {
