@@ -42,6 +42,7 @@ namespace SignalRChat
         #region Methods
     
         public void SendPrivateMessage(PrivateMessage model)
+        
         {
             var User= Context.User;
             model.RecevierId = model.ChattingId;
@@ -87,11 +88,25 @@ namespace SignalRChat
         {
                 List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, count);
                list= list.OrderBy(a => a.CreateTime).ToList();
-               Clients.Caller.messageListReceived(list);
+               Clients.Caller.unreadMessageListReceived(list);
             //让未读消息变为0
                _Msgservice.SetUnreadPrivateMsgCount(CurrentUser.UserDetailId.ToString(), ChatingUserId, 0);
         }
 
+        //获取历史消息
+        public void GetHistoryMsg(string ChatingUserId, string MsgId)
+        {
+            List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, 10);
+            list = list.OrderBy(a => a.CreateTime).ToList();
+            Clients.Caller.messageListReceived(list);
+        }
+        //
+        public void GetTopTenHistoryMsg(string ChatingUserId)
+        {
+            List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, , 10);
+            list = list.OrderBy(a => a.CreateTime).ToList();
+            Clients.Caller.messageListReceived(list);
+        }
         private enum SendMessageStatus
         {
             Success = 0,        

@@ -1,15 +1,29 @@
 ﻿function registerClientMethodsForChat(chatHub) {
-
-   
-    
-   
-    //接收后台传来的消息集合
+ 
+    //接收后台传来的历史消息集合
     chatHub.client.messageListReceived = function (MessageList) {
         for (var i = 0; i < MessageList.length; i++) {
             //将消息push进Storage，本地存储
             var key = "MessageListWith_" + MessageList[i].SenderId;
             MessageList[i].Status == SendMessageStatus.Success;
-            PushSeesionStorage(key, MessageList[i]);
+            if (i == MessageList.length - 1) { PushSeesionStorage(key, MessageList[i], "CreateTime"); }
+            else {
+                PushSeesionStorage(key, MessageList[i]);
+            }
+            PrependMessage(MessageList[i]);
+        }        
+    };
+
+    //接收后台传来的未读消息集合
+    chatHub.client.unreadMessageListReceived = function (MessageList) {
+        for (var i = 0; i < MessageList.length; i++) {
+            //将消息push进Storage，本地存储
+            var key = "MessageListWith_" + MessageList[i].SenderId;
+            MessageList[i].Status == SendMessageStatus.Success;
+            if (i == MessageList.length - 1) { PushSeesionStorage(key, MessageList[i], "CreateTime"); }
+            else {
+                PushSeesionStorage(key, MessageList[i]);
+            }
             AddMessage(MessageList[i]);
         }
         AudioPlayForNewMessage();
@@ -22,13 +36,10 @@
       
     }
 
-     
-
     //接收后台传来的单条消息
     chatHub.client.receiveGroupMessage = function (message) {
         var ChattingId = message.GroupId;
        MessageHandler(message, ChattingId);
-
     }
  
 

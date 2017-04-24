@@ -67,9 +67,7 @@ function GetStrogeMessage(chatingId) {
     if (str !== null) {
         var list = JSON.parse(str);
         for (var i = 0; i < list.length; i++) {
-
             AddMessage(list[i]);
-
         }
     }
     return;
@@ -111,6 +109,49 @@ function AddMessage(message) {
     $(".message_ul").append(str);
      
     $('.panel-body').scrollTop($('.panel-body')[0].scrollHeight);
+    if (scrollExsit(".panel-body")) { $(".message_ul .a_loading_HistoryMessage").hide(); }
+}
+
+
+//加载历史消息
+function PrependMessage(message) {
+    var chatingid = $("#currentUserName").attr("data-uid");
+    var bubble_default = "bubble_default left";
+    var me = "";
+    var nickName = "";
+    var MyId = $("#hdUserName").attr("data-uid");
+    //接收者id不等于我的Id，说明我是发送者
+    if (message.SenderId.trim() === MyId.trim()) {
+        bubble_default = "bubble_primary right";
+        me = "me";
+    }
+    if (message.type == "group" && me != "me") {
+        nickName = "<h4 class='nickname' >" + message.SenderName + "</h4>";
+    }
+    if (message.status == SendMessageStatus.Success) { var status = "style='display:none'"; }
+    else { var status = ''; }
+    //绑定聊天对话框消息，前端
+    var str =
+   " <div class='message_item message " + me + "' data-messageId='" + message.MessageIdUserForJs + "' style=' margin-bottom: 16px; float: left; width: 100%;'>" +
+                       " <p class='message_system ng-scope'>" +
+                        " <span class='content ng-binding'>" + getTime(message.CreateTime, "") + "</span>" +
+                      "</p>" +
+                       " <img class='avatar' src='" + message.SenderAvatar + "' title='" + message.SenderName + "'>" +
+                        "<div class='content'>" +
+                        nickName +
+                         "<div class='bubble js_message_bubble ng-scope " + bubble_default + " '>" +
+                          "<div class='bubble_cont ng-scope'>" +
+                           "<div class='plain'>" +
+                            "            <pre class='js_message_plain ng-binding'>" + message.content + "</pre>" +
+                       
+    " </div>" +
+     "  </div</div></div></div>";
+    $(".message_ul .ico_loading_HistoryMessage").after(str);
+
+    $('.panel-body').scrollTop(0);
+
+    if (scrollExsit(".panel-body")) { $(".message_ul .a_loading_HistoryMessage").hide(); }
+    
 }
 
 
@@ -133,7 +174,6 @@ function  MessageHandler(message, ChattingId)
             AddUserForChat(ChattingId, user.UserName, user.AvatarPic, user.IsOnline, message.type);
         }
        
-
     }
     //绑定消息在好友列表处
     $("#ul_item_" + ChattingId + "").find(".ext:eq(0)").text(getTime(message.CreateTime));
@@ -270,6 +310,7 @@ function BindingUserInfo(e)
         //将浏览器的本地缓存消息加载到聊天窗口中
         GetStrogeMessage(Uid);
         chatHub.server.messageConfirm(Uid);
+        
     }
    
 }
@@ -358,15 +399,12 @@ function UpdateUserStatesInChatul(e,id)
     $("#ul_item_" + id + "").find(".chat_item_info p.msg span.unreadcount").remove();
     $(".chat_ul_item").removeClass("selected");
     $("#ul_item_" + id + "").addClass("selected");
-
-
 }
 
 //更新用户在线状态
 function UpdateMessageStatusForSessionStroage(userId, MessageIdUserForJs,status) {
     var MessageList = GetSeesionStorageList("MessageListWith_"+userId);
     var Message = JSLINQ(MessageList).Where(item=> item.MessageIdUserForJs == MessageIdUserForJs).items[0];
-
     var index = MessageList.indexOf(Message);
     Message.status = status;
     MessageList.splice(index, Message);

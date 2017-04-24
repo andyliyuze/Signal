@@ -55,9 +55,6 @@ namespace SignalRChat
         //双方成为好友操作,uidA代表是通过者，uidB表示是申请者
         public void BeFriend(string uidA, string uidB, string applyId)
         {
-
-
-
             //通过者model
             UserDetail respondserModel = _service.GetUserDetail(uidA);
             //申请者model
@@ -74,9 +71,6 @@ namespace SignalRChat
                 //通知申请人
                 Clients.Client(toUserCId).receiveReplyResult(ReplyViewModel);
             }
-            //自己的客户端也要更新一下用户好友表
-        //    Clients.Caller.onNewUserConnected(applicantModel);
-
             //redis操作
             _Userservice.BeFriends(uidA, uidB);
             //持久化操作
@@ -310,7 +304,6 @@ namespace SignalRChat
         //拒绝操作
         public void  RefuseApply(string uidA,string applyUserId, string applyId)
         {
-
             //通过者model
             UserDetail respondserModel = _service.GetUserDetail(uidA);
             //回复模型
@@ -319,7 +312,6 @@ namespace SignalRChat
             string Cid = _service.GetUserDetail(applyUserId).UserCId;
             if (!string.IsNullOrEmpty(Cid))
             {
-
                 //尝试通知申请人
                 Clients.Client(Cid).receiveReplyResult(ReplyViewModel);
             }

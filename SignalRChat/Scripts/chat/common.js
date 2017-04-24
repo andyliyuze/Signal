@@ -88,9 +88,9 @@ function IsObjectValueEqual(a, b) {
 
 Array.prototype.Contain = function (item) {
 
-    for (var i = 0; i < Array.length; i++) {
+    for (var i = 0; i < this.length; i++) {
 
-        if (IsObjectValueEqual(Array[i], item)) { return true; }
+        if (IsObjectValueEqual(this[i], item)) { return true; }
         else { return false; }
 
     }
@@ -111,13 +111,35 @@ function PushSeesionStorage(key, item) {
         list = JSON.parse(listStr);
     }
     //flag标识 表示是否存在
-    list.push(item);
-
+  
+    list.OrderBy("CreateTime");
     //将数组序列化为字符串
     listStr = JSON.stringify(list);
 
     sessionStorage.setItem(key, listStr);
 }
+
+
+//重写PushSeesionStorage，将item添加到指定key的列表里,可排序
+function PushSeesionStorage(key, item, orderby) {
+    //获得消息集合的字符串
+    var listStr = sessionStorage.getItem(key);
+    //定义一个消息数组
+    var list = [];
+    if (listStr != null) {
+        // 将字符串反序列化为消息数组
+        list = JSON.parse(listStr);
+    }
+    //flag标识 表示是否存在
+    list.push(item);
+    list.OrderBy(orderby);
+    //将数组序列化为字符串
+    listStr = JSON.stringify(list);
+    sessionStorage.setItem(key, listStr);
+}
+
+
+
 //根据主键Id检查是否已经存在相同的消息
 
 function GetSeesionStorageList(key) {
@@ -180,3 +202,26 @@ function generateUUID() {
     });
     return uuid;
 };
+
+ 
+
+//排序,扩展方法
+Array.prototype.OrderBy = function (key) {
+    JSLINQ(this).OrderBy(x=>x[key]);
+    
+    
+};
+
+
+//判断滚动条是否存在
+function scrollExsit(selector) {
+    $(selector).scrollTop(10);//控制滚动条下移10px
+    if ($(selector).scrollTop() > 0) {
+        console.log("有滚动条");
+        return true;
+    } else {
+        console.log("有滚动条");
+        return true;
+    }
+    $(selector).scrollTop(0);//滚动条返回顶部
+}

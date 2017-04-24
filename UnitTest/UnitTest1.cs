@@ -38,9 +38,18 @@ namespace UnitTest
         [TestMethod]
         public void Test_CacheService_GetUserDetail()
         {
+            UserDetail expectModel = new UserDetail()
+            {
+                AvatarPic = "/Content/upload/image/HeadImage/20170126125314.Jpeg"
+                ,
+                IsOnline = false,
+                UserCId = "3349469f-69e4-49f8-a8c3-b47da13e4947",
+                UserDetailId = Guid.Parse("66847ba83b5343eaa69305e78827520f"),
+                UserName = "mushui"
 
-
-            service.GetUserDetail("06879b5b-33f4-4a26-a530-e0ea31004d86");
+            };
+            UserDetail actualModel= service.GetUserDetail("66847ba83b5343eaa69305e78827520f");
+            Assert.AreEqual(expectModel, actualModel);
         }
 
         [TestMethod]
@@ -65,9 +74,9 @@ namespace UnitTest
         public void TestMethod1()
         {
             RedisClient redisClient = new RedisClient("127.0.0.1", 6379);
-
-
             redisClient.Del("UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid");
+            var actual=  redisClient.Get<string>("UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid");
+            Assert.IsNull(actual);
         }
           [TestMethod]
         public void test()
@@ -89,14 +98,9 @@ namespace UnitTest
         [TestMethod]
           public void test_SetUnreadMsgCount() {
 
-              //string receiverId = "eb94d0af-3c0d-46f8-9870-5470f2c2ef40";
-              //string senderId = "06879b5b-33f4-4a26-a530-e0ea31004d86";
-              //_Msgservice.SetUnreadMsgCount(receiverId, senderId,0);
-
+             
               string key = "PrivateMessageSet:eb94d0af-3c0d-46f8-9870-5470f2c2ef40:06879b5b-33f4-4a26-a530-e0ea31004d86";
-        //      string key = "PrivateMessageSet:eb94d0af-3c0d-46f8-9870-5470f2c2ef40:06879b5b-33f4-4a26-a530-e0ea31004d86";
-          //    int CurrentIndex = 1;
-
+         
             int   startIndex=0;
             int EndIndex = 11;
          List<string> list=   redisClient.GetRangeFromSortedSet(key,startIndex,EndIndex);
@@ -145,7 +149,7 @@ namespace UnitTest
 
              
                var redisTodos = redisClient.As<PrivateMessage>();
-              var model= redisTodos.GetFromHash("PrivateMessageHash:107f3264-bcca-401e-a6c7-409d757f6848");
+               var model= redisTodos.GetFromHash("PrivateMessageHash:107f3264-bcca-401e-a6c7-409d757f6848");
               
               
               }

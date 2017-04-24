@@ -17,13 +17,11 @@ namespace QuarztSevice
             HostFactory.Run(x =>
             {
                 x.UseLog4Net();
-
                 x.Service<ServiceRunner>();
                 x.StartAutomatically();
                 x.SetDescription("将Redis数据同步到SQLServer");
                 x.SetDisplayName("Redis数据同步到SQLServer");
                 x.SetServiceName("ChatDB数据同步服务");
- 
                 x.EnablePauseAndContinue();
             });
         }
