@@ -66,10 +66,12 @@ function GetStrogeMessage(chatingId) {
     var str = sessionStorage.getItem(key);
     if (str !== null) {
         var list = JSON.parse(str);
+      list=  list.OrderBy("CreateTime");
         for (var i = 0; i < list.length; i++) {
             AddMessage(list[i]);
         }
     }
+    $(".message_item .ico_loading").hide();
     return;
 }
 
@@ -91,7 +93,7 @@ function AddMessage(message) {
     else { var status = '';}
     //绑定聊天对话框消息，前端
     var str =
-   " <div class='message_item message " + me + "' data-messageId='" + message.MessageIdUserForJs + "' style=' margin-bottom: 16px; float: left; width: 100%;'>" +
+   " <div class='message_item message " + me + "' data-messageIdForJs='" + message.MessageIdUserForJs + "' data-messageId=" + message.MessageId + "  style=' margin-bottom: 16px; float: left; width: 100%;'>" +
                        " <p class='message_system ng-scope'>" +
                         " <span class='content ng-binding'>" + getTime(message.CreateTime, "") + "</span>" +
                       "</p>" +
@@ -106,10 +108,12 @@ function AddMessage(message) {
                           "<i class='ico_fail web_wechat_message_fail ng-hide icon-exclamation-sign'  title='重新发送' style='display: none; '></i>"
                              " </div>" +
                               "  </div</div></div></div>";
-    $(".message_ul").append(str);
-     
+    $(".message_ul").append(str);     
     $('.panel-body').scrollTop($('.panel-body')[0].scrollHeight);
-    if (scrollExsit(".panel-body")) { $(".message_ul .a_loading_HistoryMessage").hide(); }
+    if (scrollExsit(".panel-body"))
+    {
+        $(".message_ul .a_loading_HistoryMessage").hide();
+    }
 }
 
 
@@ -132,7 +136,7 @@ function PrependMessage(message) {
     else { var status = ''; }
     //绑定聊天对话框消息，前端
     var str =
-   " <div class='message_item message " + me + "' data-messageId='" + message.MessageIdUserForJs + "' style=' margin-bottom: 16px; float: left; width: 100%;'>" +
+   " <div class='message_item message " + me + "' data-messageIdForJs='" + message.MessageIdUserForJs + "' data-messageId=" + message.MessageId + " style=' margin-bottom: 16px; float: left; width: 100%;'>" +
                        " <p class='message_system ng-scope'>" +
                         " <span class='content ng-binding'>" + getTime(message.CreateTime, "") + "</span>" +
                       "</p>" +
@@ -310,9 +314,8 @@ function BindingUserInfo(e)
         //将浏览器的本地缓存消息加载到聊天窗口中
         GetStrogeMessage(Uid);
         chatHub.server.messageConfirm(Uid);
-        
     }
-   
+    $(".panel-body .span_noMessage").hide();
 }
 //绑定用户信息到聊天面板
 function BindingUserInfoInBox(user)
@@ -410,4 +413,13 @@ function UpdateMessageStatusForSessionStroage(userId, MessageIdUserForJs,status)
     MessageList.splice(index, Message);
     RemoveByKey("MessageListWith_" + userId);
     PushArrInSessionStroage("MessageListWith_" + userId, MessageList);
+}
+
+//根据消息或者GetChattingId
+function GetChattingId(Message)
+{
+    var UserId = $("#hdUserName").attr("data-uid");
+    if (Message.SenderId == UserId) { return Message.RecevierId; }
+    else { return Message.SenderId;}
+
 }

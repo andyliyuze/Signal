@@ -96,17 +96,11 @@ namespace SignalRChat
         //获取历史消息
         public void GetHistoryMsg(string ChatingUserId, string MsgId)
         {
-            List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, 10);
-            list = list.OrderBy(a => a.CreateTime).ToList();
+            List<PrivateMessage> list = _Msgservice.GetHisToryMsg<PrivateMessage>(CurrentUser.UserDetailId.ToString(), ChatingUserId, MsgId, 10);
+            list = list.OrderByDescending(a => a.CreateTime).ToList();
             Clients.Caller.messageListReceived(list);
         }
-        //
-        public void GetTopTenHistoryMsg(string ChatingUserId)
-        {
-            List<PrivateMessage> list = _Msgservice.GetPrivateUnreadMsg(CurrentUser.UserDetailId.ToString(), ChatingUserId, , 10);
-            list = list.OrderBy(a => a.CreateTime).ToList();
-            Clients.Caller.messageListReceived(list);
-        }
+       
         private enum SendMessageStatus
         {
             Success = 0,        

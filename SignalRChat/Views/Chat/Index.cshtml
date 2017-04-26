@@ -217,6 +217,7 @@
             $(document).on('click', '.chat_item', function () {
                 $(".right .box").addClass('hide');
                 $(".right .panel").removeClass('hide');
+               
                 if ($(this).hasClass("group")) { BindingGroupInfo(this); }
                 else { BindingUserInfo(this); }
                 
@@ -529,8 +530,13 @@
                 $(this).hide();
                 var ChattingId = $("#currentUserName").attr("data-uid");
                 var MessageId = $(".message_ul .message_item:eq(0)").attr("data-messageid");
-                if (MessageId == "") { chatHub.server.getTopTenHistoryMsg(ChattingId); }
-                chatHub.server.getHistoryMsg(ChattingId, MessageId);
+                if (MessageId == undefined || MessageId == "") {
+                    chatHub.server.getHistoryMsg(ChattingId, null);
+                }
+                else
+                {
+                    chatHub.server.getHistoryMsg(ChattingId, MessageId);
+                }
                 $(".message_ul .ico_loading_HistoryMessage").show();
 
             });
@@ -542,7 +548,8 @@
     <script>
 
         $(function () {
-            sessionStorage.clear();
+            sessionStor
+            age.clear();
         });
     </script>
 
@@ -670,6 +677,7 @@
                 <div class="panel-body" style="padding-bottom: 0; height: 377px; overflow: auto;">
                     <div class="ng-scope">
                         <div class="message_ul">
+                            <span class="span_noMessage" style="position: relative;left: 45%;">无更多消息</span>
                             <a class="a_loading_HistoryMessage" style="text-align: center;display: block;cursor: pointer;">查看消息</a>
                             <i class="ico_loading_HistoryMessage ng-hide icon-spin icon-spinner" style="display: none;position: relative;width: 15px;height: 15px;left: 49%; font-size: 19px; "></i>
                         

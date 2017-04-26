@@ -154,7 +154,7 @@ namespace SignalRChat
             //当有新的用户上线
             OnNewUserContented();
             //获得与每位好友的历史消息，最新一条以及未读消息数量
-            List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsg(CurrentUser.UserDetailId.ToString());
+            List<HistoryMsgViewModel> hisMsglist = _Msgservice.GetHistoryMsgWithEveryOne(CurrentUser.UserDetailId.ToString());
             //获得好友列表
             List<UserDetail> friendlist = _service.GetMyFriends(CurrentUser.UserDetailId.ToString());
 

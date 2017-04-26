@@ -207,15 +207,15 @@ function generateUUID() {
 
 //排序,扩展方法
 Array.prototype.OrderBy = function (key) {
-    JSLINQ(this).OrderBy(x=>x[key]);
-    
-    
+   return JSLINQ(this).OrderBy(x=>x[key]).items;   
 };
 
 
 //判断滚动条是否存在
 function scrollExsit(selector) {
-    $(selector).scrollTop(10);//控制滚动条下移10px
+    var top = $(selector).scrollTop();
+
+    $(selector).scrollTop(top+10);//控制滚动条下移10px
     if ($(selector).scrollTop() > 0) {
         console.log("有滚动条");
         return true;
@@ -223,5 +223,5 @@ function scrollExsit(selector) {
         console.log("有滚动条");
         return true;
     }
-    $(selector).scrollTop(0);//滚动条返回顶部
+    $(selector).scrollTop(top);//滚动条返回底部
 }

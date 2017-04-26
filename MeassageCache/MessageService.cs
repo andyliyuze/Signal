@@ -97,7 +97,7 @@ namespace MeassageCache
         }
   
         //登陆后就获得与每个好友的历史消息
-        public List<HistoryMsgViewModel> GetHistoryMsg(string UserId)
+        public List<HistoryMsgViewModel> GetHistoryMsgWithEveryOne(string UserId)
         {
             try
             {
@@ -192,7 +192,6 @@ namespace MeassageCache
             }
             else
             {
-
                 setKey = setKey + recevierId + ":" + senderId + "";
             }
             return setKey;
@@ -213,9 +212,7 @@ namespace MeassageCache
                     var kvp = RedisClient.ConvertToHashFn(model);
                     kvp.Remove("ChattingId");
                     kvp.Remove("type");
-                    redisClient.SetRangeInHash(key, kvp);
-                //    var redisTodos = redisClient.As<BroadcastMessage>();
-                 //   redisTodos.[]
+                    redisClient.SetRangeInHash(key, kvp);          
                     //将消息Id保存到list队列
                     redisClient.PushItemToList("BroadcastMessageList", model.MessageId.ToString());                  
                     string setKey = "BroadcastMessageSet:" + model.GroupId + "";
@@ -304,6 +301,40 @@ namespace MeassageCache
             }
         }
 
+        public List<T> GetHisToryMsg<T>(string ReceiverId, string SenderId,string msgId,int count)
+        {
+
+            try
+            {
+                using (RedisClient redisClient = new RedisClient("localhost", 6379))
+                {
+                    int EndIndex;
+                    int startIndex;
+                    string hashKey = "PrivateMessageHash" ;
+                    string setKey=  GetKeyForTowUserOrder("PrivateMessageSet:", SenderId, ReceiverId);
+
+                    if (string.IsNullOrEmpty(msgId)) { startIndex = 0;  }
+                    else
+                    {
+                        startIndex = (int)redisClient.GetItemIndexInSortedSetDesc(setKey, msgId)+1;                        
+                    }
+                    EndIndex = startIndex + count - 1;
+                    List<string> list = redisClient.GetRangeFromSortedSetDesc(setKey, startIndex, EndIndex);
+                    List<T> MsgList = new List<T>();
+                    foreach (string str in list)
+                    {
+                        T priMsgModel = redisClient.GetAllEntriesFromHash(hashKey + ":" + str).ToJson().FromJson<T>();
+                        MsgList.Add(priMsgModel);
+                    }
+                    return MsgList;
+                }
+            }
+            catch
+            {
+                return new List<T>();
+
+            }
+            }
         #endregion
     }
 }
