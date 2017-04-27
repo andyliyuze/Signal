@@ -15,7 +15,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     List<FriendsApplyViewModel> ApplyIdList = new List<FriendsApplyViewModel>();
                    //获取好友申请的Id集合
@@ -39,7 +39,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
 
                     //首先取得该用户所有申请记录Id，并且是未读的，已读的话会被清理了
@@ -63,7 +63,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     //添加消息实体到hash类型
                     string key = "FriendsApply:" + model.FriendsApplyId.ToString() + "";
@@ -79,7 +79,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     string key = "HasReadResult";
                     string value = "已读";
@@ -97,7 +97,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     List<KeyValuePair<string, string>> kvp = new List<KeyValuePair<string, string>>();
                     kvp.Add(new KeyValuePair<string, string>("Result", model.Result));

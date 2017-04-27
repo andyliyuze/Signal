@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\RedisCofig.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="Common\RedisExtend.cs" />
     <Compile Include="Common\RedisHashHelper.cs" />

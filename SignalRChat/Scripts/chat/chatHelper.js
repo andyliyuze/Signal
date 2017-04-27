@@ -276,7 +276,8 @@ function BindingGroupInfo(e) {
     //将浏览器的本地缓存消息加载到聊天窗口中
     GetStrogeMessage(groupId);
     
-  
+    $(".panel-body .span_noMessage").hide();
+    $(".panel-body .a_loading_HistoryMessage").show();
    
 }
 
@@ -316,6 +317,7 @@ function BindingUserInfo(e)
         chatHub.server.messageConfirm(Uid);
     }
     $(".panel-body .span_noMessage").hide();
+    $(".panel-body .a_loading_HistoryMessage").show();
 }
 //绑定用户信息到聊天面板
 function BindingUserInfoInBox(user)

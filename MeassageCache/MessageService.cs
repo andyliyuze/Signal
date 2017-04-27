@@ -5,6 +5,8 @@ using ServiceStack.Redis;
 using Common;
 using ServiceStack;
 using MeassageCache.Interface;
+using MeassageCache.Common;
+
 namespace MeassageCache
 {
     public class MessageService : IMessageService
@@ -18,7 +20,7 @@ namespace MeassageCache
 
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
 
                     //添加消息实体到hash类型
@@ -81,7 +83,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     List<string> msglist = redisClient.SearchSortedSet(key, beginStamp, endStamp);
                     List<PrivateMessage> list = new List<PrivateMessage>(); ;
@@ -101,7 +103,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     //接收方与发送方
                     List<string> list = redisClient.SearchKeys("HistoryMsgHash:" + UserId + "*");
@@ -156,7 +158,7 @@ namespace MeassageCache
         
         public List<PrivateMessage> PopMesFromMessageList(string MessageListkey, int count)
         {
-            using (RedisClient redisClient = new RedisClient("localhost", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 List<PrivateMessage> msgList = new List<PrivateMessage>();
 
@@ -205,7 +207,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     //添加消息实体到hash类型
                     string key = "BroadcastMessageHash:" + model.MessageId.ToString() + "";
@@ -257,7 +259,7 @@ namespace MeassageCache
         //获得单条消息
         public T GetItem<T>(string key)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 T model = redisClient.GetAllEntriesFromHash(key).ToJson().FromJson<T>();
                 return model;
@@ -268,7 +270,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("localhost", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     int EndIndex = (int)redisClient.GetItemIndexInSortedSet(setKey, msgId);
                     int startIndex = EndIndex - count + 1;
@@ -288,7 +290,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
 
                     redisClient.SetEntryInHash(HisMsgKey, "UnReadMsgCount", count.ToString());
@@ -306,7 +308,7 @@ namespace MeassageCache
 
             try
             {
-                using (RedisClient redisClient = new RedisClient("localhost", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     int EndIndex;
                     int startIndex;

@@ -18,7 +18,7 @@ namespace MeassageCache
         public bool Register(string id, string UserName, string Pwd, string avatarPic)
         {
 
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 string key = "UserDetail:" + id + "";
                 //插入用户详细信息
@@ -47,7 +47,7 @@ namespace MeassageCache
         public bool Login(string Id, string pwd)
         {
             //1.根据用户名找到uid
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 string key = "UserInfo:" + Id + "";
                 //获取hash对象的方法
@@ -68,7 +68,7 @@ namespace MeassageCache
         //用户登录成功之后的操作
         public string AfterLogin(string Id, string cid)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 try
                 {
@@ -95,7 +95,7 @@ namespace MeassageCache
         //获取用户信息
         public UserDetail GetUserDetail(string Id)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
 
                 var map = redisClient.GetAllEntriesFromHash("UserDetail:" + Id + "");
@@ -109,7 +109,7 @@ namespace MeassageCache
         {
 
 
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
 
                 return redisClient.SetEntryInHash("UserDetail:" + Uid + "", "UserCId", NewCid);
@@ -120,7 +120,7 @@ namespace MeassageCache
         public string GetUserIdByName(string name)
         {
 
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 string Id = redisClient.Get<string>("UserIdByName:" + name + ":id");
                 //如果在Id不存在则表示不存在该用户
@@ -134,7 +134,7 @@ namespace MeassageCache
 
         public string GetUserIdByCId(string cid)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 string cmd = "UserIdByCId:" + cid + ":uid";
                 string uid = redisClient.Get<string>(cmd);
@@ -148,7 +148,7 @@ namespace MeassageCache
         //获取Uid
         public string GetUserCIdByUId(string uid)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 var map = redisClient.GetAllEntriesFromHash("UserDetail:" + uid + "");
                 UserDetail model = SerializeHelper.ConvetToEntity<UserDetail>(map);
@@ -160,7 +160,7 @@ namespace MeassageCache
         //退出登录
         public bool LogOut(string uid)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 try
                 {
@@ -190,7 +190,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     return redisClient.SetEntryInHash("UserDetail:" + UId + "", key, value);
                 }
@@ -209,7 +209,7 @@ namespace MeassageCache
         //获取好友Id
         private List<string> GetFriendsIds(string id)
         {
-            using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+            using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
             {
                 List<string> IdList = redisClient.GetAllItemsFromSet("Friends:UserId:" + id + "").ToList<string>();
 

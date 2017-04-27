@@ -15,7 +15,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     //添加消息实体到hash类型
                     string key = "Group:" + model.GroupId.ToString() + "";
@@ -33,7 +33,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                  
                     //添加消息实体到hash类型
@@ -56,7 +56,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
 
                     //添加消息实体到hash类型
@@ -75,7 +75,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     List<Group> groupList = new List<Group>();
                     //添加消息实体到hash类型

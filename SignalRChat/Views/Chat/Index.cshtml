@@ -80,7 +80,6 @@
             $.connection.hub.start().done(function () {
                 registerEvents(chatHub, userHub);
                 console.log("连接完成");
- 
             });
             $.connection.hub.disconnected(function () {
             
@@ -171,7 +170,6 @@
                     bindingApplys(Applys);
                     bindingGroupApplys(GroupApplys);
                     $("#friendsapplyModal").modal('show');
-
                 }
 
 
@@ -429,8 +427,12 @@
                 $(".friends_item").removeClass("selected");
                 $(".action_area .button").addClass("single").removeClass("group");
                 $(this).addClass("selected");
-                $(".right .box").removeClass('hide');  
+                $(".right .box").removeClass('hide');
+                $(".right .box .welcome").addClass('hide');
                 $(".right .panel").addClass('hide');
+                $(".right .box .profile").removeClass('hide');
+               
+
                 var uid = $(this).attr("data-uid");
                 var user = GetUserByUserId(uid);
                 BindingUserInfoInBox(user);
@@ -548,8 +550,10 @@
     <script>
 
         $(function () {
-            sessionStor
-            age.clear();
+            sessionStorage.clear();
+            $(".right .box .welcome").removeClass('hide');
+            $(".right .panel").addClass('hide');
+            $(".right .box .profile").addClass('hide');
         });
     </script>
 
@@ -729,7 +733,7 @@
             </div>
 
 
-            <div class="box ng-scope hide">
+            <div class="box ng-scope">
                 <div class="box_hd with_border">
                     <div class="title_wrap">
                         <div class="title">详细信息</div>
@@ -737,6 +741,13 @@
                 </div>
                 <div class="box_bd">
                     <div     class="ng-scope ng-isolate-scope">
+                        <div class="welcome" style="padding: 80px 0;text-align: center;">
+                            <div class="nickname_area">
+                                <h4 class="nickname ng-binding">欢迎使用鱼聊</h4>
+
+                            </div>
+
+                        </div>
                         <div class="profile">
 
                             <div class="avatar">

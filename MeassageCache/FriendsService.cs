@@ -9,7 +9,8 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                RedisEndpoint config = new RedisEndpoint() { Password = "123456", Port = 6379, Host = "127.0.0.1" };
+                using (RedisClient redisClient = new RedisClient(config))
                 {
                     string key=   "Friends:UserId:" + uidA + "";
                     string key2 = "Friends:UserId:" + uidB + "";

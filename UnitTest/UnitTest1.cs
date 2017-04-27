@@ -73,9 +73,9 @@ namespace UnitTest
         [TestMethod]
         public void TestMethod1()
         {
-            RedisClient redisClient = new RedisClient("127.0.0.1", 6379);
-            redisClient.Del("UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid");
-            var actual=  redisClient.Get<string>("UserIdByCId:2e83cccc-d410-4a46-b858-9dbbba0582e9:uid");
+            RedisEndpoint config = new RedisEndpoint() {   Port = 6379, Host = "127.0.0.1" };
+            RedisClient redisClient = new RedisClient(config);    
+            var actual=  redisClient.Get<string>("UserIdByName:咸鱼翻身:id");
             Assert.IsNull(actual);
         }
           [TestMethod]

@@ -1,6 +1,8 @@
 ﻿using System;
 using ServiceStack.Redis;
 using MeassageCache.Interface;
+using MeassageCache.Common;
+
 namespace MeassageCache
 {
     public class GroupMemberService : IGroupMemberService
@@ -9,7 +11,7 @@ namespace MeassageCache
         {
             try
             {
-                using (RedisClient redisClient = new RedisClient("127.0.0.1", 6379))
+                using (RedisClient redisClient = new RedisClient(RedisCofig.DefaultEndpoint))
                 {
                     string key = "Group:UserId" + MemberId.ToString();
                     byte[] value = GroupId.ToByteArray();
