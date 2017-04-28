@@ -209,6 +209,34 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Chat.html" />
+    <Content Include="Content\assets\css\admin.css" />
+    <Content Include="Content\assets\css\amazeui.css" />
+    <Content Include="Content\assets\css\amazeui.flat.css" />
+    <Content Include="Content\assets\css\amazeui.flat.min.css" />
+    <Content Include="Content\assets\css\amazeui.min.css" />
+    <Content Include="Content\assets\css\app.css" />
+    <Content Include="Content\assets\i\app-icon72x72%402x.png" />
+    <Content Include="Content\assets\i\examples\admin-chrome.png" />
+    <Content Include="Content\assets\i\examples\admin-firefox.png" />
+    <Content Include="Content\assets\i\examples\admin-ie.png" />
+    <Content Include="Content\assets\i\examples\admin-opera.png" />
+    <Content Include="Content\assets\i\examples\admin-safari.png" />
+    <Content Include="Content\assets\i\examples\adminPage.png" />
+    <Content Include="Content\assets\i\examples\blogPage.png" />
+    <Content Include="Content\assets\i\examples\landing.png" />
+    <Content Include="Content\assets\i\examples\landingPage.png" />
+    <Content Include="Content\assets\i\examples\loginPage.png" />
+    <Content Include="Content\assets\i\examples\sidebarPage.png" />
+    <Content Include="Content\assets\i\favicon.png" />
+    <Content Include="Content\assets\i\startup-640x1096.png" />
+    <Content Include="Content\assets\js\amazeui.ie8polyfill.js" />
+    <Content Include="Content\assets\js\amazeui.ie8polyfill.min.js" />
+    <Content Include="Content\assets\js\amazeui.js" />
+    <Content Include="Content\assets\js\amazeui.min.js" />
+    <Content Include="Content\assets\js\amazeui.widgets.helper.js" />
+    <Content Include="Content\assets\js\amazeui.widgets.helper.min.js" />
+    <Content Include="Content\assets\js\app.js" />
+    <Content Include="Content\assets\js\handlebars.min.js" />
     <Content Include="Content\audio\Bongo.mp3" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -378,6 +406,7 @@
     <Content Include="Images\weixinlogo.jpg" />
     <Content Include="Images\新建文本文档.txt" />
     <Content Include="Images\暖色木纹背景.jpg" />
+    <Content Include="mobile.html" />
     <Content Include="Scripts\avartar\constants.js" />
     <Content Include="Scripts\avartar\cropit.js" />
     <Content Include="Scripts\avartar\jquery-1.10.2.min.js" />
@@ -394,6 +423,11 @@
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.ttf" />
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.woff" />
     <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\assets\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\chatConfig.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />

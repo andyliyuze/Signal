@@ -1,0 +1,99 @@
+
+/* Write your styles */
+
+body {
+    min-height: 90%;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+.am-tabs {
+
+    height: 100%;
+    margin: 0px;
+}
+
+.am-tabs-nav {
+        position: fixed;
+    bottom: 0px;
+       
+}
+
+.am-list-news-default {
+    margin:0;
+}
+  
+   
+    .am-list-news-default .am-list>li {
+        border-top:0px;
+    border-color: #dedede;
+   
+}
+.am-tab-panel {
+padding:0px !important;
+}
+ .pannel {
+      width:auto;  
+     height:auto; 
+    background-color: #fdf9f3;
+     position: relative;  
+     float:none;
+}
+p {
+margin:0;
+}
+h3 {
+margin:0;
+}
+.chat_ul_item .chat_item_info .nickname_text {
+    color: #080808;
+    font-size: 17px;
+}
+.chat_ul_item {
+    border-bottom: 1px solid #edeff3;
+}
+.chat_ul_item:hover {
+    background-color: #b9b7b4;
+}
+.am-tab-panel {
+height:100%;
+}
+.edit_area {
+    width: 83%;
+        margin: 0;
+    display: inline-block;
+}
+.btn_send {
+display: inline-block;
+    padding: 7px;
+        color: #0e90d2;
+}
+.message_item pre{
+    
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    white-space: pre-wrap;
+    word-break: initial;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+ 
+}
+ 
+.message_item {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.message_system {
+    margin: 5px auto;
+ 
+}
+.bubble.bubble_default {
+    background-color: #e0dddd;
+}
+.bubble.left:after {
+    border-right-color: #e0dddd;
+    border-right-width: 4px;
+}

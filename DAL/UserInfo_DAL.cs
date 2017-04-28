@@ -16,6 +16,7 @@ namespace DAL
             using (var context = new ChatContext())
             {
                 context.UserInfo.Add(model);
+                               
                 return context.SaveChanges() > 0;
             }
         }
