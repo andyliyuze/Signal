@@ -423,11 +423,6 @@
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.ttf" />
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.woff" />
     <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
-    <Content Include="Content\assets\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\assets\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\assets\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\assets\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\assets\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\chatConfig.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />
