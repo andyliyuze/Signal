@@ -215,6 +215,7 @@
     <Content Include="Content\assets\css\amazeui.flat.min.css" />
     <Content Include="Content\assets\css\amazeui.min.css" />
     <Content Include="Content\assets\css\app.css" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\assets\i\app-icon72x72%402x.png" />
     <Content Include="Content\assets\i\examples\admin-chrome.png" />
     <Content Include="Content\assets\i\examples\admin-firefox.png" />
@@ -254,6 +255,10 @@
     <Content Include="Content\upload\image\HeadImage\20170226230923.Jpeg" />
     <Content Include="Content\upload\image\HeadImage\20170228121118.Jpeg" />
     <Content Include="Content\upload\image\HeadImage\20170306093339.Jpeg" />
+    <Content Include="Content\mobileLogin\css\mobileLogin.css" />
+    <Content Include="Content\mobileLogin\img\bg.jpg" />
+    <Content Include="index.html" />
+    <Content Include="Content\mobileLogin\js\mobileLogin.js" />
     <Content Include="Css\Chat.css" />
     <Content Include="Css\ChatStyle.css" />
     <Content Include="Css\Font-Awesome-3.2.1\css\font-awesome-ie7.css" />
@@ -423,6 +428,11 @@
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.ttf" />
     <Content Include="Css\Font-Awesome-3.2.1\font\fontawesome-webfont.woff" />
     <Content Include="Css\Font-Awesome-3.2.1\font\FontAwesome.otf" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\assets\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\chatConfig.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat\chatclient.js" />
