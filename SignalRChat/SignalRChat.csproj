@@ -241,6 +241,10 @@
     <Content Include="Content\audio\Bongo.mp3" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\pclogin\css\style.css" />
+    <Content Include="Content\pclogin\images\arrow.png" />
+    <Content Include="Content\pclogin\images\bg2.jpg" />
+    <Content Include="Content\pclogin\index.html" />
     <Content Include="Content\upload\image\HeadImage\20170125223228.jpg" />
     <Content Include="Content\upload\image\HeadImage\20170125231027.Jpeg" />
     <Content Include="Content\upload\image\HeadImage\20170126102354.Jpeg" />

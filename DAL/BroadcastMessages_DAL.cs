@@ -26,10 +26,9 @@ namespace DAL
        {
            using (var context = new ChatContext())
            {
-
+              
                //foreach (var model in list)
                //{
-
                //    context.BroadcastMessage.Add(model);
                 
                //}
