@@ -261,6 +261,7 @@
     <Content Include="Content\upload\image\HeadImage\20170306093339.Jpeg" />
     <Content Include="Content\mobileLogin\css\mobileLogin.css" />
     <Content Include="Content\mobileLogin\img\bg.jpg" />
+    <Content Include="Images\图片3.jpg" />
     <Content Include="index.html" />
     <Content Include="Content\mobileLogin\js\mobileLogin.js" />
     <Content Include="Css\Chat.css" />
