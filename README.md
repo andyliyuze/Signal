@@ -20,7 +20,7 @@
 
 ### 演示  
 
-群单功能
+私聊功能
 ![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/%E5%8D%95%E8%81%8A.gif)
 
 群聊功能
