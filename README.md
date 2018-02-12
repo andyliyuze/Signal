@@ -18,5 +18,12 @@
 #### 3.群搜索，群创建，添加
 #### 3.单对单聊天，群聊天
 
-### 演示  群聊功能
+### 演示  
+
+群单功能
+![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/%E5%8D%95%E8%81%8A.gif)
+
+群聊功能
 ![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif)
+
+
