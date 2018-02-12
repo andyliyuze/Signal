@@ -19,4 +19,4 @@
 #### 3.单对单聊天，群聊天
 
 ### 演示  群聊功能
-![](https://github.com/andyliyuze/FishFourmNew/blob/master/FishFourm.WebApp/Content/loginflow.gif)
+![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif)
