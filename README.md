@@ -28,6 +28,6 @@
 ![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif)
 
 查看历史消息
-![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif))
+![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%B6%88%E6%81%AF.gif)
 
 
