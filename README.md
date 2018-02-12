@@ -17,3 +17,6 @@
 #### 2.好友搜索，添加好友
 #### 3.群搜索，群创建，添加
 #### 3.单对单聊天，群聊天
+
+### 演示  群聊功能
+![](https://github.com/andyliyuze/FishFourmNew/blob/master/FishFourm.WebApp/Content/loginflow.gif)
