@@ -27,4 +27,7 @@
 群聊功能
 ![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif)
 
+查看历史消息
+![](https://github.com/andyliyuze/Signal/blob/master/SignalRChat/Images/Animation.gif))
+
 
